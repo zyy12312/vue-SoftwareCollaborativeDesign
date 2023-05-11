@@ -4,6 +4,8 @@
 <!--    <HelloWorld msg="Welcome to Your Vue.js App"/>-->
 <!--      <FileUpload></FileUpload>-->
       <NavBar></NavBar>
+      <NavBarr></NavBarr>
+      <NavFoot></NavFoot>
   </div>
 </template>
 
@@ -11,10 +13,16 @@
 // import HelloWorld from './components/HelloWorld.vue'
 // import FileUpload from "@/components/FileUpload.vue";
 import NavBar from "@/components/NavBar.vue";
+import NavFoot from "@/components/NavFoot.vue";
+import NavBarr from "@/components/NavBarr.vue";
+//import StudyDiscuss from "@/components/StudyDiscuss.vue";
 
 export default {
   name: 'App',
   components: {
+      //StudyDiscuss,
+      NavBarr,
+      NavFoot,
       NavBar,
       // FileUpload,
     // HelloWorld

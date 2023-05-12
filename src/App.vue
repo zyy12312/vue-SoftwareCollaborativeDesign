@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-<!--    <img alt="Vue logo" src="./assets/logo.png">-->
-<!--    <HelloWorld msg="Welcome to Your Vue.js App"/>-->
-<!--      <FileUpload></FileUpload>-->
-<!--      <submit-window></submit-window>-->
       <NavBar></NavBar>
       <PageTitle></PageTitle>
       <NavFoot></NavFoot>
@@ -16,16 +12,13 @@
 import NavBar from "@/components/NavBar.vue";
 import NavFoot from "@/components/NavFoot.vue";
 import PageTitle from "@/components/PageTitle.vue";
-// import NavBarr from "@/components/PageTitle.vue";
-// import SubmitWindow from "@/components/SubmitWindow.vue";
 //import StudyDiscuss from "@/components/StudyDiscuss.vue";
 
 export default {
   name: 'App',
   components: {
-      // SubmitWindow,
-      //StudyDiscuss,
       PageTitle,
+      //StudyDiscuss,
       NavFoot,
       NavBar,
       // FileUpload,

@@ -56,6 +56,9 @@ export default {
                     });
                 });
         }
+    },
+    mounted() {
+        console.log("StudydiscussPageMounted！")
     }
 
 }

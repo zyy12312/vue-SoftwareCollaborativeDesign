@@ -41,7 +41,7 @@
 import StudyDiscuss from "@/components/StudyDiscuss.vue";
 
 export default {
-    name:"NavBarr",
+    name:"PageTitle",
     components: {StudyDiscuss},
     data() {
         return {

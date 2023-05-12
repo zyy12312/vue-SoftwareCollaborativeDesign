@@ -6,7 +6,6 @@
            <el-menu-item index="1" >
                <i class="el-icon-chat-round"></i>
                <a href="https://www.ele.me" target="_blank" style="font-size: 18px">{{item.message}}</a>
-
            </el-menu-item>
                <div style="text-align: right">
                <a style="font-size: 15px;text-align: right ">{{item.time}}</a>

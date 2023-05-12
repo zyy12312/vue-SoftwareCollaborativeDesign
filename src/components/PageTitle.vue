@@ -25,7 +25,7 @@
                     <el-tab-pane label="课件" name="fife">课件</el-tab-pane>
                     <el-tab-pane label="作业" name="six">作业</el-tab-pane>
                     <el-tab-pane label="测试" name="seven">测试</el-tab-pane>
-                    <el-tab-pane label="讨论" name="eight"><StudyDiscuss></StudyDiscuss></el-tab-pane>
+                    <el-tab-pane label="讨论" name="eight"><DiscussDetail></DiscussDetail></el-tab-pane>
                     <el-tab-pane label="互动" name="nine">互动</el-tab-pane>
                     <el-tab-pane label="分组学习" name="ten">分组学习</el-tab-pane>
                     <el-tab-pane label="笔记" name="eleven">笔记</el-tab-pane>
@@ -38,27 +38,29 @@
 </template>
 
 <script >
-import StudyDiscuss from "@/components/StudyDiscuss.vue";
+
+import DiscussDetail from "@/components/DiscussDetail.vue";
 
 export default {
-    name:"NavBarr",
-    components: {StudyDiscuss},
+    name:"PageTitle",
+    components: {DiscussDetail},
     data() {
         return {
-            activeName: 'first'
+            activeName: 'first',
+            //active:0
         };
     },
     methods: {
         handleClick(tab, event) {
             console.log(tab, event);
-        }
-    }
+        },
+    },
 };
 </script>
 
 <style scoped>
 ::v-deep .el-tabs__nav-scroll{
-    width:80%;
+    width:75%;
     margin:0 auto
 }
 

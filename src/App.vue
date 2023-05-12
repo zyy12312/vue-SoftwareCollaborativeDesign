@@ -1,10 +1,7 @@
 <template>
   <div id="app">
-<!--    <img alt="Vue logo" src="./assets/logo.png">-->
-<!--    <HelloWorld msg="Welcome to Your Vue.js App"/>-->
-<!--      <FileUpload></FileUpload>-->
       <NavBar></NavBar>
-      <NavBarr></NavBarr>
+      <PageTitle></PageTitle>
       <NavFoot></NavFoot>
   </div>
 </template>
@@ -14,14 +11,14 @@
 // import FileUpload from "@/components/FileUpload.vue";
 import NavBar from "@/components/NavBar.vue";
 import NavFoot from "@/components/NavFoot.vue";
-import NavBarr from "@/components/NavBarr.vue";
+import PageTitle from "@/components/PageTitle.vue";
 //import StudyDiscuss from "@/components/StudyDiscuss.vue";
 
 export default {
   name: 'App',
   components: {
+      PageTitle,
       //StudyDiscuss,
-      NavBarr,
       NavFoot,
       NavBar,
       // FileUpload,

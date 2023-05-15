@@ -103,8 +103,8 @@ export const teacherRoutes = [
         children : [
             //组队管理
             {
-                path: "group",
-                component : ()=> import('@/views/teacher/Group'),
+                path: "teacherGroup",
+                component : ()=> import('@/views/teacher/TeacherTeam.vue'),
                 hidden: true
             },
             //资料管理
@@ -132,7 +132,7 @@ export const teacherRoutes = [
             //教师端成绩管理
             {
                 path: "grade",
-                component: () => import('@/views/teacher/Grade')
+                component: () => import('@/views/teacher/TeacherGrade.vue')
             }
         ],
         hidden :true,

@@ -24,11 +24,13 @@
                     <el-tab-pane label="资料" name="fife"><DataBank></DataBank></el-tab-pane>
                     <el-tab-pane label="作业" name="six"><StudentTask></StudentTask></el-tab-pane>
                     <el-tab-pane label="测试" name="seven">测试</el-tab-pane>
-                    <el-tab-pane label="讨论" name="eight"><DiscussDetail></DiscussDetail></el-tab-pane>
+                    <el-tab-pane label="讨论" name="eight"><StudyDiscuss></StudyDiscuss></el-tab-pane>
                     <el-tab-pane label="互动" name="nine">互动</el-tab-pane>
                     <el-tab-pane label="分组学习" name="ten">分组学习</el-tab-pane>
                     <el-tab-pane label="笔记" name="eleven">笔记</el-tab-pane>
                     <el-tab-pane label="错题本" name="twelve">错题本</el-tab-pane>
+                    <el-tab-pane label="教师-分组" name="thirteen"><TeacherGroup></TeacherGroup></el-tab-pane>
+                    <el-tab-pane label="教师-成绩" name="fourteen"><TeacherGrade></TeacherGrade></el-tab-pane>
                 </el-tabs>
             </el-col>
         </el-row>
@@ -41,15 +43,18 @@
 
 
 import ChapterDetail from "@/views/ChapterDetail.vue";
-import DiscussDetail from "@/views/DiscussDetail.vue";
+// import DiscussDetail from "@/views/DiscussDetail.vue";
 import StudentTask from "@/views/StudentTask.vue";
 import DataBank from "@/views/DataBank.vue";
 import CourseGroup from "@/views/CourseGroup.vue";
 import GroupChat from "@/views/GroupChat.vue";
+import StudyDiscuss from "@/views/StudyDiscuss.vue";
+import TeacherGroup from "@/views/teacher/TeacherTeam.vue";
+import TeacherGrade from "@/views/teacher/TeacherGrade.vue";
 
 export default {
     name:"PageTitle",
-    components: {GroupChat, CourseGroup, DataBank, StudentTask, DiscussDetail, ChapterDetail},
+    components: {StudyDiscuss, GroupChat, CourseGroup, DataBank, StudentTask, ChapterDetail, TeacherGroup, TeacherGrade}, //DiscussDetail
     data() {
         return {
             activeName: 'first',

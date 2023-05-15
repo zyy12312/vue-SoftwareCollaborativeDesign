@@ -4,7 +4,8 @@
 
 <script>
 export default {
-    name: "DiscussA"
+    // eslint-disable-next-line vue/multi-word-component-names
+    name: "Discuss"
 }
 </script>
 

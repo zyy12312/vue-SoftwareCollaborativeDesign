@@ -1,12 +1,12 @@
-<template>
-  <div></div>
-</template>
+<script setup>
 
-<script>
-export default {
-    name: "LoginPage"
-}
 </script>
+
+<template>
+<el-main>
+
+</el-main>
+</template>
 
 <style scoped>
 

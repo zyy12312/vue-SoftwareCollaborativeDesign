@@ -1,7 +1,7 @@
 <template>
   <div id="app">
       <NavBar></NavBar>
-      <PageTitle></PageTitle>
+      <AllNavigation></AllNavigation>
       <NavFoot></NavFoot>
   </div>
 </template>
@@ -11,13 +11,13 @@
 // import FileUpload from "@/components/FileUpload.vue";
 import NavBar from "@/views/NavBar.vue";
 import NavFoot from "@/views/NavFoot.vue";
-import PageTitle from "@/views/PageTitle.vue";
+import AllNavigation from "@/views/AllNavigation.vue";
 //import StudyDiscuss from "@/components/StudyDiscuss.vue";
 
 export default {
   name: 'App',
   components: {
-      PageTitle,
+      AllNavigation,
       //StudyDiscuss,
       NavFoot,
       NavBar,

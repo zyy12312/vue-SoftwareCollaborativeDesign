@@ -13,17 +13,7 @@ export const baseRoutes = [
         component : () => import('@/views/LoginPage'),
         hidden : true
     },
-    {
-        path: '/DiscussDetail',
-        component:StudentLayout ,
-        children: [
-            {
-                path: 'DiscussDetail',
-                component: () => import('@/views/DiscussDetail'),
-                hidden : true
-            }
-        ]
-    },
+
     {
         path : "/DiscussDetail",
         name : "DiscussDetail",
@@ -146,7 +136,7 @@ const createRouter = () => new Router(
     }
 )
 
-const router  = createRouter()
+const router = createRouter()
 
 export function resetRouter() {
     const newRouter = createRouter()

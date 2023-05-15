@@ -1,7 +1,7 @@
 <template >
     <el-main>
    <ul id="example">
-       <li v-for="item in items" v-bind:key="item.message">
+       <li v-for="item in items" v-bind:key="item">
            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
            <el-menu-item index="1" >
                <i class="el-icon-chat-round"></i>
@@ -10,7 +10,7 @@
                <div style="text-align: right">
                <a style="font-size: 15px;text-align: right ">{{item.time}}</a>
                <p>
-                   <a ><el-button type="primary" @click="goDiscussDetail">查看详情</el-button></a>
+                   <a ><el-button type="primary" @click="goDiscussDetail(item)">查看详情</el-button></a>
                    <a><el-button type="warning"  @click=" removeItem(index) ">删除帖子</el-button></a>
                </p>
                </div>
@@ -27,9 +27,10 @@ export default {
     el:'#example',
     data() {
         return {
+            indexs:"",
             items: [
-                {message: '什么时候开始？',time:'2023/5/11 19:40'},
-                {message: '什么是事实？',time:'2023/5/11 19:40'}
+                {index:1,message: '什么时候开始？',time:'2023/5/11 19:40'},
+                {index:2,message: '什么是事实？',time:'2023/5/11 19:40'}
             ]
         }
     },
@@ -55,8 +56,16 @@ export default {
                     });
                 });
         },
-        goDiscussDetail() {
-            router.push('/DiscussDetail')
+        goDiscussDetail(item) {
+            router.push({
+                name: 'DiscussDetail',
+                query: {
+                    item: item,
+                }
+            });
+        },
+        getIndex(index){
+            this.indexs=index;
         }
     },
     mounted() {

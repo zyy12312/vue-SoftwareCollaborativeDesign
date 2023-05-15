@@ -12,7 +12,7 @@
                     </el-row>
                 </span>
             </div>
-            <div v-for="task in tasks" v-bind:key="task.title">
+            <div v-for="(task,index) in tasks" v-bind:key="index">
                 <el-row>
                     <el-col :span="8">
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{task.title}}</div>
@@ -31,8 +31,8 @@
                     <el-col :span="4" >
                         <div class="grid-content bg-purple-light"></div>
                         <div class="grid-content bg-purple-light" >
-                            <el-button type="text" @click="dialogFormVisible = true;indexs=(indexs+1)%2"  style="font-size: 16px" >查看作业</el-button>
-                            <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs+''===task.index">
+                            <el-button type="text" @click="dialogFormVisible = true;getIndex(task.index)"  style="font-size: 16px" >查看作业</el-button>
+                            <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs===task.index">
                                 <el-row>
                                     <el-col :span="20">
                                         <div class="grid-content bg-purple-dark" style="margin-top: 13px;text-align: left">{{task.status}}（若学生多次提交，成绩计算请以评分规则为准）</div>
@@ -252,9 +252,9 @@ export default {
                 {title1:"作业名称",title2:"作业形式",title3:"状态",title4:"类型",title5:"交付"},
             ],
             tasks:[
-                {index:"0",title:"分布式实验",detail: "开发一个java web 网站，该网站提供一个页面，可以输入图书名称，输出该书的库存。程序应该首先访问缓存输出查询结果，如果缓存没有该数据",
+                {index:1,title:"分布式实验",detail: "开发一个java web 网站，该网站提供一个页面，可以输入图书名称，输出该书的库存。程序应该首先访问缓存输出查询结果，如果缓存没有该数据",
                     deadline:"2023.05.17 18:00",request:"多人合作完成,并提交报告",file:"分布式实验.docx",filesize:"200KB",form:"个人作业",status:"未提交",type:"负责人发布",leader:"计划经理"},
-                {index:"1",title:"DES实现",detail:"设计一个图书馆数据库，包含一个图书表books,该表有id,bookname, inventory三个字段（假设书名不会重复），并自行提前录入若干图书数据。",
+                {index:2,title:"DES实现",detail:"设计一个图书馆数据库，包含一个图书表books,该表有id,bookname, inventory三个字段（假设书名不会重复），并自行提前录入若干图书数据。",
                     deadline:"2023.05.20 14:00",request:"多人合作完成",file:"DES实现.docx",filesize:"203KB",form:"小组作业",status:"已提交",type:"教师发布",leader:"产品经理"},
             ],
             roles:[
@@ -306,6 +306,9 @@ export default {
         },
         handlePreview(file) {
             console.log(file);
+        },
+        getIndex(index){
+            this.indexs=index;
         },
         clicks(index){
             this.indexs=index;

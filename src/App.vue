@@ -9,9 +9,9 @@
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 // import FileUpload from "@/components/FileUpload.vue";
-import NavBar from "@/components/NavBar.vue";
-import NavFoot from "@/components/NavFoot.vue";
-import PageTitle from "@/components/PageTitle.vue";
+import NavBar from "@/views/NavBar.vue";
+import NavFoot from "@/views/NavFoot.vue";
+import PageTitle from "@/views/PageTitle.vue";
 //import StudyDiscuss from "@/components/StudyDiscuss.vue";
 
 export default {

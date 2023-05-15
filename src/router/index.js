@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import Router from "vue-router"
 
 Vue.use(Router)
 
@@ -11,6 +11,23 @@ export const baseRoutes = [
     {
         path : "/login",
         component : () => import('@/views/LoginPage'),
+        hidden : true
+    },
+    {
+        path: '/DiscussDetail',
+        component:StudentLayout ,
+        children: [
+            {
+                path: 'DiscussDetail',
+                component: () => import('@/views/DiscussDetail'),
+                hidden : true
+            }
+        ]
+    },
+    {
+        path : "/DiscussDetail",
+        name : "DiscussDetail",
+        component : () => import('@/views/DiscussDetail'),
         hidden : true
     },
     {

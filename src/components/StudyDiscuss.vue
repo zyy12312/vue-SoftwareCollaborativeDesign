@@ -21,6 +21,7 @@
 </template>
 
 <script >
+import router from "@/router";
 export default {
     name:"StudyDiscuss",
     el:'#example',
@@ -55,7 +56,7 @@ export default {
                 });
         },
         goDiscussDetail() {
-            this.$router.push('/DiscussDetail')
+            router.push('/DiscussDetail')
         }
     },
     mounted() {

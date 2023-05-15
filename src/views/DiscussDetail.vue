@@ -95,6 +95,7 @@ export default {
     data() {
         return {
             activeNames: ['1'],
+            initem: this.$router.query.param,
             items:[
                 {question:'什么时候开始？',detail:'明天就开始',time:'2023/5/11 19:40'},
             ],

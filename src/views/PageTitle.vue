@@ -24,7 +24,7 @@
                     <el-tab-pane label="资料" name="fife"><DataBank></DataBank></el-tab-pane>
                     <el-tab-pane label="作业" name="six"><StudentTask></StudentTask></el-tab-pane>
                     <el-tab-pane label="测试" name="seven">测试</el-tab-pane>
-                    <el-tab-pane label="讨论" name="eight"><DiscussDetail></DiscussDetail></el-tab-pane>
+                    <el-tab-pane label="讨论" name="eight"><StudyDiscuss></StudyDiscuss></el-tab-pane>
                     <el-tab-pane label="互动" name="nine">互动</el-tab-pane>
                     <el-tab-pane label="分组学习" name="ten">分组学习</el-tab-pane>
                     <el-tab-pane label="笔记" name="eleven">笔记</el-tab-pane>
@@ -41,15 +41,15 @@
 
 
 import ChapterDetail from "@/views/ChapterDetail.vue";
-import DiscussDetail from "@/views/DiscussDetail.vue";
 import StudentTask from "@/views/StudentTask.vue";
 import DataBank from "@/views/DataBank.vue";
 import CourseGroup from "@/views/CourseGroup.vue";
 import GroupChat from "@/views/GroupChat.vue";
+import StudyDiscuss from "@/components/StudyDiscuss.vue";
 
 export default {
     name:"PageTitle",
-    components: {GroupChat, CourseGroup, DataBank, StudentTask, DiscussDetail, ChapterDetail},
+    components: {StudyDiscuss, GroupChat, CourseGroup, DataBank, StudentTask,  ChapterDetail},
     data() {
         return {
             activeName: 'first',

@@ -146,7 +146,7 @@ const createRouter = () => new Router(
     }
 )
 
-const router  = createRouter()
+const router = createRouter()
 
 export function resetRouter() {
     const newRouter = createRouter()

@@ -1,26 +1,31 @@
 <template >
     <el-main>
-   <ul id="example">
-       <li v-for="item in items" v-bind:key="item.message">
-           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-           <el-menu-item index="1" >
-               <i class="el-icon-chat-round"></i>
-               <a href="https://www.ele.me" target="_blank" style="font-size: 18px">{{item.message}}</a>
-           </el-menu-item>
-               <div style="text-align: right">
-               <a style="font-size: 15px;text-align: right ">{{item.time}}</a>
-               <p>
-                   <a ><el-button type="primary" @click="goDiscussDetail">查看详情</el-button></a>
-                   <a><el-button type="warning"  @click=" removeItem(index) ">删除帖子</el-button></a>
-               </p>
-               </div>
-           </el-menu>
-       </li>
-   </ul>
+        <ul id="example">
+            <li v-for="item in items" v-bind:key="item.message">
+                <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                    <el-menu-item index="1">
+                        <i class="el-icon-chat-round"></i>
+                        <a href="https://www.ele.me" target="_blank" style="font-size: 18px">{{ item.message }}</a>
+                    </el-menu-item>
+                    <div style="text-align: right">
+                        <a style="font-size: 15px;text-align: right ">{{ item.time }}</a>
+                        <p>
+                            <a>
+                                <el-button type="primary" @click="goDiscussDetail">查看详情</el-button>
+                            </a>
+                            <a>
+                                <el-button type="warning" @click=" removeItem(index) ">删除帖子</el-button>
+                            </a>
+                        </p>
+                    </div>
+                </el-menu>
+            </li>
+        </ul>
     </el-main>
 </template>
 
 <script >
+import router from "@/router";
 export default {
     name:"StudyDiscuss",
     el:'#example',
@@ -55,7 +60,7 @@ export default {
                 });
         },
         goDiscussDetail() {
-            this.$router.push('/DiscussDetail')
+            router.push('/DiscussDetail')
         }
     },
     mounted() {

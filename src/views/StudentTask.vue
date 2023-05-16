@@ -247,7 +247,7 @@ export default {
         return{
             activeName2: 'first',
             myRole:"产品经理",
-            indexs:-1,
+            indexs:0,
             items:[
                 {title1:"作业名称",title2:"作业形式",title3:"状态",title4:"类型",title5:"交付"},
             ],
@@ -261,7 +261,7 @@ export default {
                 {role:"小组长"},{role:"产品经理"},{role:"计划质量经理"},{role:"开发经理"},{role:"测试经理"}
             ],
             submit:[
-                {subTime:"2023.5.13 11:30",score:"未评分",file:"作业"}
+                {subTime:"2023.05.13 11:30",score:"未评分",file:"作业"}
             ],
             cla:[
                 {title1:"附件名",title2:"大小"}

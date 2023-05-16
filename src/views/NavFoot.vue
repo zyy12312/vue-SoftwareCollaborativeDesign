@@ -26,6 +26,6 @@ export default {
     height: 100%;
     display: inline-flex;
     justify-content: space-between;
-    flex: fit-content;
+    flex: 0;
 }
 </style>

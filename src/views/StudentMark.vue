@@ -1,6 +1,6 @@
 
 <template>
-<el-main>
+<el-main style="background-color: #E2E1E4">
     <div v-for="score in scores"  :key="score" class="text item " >
     <el-row>
         <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.teacherScore}}分<div class="font">教师评分</div></div></el-col>

@@ -6,7 +6,7 @@
                     <el-tab-pane label="班级成员" name="first" ><ClassMember></ClassMember></el-tab-pane>
                     <el-tab-pane label="课程信息" name="second"><CourseInfo></CourseInfo></el-tab-pane>
                     <el-tab-pane label="成绩" name="third"><StudentMark></StudentMark></el-tab-pane>
-                    <el-tab-pane label="学习分析" name="fourth"><StudyAnalysis></StudyAnalysis></el-tab-pane>
+                    <el-tab-pane label="学习分析" name="fourth"><ModifyInfo></ModifyInfo></el-tab-pane>
                 </el-tabs>
             </el-col>
         </el-row>
@@ -18,11 +18,11 @@
 import ClassMember from "@/views/ClassMember.vue";
 import CourseInfo from "@/views/CourseInfo.vue";
 import StudentMark from "@/views/StudentMark.vue";
-import StudyAnalysis from "@/views/StudyAnalysis.vue";
+import ModifyInfo from "@/views/ModifyInfo.vue";
 
 export default {
     name:"AllNavigation",
-    components: {StudyAnalysis, StudentMark, CourseInfo, ClassMember},
+    components: {ModifyInfo,  StudentMark, CourseInfo, ClassMember},
     data() {
         return {
             activeName: 'first',

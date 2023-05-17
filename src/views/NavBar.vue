@@ -6,25 +6,13 @@
             </a>
         </div>
         <div class="buttons-middle">
-            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                <el-menu-item index="1" >处理中心</el-menu-item>
-                <el-submenu index="2" style="color: black">
-                    <template slot="title" >我的工作台</template>
-                    <el-menu-item index="2-1">选项1</el-menu-item>
-                    <el-menu-item index="2-2">选项2</el-menu-item>
-                    <el-menu-item index="2-3">选项3</el-menu-item>
-                    <el-submenu index="2-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="2-4-1">选项1</el-menu-item>
-                        <el-menu-item index="2-4-2">选项2</el-menu-item>
-                        <el-menu-item index="2-4-3">选项3</el-menu-item>
-                    </el-submenu>
-                </el-submenu>
-                <el-menu-item index="3"  >消息中心</el-menu-item>
-                <el-menu-item index="4"><a href="https://www.ele.me" target="_blank" >订单管理</a></el-menu-item>
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" active-text-color=" #eef4fa" >
+                <el-menu-item index="1" style="color: #eef4fa;font-family: '微软雅黑 Light',serif;font-size: 18px">
+                    <a href="https://www.ele.me" target="_blank">修改个人信息</a></el-menu-item>
             </el-menu>
         </div>
         <div class="personal-buttons">
+            <el-button style=" padding: 10px ;color: #eef4fa;font-family: '微软雅黑 Light',serif;font-size: 15px" type="text">退出登录</el-button>
             <el-avatar shape="circle" size="large" src="../assets/logo.png" />
 
         </div>
@@ -33,7 +21,17 @@
 
 <script>
 export default {
-    name: "NavBar"
+    name: "NavBar",
+    data(){
+        return {
+            activeIndex: '1',
+        };
+    },
+    methods:{
+        handleSelect(key, keyPath) {
+            console.log(key, keyPath);
+        }
+    }
 }
 </script>
 
@@ -47,15 +45,15 @@ export default {
     .buttons-middle{
         /*background: #2c3e50;*/
         height: 100%;
-        background: #42b983;
+        background: #74759B;
     }
     .el-menu{
-        background: #42b983;
+        background: #74759B;
 
     }
     .el-header{
         margin-top: 0;
-        background: #42b983;
+        background: #74759B;
         width: 100%;
         display: flex;
         justify-content: space-between;

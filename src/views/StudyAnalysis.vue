@@ -1,5 +1,5 @@
 <template>
-<el-main>
+<el-main style="background-color: #E2E1E4">
     <el-card class="box-card">
         <div slot="header" class="clearfix" style="text-align: left">
             <span>{{ name }}的学习分析</span>

@@ -1,5 +1,5 @@
 <template>
-    <el-main>
+    <el-main style="background-color: #E2E1E4">
         <el-card class="box-card">
             <div slot="header" class="clearfix" style="text-align: left">
                 <span><i class="el-icon-s-management"></i>课程信息</span>

@@ -1,5 +1,5 @@
 <template>
-<el-main>
+<el-main >
     <el-card class="box-card">
         <div slot="header" class="clearfix">
             <span  style="float: right;font-size: 14px" >本班级总共有 {{teacherNumber}}位教师 {{studentNumber}}名学生</span>
@@ -65,7 +65,7 @@ export default {
             total:0,//总条数
             pageList:[],//循环数据
             students:[
-                {id:1,account:"1001",name:"林董",avatarURL:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",role:"教师",sex:"男",teamId:""},
+                {id:1,account:"1001",name:"林董",avatarURL:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",role:"教师",sex:"男",teamId:"无"},
                 {id:2,account:"10001",name:"郑总",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"女",teamId:"5"},
                 {id:3,account:"10002",name:"李都",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"6"},
                 {id:4,account:"10003",name:"李是",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"8"},

@@ -9,10 +9,8 @@
                         <el-menu-item style="text-align: left">授课教师<el-avatar shape="circle" size="large" src="assets/logo.png" /></el-menu-item>
                         <el-menu-item index="1" ><i class="el-icon-s-custom"></i><a href="https://www.ele.me" target="_blank" >班级成员</a></el-menu-item>
                         <el-menu-item index="2" ><i class="el-icon-star-off"></i><a href="https://www.ele.me" target="_blank" >课程信息</a></el-menu-item>
-                        <el-menu-item index="3" ><i class="el-icon-tickets"></i><a href="https://www.ele.me" target="_blank" >点名记录</a></el-menu-item>
-                        <el-menu-item index="4" ><i class="el-icon-news"></i><a href="https://www.ele.me" target="_blank" >课堂报告</a></el-menu-item>
-                        <el-menu-item index="5" ><i class="el-icon-s-marketing"></i><a href="https://www.ele.me" target="_blank" >成绩</a></el-menu-item>
-                        <el-menu-item index="6" ><i class="el-icon-pie-chart"></i><a href="https://www.ele.me" target="_blank" >学习分析</a></el-menu-item>
+                        <el-menu-item index="3" ><i class="el-icon-s-marketing"></i><a href="https://www.ele.me" target="_blank" >成绩</a></el-menu-item>
+                        <el-menu-item index="4" ><i class="el-icon-pie-chart"></i><a href="https://www.ele.me" target="_blank" >学习分析</a></el-menu-item>
                     </el-menu>
                 </div>
             </el-col>
@@ -23,12 +21,7 @@
                     <el-tab-pane label="小组交流" name="fourth"><GroupChat></GroupChat></el-tab-pane>
                     <el-tab-pane label="资料" name="fife"><DataBank></DataBank></el-tab-pane>
                     <el-tab-pane label="作业" name="six"><StudentTask></StudentTask></el-tab-pane>
-                    <el-tab-pane label="测试" name="seven">测试</el-tab-pane>
-                    <el-tab-pane label="讨论" name="eight"><StudyDiscuss></StudyDiscuss></el-tab-pane>
-                    <el-tab-pane label="互动" name="nine">互动</el-tab-pane>
-                    <el-tab-pane label="分组学习" name="ten">分组学习</el-tab-pane>
-                    <el-tab-pane label="笔记" name="eleven">笔记</el-tab-pane>
-                    <el-tab-pane label="错题本" name="twelve">错题本</el-tab-pane>
+                    <el-tab-pane label="学习讨论" name="eight"><StudyDiscuss></StudyDiscuss></el-tab-pane>
                 </el-tabs>
             </el-col>
         </el-row>
@@ -66,7 +59,7 @@ export default {
 
 <style scoped>
 ::v-deep .el-tabs__nav-scroll{
-    width:75%;
+    width:40%;
     margin:0 auto
 }
 

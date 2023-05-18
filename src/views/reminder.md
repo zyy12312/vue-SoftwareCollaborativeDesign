@@ -9,7 +9,7 @@
 
 TeacherTeam：教师分组界面
 数据：teams列表，元素包括 teamID，studentID，studentName，character
-例如：
+数据示例：
 teams:[
 {teamID:"5",studentID:"2035060301",studentName: "张三",character:"小组长"},
 {teamID:"5",studentID:"2035060302",studentName: "李四",character:"计划经理"}
@@ -18,7 +18,7 @@ teams:[
 TeacherGrade：教师成绩界面
 数据：gradeData列表，元素包括 id，studentID，studentName，GroupGrade，totalGrade。
 其中，totalGrade如果尚未生成（期末成绩尚未输入），就传递"Null"过来
-例如：
+数据示例：
 gradeData: [{
 id: '1',
 studentId: '2035060301',
@@ -31,4 +31,45 @@ studentId: '2035060301',
 studentName: '王小虎',
 GroupGrade: '87',
 totalGrade: '78'
+}]
+
+
+TeacherTask：教师任务界面
+数据：tasks列表，元素包括 id，title，deadline，character，handledTotal，status。
+其中，handledTotal表示“已交/未交”。例如“4/7”
+数据示例：
+tasks: [{
+id: '101',
+title: '撰写需求分析报告，绘制用例图',
+deadline: '2023.5.1',
+character: '产品经理',
+handledTotal: '6/6',
+status: '已截止'
+},{
+id: '102',
+title: '撰写系统设计报告，绘制活动图',
+deadline: '2023.6.1',
+character: '开发经理',
+handledTotal: '5/6',
+status: '进行中'
+}]
+
+TeacherDataBank：教师资料界面
+数据：tasks列表，元素包括 id，title，deadline，character，handledTotal，status。
+其中，handledTotal表示“已交/未交”。例如“4/7”
+数据示例：
+tasks: [{
+id: '101',
+title: '撰写需求分析报告，绘制用例图',
+deadline: '2023.5.1',
+character: '产品经理',
+handledTotal: '6/6',
+status: '已截止'
+},{
+id: '102',
+title: '撰写系统设计报告，绘制活动图',
+deadline: '2023.6.1',
+character: '开发经理',
+handledTotal: '5/6',
+status: '进行中'
 }]

@@ -15,56 +15,46 @@
                     </el-row>
                 </span>
             </div>
-            <div v-for="(task,index) in tasks" v-bind:key="index">
+            <div v-for="(data,index) in datas" v-bind:key="index">
                 <el-row>
+<!--                资料名称dataName，附件名称attachmentName，附件大小attachmentSize，下载图标，资料状态（未发布，已发布）-->
                     <el-col :span="5">
-                        <div class="grid-content bg-purple-light" style="margin-top: 5px">{{task.title}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 5px">{{data.dataName}}</div>
                     </el-col>
                     <el-col :span="3">
-                        <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">{{task.deadline}}</div>
+                        <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">{{data.attachmentName}}</div>
                     </el-col>
                     <el-col :span="3">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.character}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.attachmentSize}}</div>
                     </el-col>
                     <el-col :span="3">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.handledTotal}}</div>
+                        <el-button type="text" @click="dialogFormVisible_download = true;getIndex(data.index)" style="font-size: 16px">
+                            <i class="el-icon-download"></i>
+                        </el-button>
+                        <el-dialog title="文件下载" :visible.sync="dialogFormVisible_download" v-if="indexs===data.index">
+                            <el-row>
+                                <el-col :span="20">
+                                    <div class="grid-content bg-purple-dark" style="margin-top: 13px;text-align: left">{{data.title}}</div>
+                                </el-col>
+                            </el-row>
+                        </el-dialog>
                     </el-col>
                     <el-col :span="3">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.status}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.status}}</div>
                     </el-col>
-                    <el-col :span="2" v-if="task.status === '未开始'">
-                        <el-button type="primary" plain @click="publish(task.id)">发布</el-button>
+                    <el-col :span="2" v-if="data.status === '未发布'">
+                        <el-button type="primary" plain @click="publish(data.id)">发布</el-button>
                     </el-col>
                     <el-col :span="2" v-else>
                         <el-button type="primary" plain disabled>发布</el-button>
                     </el-col>
-                    <el-col :span="2" v-if="task.status === '进行中'">
+                    <el-col :span="2">
                         <el-button type="success" plain @click="dialogFormVisible_edit = true;">编辑</el-button>
                         <el-dialog :visible.sync="dialogFormVisible_edit" >
                             <div>
-                                <el-input v-model="inputTitle">
-                                    <template slot="prepend">标题：</template>
+                                <el-input v-model="inputName">
+                                    <template slot="prepend">资料名称：</template>
                                 </el-input>
-                            </div>
-                            <div>
-                                <el-input v-model="inputDetail">
-                                    <template slot="prepend">详情：</template>
-                                </el-input>
-
-                            </div>
-                            <div>
-                                <el-input v-model="inputDeadline">
-                                    <template slot="prepend">截止日期：</template>
-                                </el-input>
-                            </div>
-                            <div>
-                                <el-autocomplete
-                                    class="inline-input"
-                                    v-model="inputCharacter"
-                                    :fetch-suggestions="querySearch"
-                                    @select="handleSelect">
-                                    <template slot="prepend">作业负责人：</template>
-                                </el-autocomplete>
                             </div>
                             <div class="grid-content bg-purple-light">
                                 <el-button style="float: right; padding: 3px 0"
@@ -114,47 +104,24 @@
                             </div>
                         </el-dialog>
                     </el-col>
-                    <el-col :span="2" v-else>
-                        <el-button type="success" plain disabled>编辑</el-button>
-                    </el-col>
                     <el-col :span="2">
                         <el-button type="danger" plain @click="removeItem(index)">删除</el-button>
                     </el-col>
                 </el-row>
             </div>
             <div class="grid-content bg-purple-light" >
-                <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px" >添加作业</el-button>
+                <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px" >添加资料</el-button>
                 <el-dialog :visible.sync="dialogFormVisible_add" >
                     <div>
-                        <el-input v-model="inputTitle">
-                            <template slot="prepend">标题：</template>
+                        <el-input v-model="inputName">
+                            <template slot="prepend">资料名称：</template>
                         </el-input>
-                    </div>
-                    <div>
-                        <el-input v-model="inputDetail">
-                            <template slot="prepend">详情：</template>
-                        </el-input>
-
-                    </div>
-                    <div>
-                        <el-input v-model="inputDeadline">
-                            <template slot="prepend">截止日期：</template>
-                        </el-input>
-                    </div>
-                    <div>
-                        <el-autocomplete
-                            class="inline-input"
-                            v-model="inputCharacter"
-                            :fetch-suggestions="querySearch"
-                            @select="handleSelect">
-                            <template slot="prepend">作业负责人：</template>
-                        </el-autocomplete>
                     </div>
                         <div class="grid-content bg-purple-light">
                             <el-button style="float: right; padding: 3px 0"
                                        type="text"
                                        @click="dialogFormVisible_upload = true">上传文件</el-button>
-                            <el-dialog title="提交作业"
+                            <el-dialog title="上传文件"
                                        :visible.sync="dialogFormVisible_upload">
                                 <el-form :model="form">
                                     <el-form-item :label-width="formLabelWidth">
@@ -204,12 +171,13 @@
 
 <script>
 export default {
-    name: "TeacherTask",
+    name: "Teacherdata",
     data() {
         return {
             dialogFormVisible_upload: false,
             dialogFormVisible_edit: false,
             dialogFormVisible_add: false,
+            dialogFormVisible_download: false,
             form: { //没有修改过
                 name: '',
                 region: '',
@@ -221,52 +189,42 @@ export default {
                 desc: ''
             },
             fileList: [{
-                name: '作业要求.jpeg',
+                name: '学习要求.jpeg',
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
             }, {
                 name: '课堂重点截图.jpeg',
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
             }],
-            roles:[
-                {role:"小组长"},{role:"产品经理"},{role:"计划质量经理"},{role:"开发经理"},{role:"测试经理"}
-            ],
-            submit:[
-                {subTime:"2023.05.13 11:30",score:"未评分",file:"作业"}
-            ],
-            cla:[
-                {title1:"附件名",title2:"大小"}
-            ],
-            clas:[
-                {title1:"交付历史与批改记录",title2:"原始成绩"}
-            ],
             indexs:0,
-            // 作业标题title,截止时间deadline,作业负责人character,已交/总计handledTotal,作业状态status
-            tasks: [{
-                id: '101',
-                title: '撰写需求分析报告，绘制用例图',
-                deadline: '2023.5.1',
-                character: '产品经理',
-                handledTotal: '6/6',
-                status: '已截止'
+            datas: [{
+                id: '201',
+                dataName: '需求分析课件',
+                attachmentName: '需求分析2023-3-3.pptx',
+                attachmentSize: '178MB',
+                status: '已发布'
             },{
-                id: '102',
-                title: '撰写系统设计报告，绘制活动图',
-                deadline: '2023.6.1',
-                character: '开发经理',
-                handledTotal: '5/6',
-                status: '进行中'
+                id: '202',
+                dataName: '需求分析报告要求',
+                attachmentName: '模版1.docx',
+                attachmentSize: '11MB',
+                status: '已发布'
             },{
-                id: '103',
-                title: '提交程序代码',
-                deadline: '2023.6.10',
-                character: '开发经理',
-                handledTotal: '0/6',
-                status: '未开始'
-            },
+                id: '203',
+                dataName: '系统设计课件',
+                attachmentName: '系统设计课件2023-5-13.pptx',
+                attachmentSize: '112MB',
+                status: '未发布'
+            }
             ],
             items:[
-                {title1:"作业标题",title2:"截止时间",title3:"作业负责人",title4:"已交/总计",title5:"作业状态"}
-            ]
+                {title1:"资料名称",title2:"附件名称",title3:"附件大小",title4:"下载",title5:"资料状态"}
+            ],
+            characters: [],
+            inputName: '',
+            inputDetail: '',
+            inputDeadline: '',
+            inputCharacter: ''
+
         }
     },
     methods: {
@@ -326,8 +284,8 @@ export default {
         handleSelect(item) {
             console.log(item);
         },
-        publish(taskID){
-            console.log("发布任务，任务编号："+taskID);
+        publish(dataID){
+            console.log("发布资料，资料编号："+dataID);
         },
         removeItem(index) {
             this.$confirm("此操作将删除信息, 是否继续?", "提示", {

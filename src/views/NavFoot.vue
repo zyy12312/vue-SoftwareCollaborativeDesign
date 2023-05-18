@@ -16,16 +16,16 @@ export default {
 .buttons-middle1{
     /*background: #2c3e50;*/
     height: 100%;
-    background: #42b983;
+    background:#74759B;
 
 }
 .el-footer{
     margin-bottom: 0;
-    background: #42b983;
+    background: #74759B;
     width: 100%;
     height: 100%;
     display: inline-flex;
     justify-content: space-between;
-    flex: fit-content;
+    flex: 0;
 }
 </style>

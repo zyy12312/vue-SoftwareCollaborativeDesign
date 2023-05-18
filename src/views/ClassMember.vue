@@ -1,5 +1,5 @@
 <template>
-<el-main>
+<el-main >
     <el-card class="box-card">
         <div slot="header" class="clearfix">
             <span  style="float: right;font-size: 14px" >本班级总共有 {{teacherNumber}}位教师 {{studentNumber}}名学生</span>
@@ -16,7 +16,7 @@
                 </el-row>
                 </span>
         </div>
-        <div v-for="(student,id) in students" :key="id" class="text item" style="text-align: left">
+        <div v-for="(student,id) in pageList" :key="id" class="text item" style="text-align: left">
             <el-row>
                 <el-col :span="12">
                     <div class="grid-content bg-purple-light" style="margin-top: 10px">
@@ -37,13 +37,14 @@
         </div>
         <div class="block">
             <el-pagination
+                backgroud
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="queryInfo.pagenum"
+                :current-page="current"
                 :page-sizes="[1,2,5,10]"
-                :page-size="queryInfo.pagesize"
+                :page-size="pagesize"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total=total>
+                :total="total">
             </el-pagination>
         </div>
     </el-card>
@@ -59,24 +60,22 @@ export default {
             activeName: 'first',
             teacherNumber:1,
             studentNumber:10,
-            queryInfo: {
-                query:"",
-                pagenum: 1, //当前的页数
-                pagesize: 2, //每页的数量
-            },
-            total:11,
+            current:1, //初始页
+            pagesize:10,
+            total:0,//总条数
+            pageList:[],//循环数据
             students:[
-                {id:1,account:"1001",name:"张三",avatarURL:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",role:"教师",sex:"女",teamId:""},
-                {id:2,account:"10001",name:"李四",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"5"},
+                {id:1,account:"1001",name:"林董",avatarURL:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",role:"教师",sex:"男",teamId:"无"},
+                {id:2,account:"10001",name:"郑总",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"女",teamId:"5"},
                 {id:3,account:"10002",name:"李都",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"6"},
                 {id:4,account:"10003",name:"李是",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"8"},
                 {id:5,account:"10004",name:"李等等",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"1"},
-                {id:6,account:"10002",name:"老六",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"2"},
-                {id:7,account:"10002",name:"宝宝",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"3"},
-                {id:8,account:"10002",name:"导师",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"2"},
-                {id:9,account:"10002",name:"刘伟",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"3"},
-                {id:10,account:"10002",name:"小丑",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"5"},
-                {id:11,account:"10002",name:"坤哥",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"5"},
+                {id:6,account:"10005",name:"老六",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"2"},
+                {id:7,account:"10006",name:"宝宝",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"3"},
+                {id:8,account:"10007",name:"导师",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"2"},
+                {id:9,account:"10008",name:"刘伟",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"3"},
+                {id:10,account:"10009",name:"小丑",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"5"},
+                {id:11,account:"100010",name:"坤哥",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"5"},
             ],
             titles:[
                 {title1:"班级成员",title2:"课程角色",title3:"性别",title4:"学生组号"}
@@ -84,36 +83,40 @@ export default {
         };
     },
     created() {
-        this.getUsersList();
+        //调用获取数据
+        this.getData()
     },
+
     methods: {
-        $http: undefined,
         handleClick(tab, event) {
             console.log(tab, event);
         },
-        async getUsersList() {
-            const { data: res } = await this.$http.get("student", {
-                id:this.students.id,
-            });
-            if(res.meta.status!==200){
-                return this.$message.error("获取用户列表失败！");
-            }
-            console.log(res);
-            this.students = res.data.student;
-            this.total = res.data.total;
+        getData() {
+            //发送接口并赋值
+            this.total = this.students.length
+            // 拷贝一份数据
+            let list = JSON.parse(JSON.stringify(this.students))
+            // splice处理数组的方法会改变原数组,所以需要拷贝一份
+            this.pageList = list.splice(0, this.pagesize)
         },
+        //改变当前页数
         handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-            this.queryInfo.pagesize = val;//重新指定每页数据量
-            this.getUsersList();//带着新的分页请求获取数据
-
+            // 只要换页数就直接返回1页
+            this.pagesize = val
+            this.current = 1
+            this.pageList = this.students.slice(0, this.pagesize)
         },
+        // 改变当前页码
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-            this.queryInfo.pagenum = val;//重新指定当前页
-            this.getUsersList();//带着新的分页请求获取数据
-
-
+            this.current = val
+            //如果页码为1,就正常切割
+            if (val === 1) {
+                this.pageList = this.students.slice(0, this.pagesize)
+                return
+            }
+            // 当前页码不为1时
+            val = (val - 1) * this.pagesize
+            this.pageList = this.students.slice(val, val + this.pagesize)
         },
 
     },

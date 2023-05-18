@@ -1,6 +1,11 @@
 
 <template>
-<el-main style="background-color: #E2E1E4">
+<el-main style="background-color: #ffffff">
+<!--    #eef4fa-->
+    <el-row>
+        <el-col :span="24"><div class="grid-content bg-purple-dark">
+            <el-button @click="exportData" type="success" style="float: right">导出成绩<i class=" el-icon-position"></i></el-button></div>
+        </el-col></el-row>
     <div v-for="score in scores"  :key="score" class="text item " >
     <el-row>
         <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.teacherScore}}分<div class="font">教师评分</div></div></el-col>
@@ -67,6 +72,39 @@ export default {
         getIndex(index){
             this.indexs=index;
         },
+        exportData(){
+            this.$http({
+                method: "GET",
+                url: "student/export",
+                params: {},
+                responseType: "blob"
+            })
+                .then(res => {
+                    let blob = new Blob([res.data], { type: "application/vnd.ms-excel" }); // 将服务端返回的文件流（二进制）excel文件转化为blob
+                    let fileName = "学生列表.xls";
+
+                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                        // IE
+                        window.navigator.msSaveOrOpenBlob(blob, fileName);
+                    } else {
+                        let objectUrl = (window.URL || window.webkitURL).createObjectURL(
+                            blob
+                        );
+                        let downFile = document.createElement("a");
+                        downFile.style.display = "none";
+                        downFile.href = objectUrl;
+                        downFile.download = fileName; // 下载后文件名
+                        document.body.appendChild(downFile);
+                        downFile.click();
+                        document.body.removeChild(downFile); // 下载完成移除元素
+                        // window.location.href = objectUrl
+                        window.URL.revokeObjectURL(objectUrl); // 只要映射存在，Blob就不能进行垃圾回收，因此一旦不再需要引用，就必须小心撤销URL，释放掉blob对象。
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     }
 }
 </script>

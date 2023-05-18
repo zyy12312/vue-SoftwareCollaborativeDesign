@@ -171,7 +171,7 @@
 
 <script>
 export default {
-    name: "Teacherdata",
+    name: "TeacherDataBank",
     data() {
         return {
             dialogFormVisible_upload: false,

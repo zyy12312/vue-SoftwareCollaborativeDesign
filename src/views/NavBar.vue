@@ -6,13 +6,13 @@
             </a>
         </div>
         <div class="buttons-middle">
-            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" active-text-color=" #eef4fa" >
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" active-text-color=" #74759B" >
                 <el-menu-item index="1" style="color: #eef4fa;font-family: '微软雅黑 Light',serif;font-size: 18px">
                     <a href="https://www.ele.me" target="_blank">修改个人信息</a></el-menu-item>
             </el-menu>
         </div>
         <div class="personal-buttons">
-            <el-button style=" padding: 10px ;color: #eef4fa;font-family: '微软雅黑 Light',serif;font-size: 15px" type="text">退出登录</el-button>
+            <el-button style=" padding: 10px ;color: #f5eefa;font-family: '微软雅黑 Light',serif;font-size: 15px" type="text">退出登录</el-button>
             <el-avatar shape="circle" size="large" src="../assets/logo.png" />
 
         </div>

@@ -18,7 +18,7 @@ export const baseRoutes = [
         path : "/DiscussDetail",
         name : "DiscussDetail",
         component : () => import('@/views/DiscussDetail'),
-        hidden : true
+        hidden : false
     },
     {
         path: "/404",
@@ -117,7 +117,7 @@ export const teacherRoutes = [
             //教师端与各个团队交流
             // {
             //     path: "chat",
-            //     component: () => import('@/views/teacher/')
+            //     component: () => import('@/views/teacher/Chat')
             // },
             //教师端成绩管理
             {

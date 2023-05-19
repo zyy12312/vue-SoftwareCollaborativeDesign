@@ -47,12 +47,12 @@
                                     <el-col :span="4">
                                         <div class="grid-content bg-purple-light" v-if="task.leader===myRole">
                                             <el-button style="float: right; padding: 3px 0;margin-top: 13px" type="text"
-                                                       @click="write">提交
+                                                       @click="write(index)">提交
                                             </el-button>
                                         </div>
                                         <div class="grid-content bg-purple-light" v-else>
                                             <el-button style="float: right; padding: 3px 0;margin-top: 13px" type="text"
-                                                       @click="write" disabled>提交
+                                                       @click="write(index)" disabled>提交
                                             </el-button>
                                         </div>
                                     </el-col>
@@ -173,7 +173,7 @@
                                                     </div>
                                                     <div class="grid-content bg-purple-light" v-else>
                                                         <el-button style="float: right; padding: 3px 0;margin-top: 13px"
-                                                                   type="text" @click="write" disabled>任务分配
+                                                                   type="text" @click="subtasks(index)" disabled>任务分配
                                                         </el-button>
                                                     </div>
                                                 </el-col>
@@ -204,7 +204,7 @@
                                                     </el-col>
                                                     <el-col :span="4">
                                                         <div class="grid-content bg-purple-light">
-                                                            <el-button type="text" @click="dialogFormVisible = true"
+                                                            <el-button type="text" @click="dialogFormVisible = true;download(index)"
                                                                        style="font-size: 16px">
                                                                 <i class="el-icon-download"></i>
                                                             </el-button>
@@ -270,7 +270,7 @@
                                                 </el-col>
                                             </el-row>
                                         </el-card>
-                                        <el-card>
+                                        <el-card v-if="searchDetail==='false'">
                                             <div slot="header" class="clearfix">
                                                       <span v-for="cl in clas" v-bind:key="cl.title1">
                                                           <el-row>
@@ -320,7 +320,7 @@
                                                              <el-button
                                                                      @click="dialogFormVisible = false">取 消</el-button>
                                                                <el-button type="primary"
-                                                                          @click="dialogFormVisible = false">确 定</el-button>
+                                                                          @click="dialogFormVisible = false;confirm">确 定</el-button>
                                                              </div>
                                                               </el-dialog>
                                                                   </div>
@@ -342,9 +342,35 @@
                                                     </el-col>
                                                     <el-col :span="4">
                                                         <div class="grid-content bg-purple-light">
-                                                            <el-button style="float: right; padding: 3px 0" type="text"
-                                                                       @click="search">查看详情
-                                                            </el-button>
+                                                            <el-button style="float: right; padding: 3px 0" type="text" @click="searchDetail='true'">查看详情</el-button>
+                                                        </div>
+                                                    </el-col>
+                                                </el-row>
+                                            </div>
+                                        </el-card>
+                                        <el-card class="box-card" v-else>
+                                            <div slot="header" class="clearfix">
+                                                <span>作业</span>
+                                                <el-button style="float: right; padding: 3px 0" type="text" @click="searchDetail='false'"><i class="el-icon-close"></i></el-button>
+                                            </div>
+                                            <div v-for="cl in cla" :key="cl" class="text item" style="text-align: left">
+                                                <el-row>
+                                                    <el-col :span="12"><div
+                                                        class="grid-content bg-purple-light">{{ cl.title1 }}</div></el-col>
+                                                    <el-col :span="8"><div
+                                                        class="grid-content bg-purple-light">{{ cl.title2 }}</div></el-col>
+                                                </el-row>
+                                            </div>
+                                            <div v-for="sub in submit" :key="sub" style="text-align: left">
+                                                <el-row>
+                                                    <el-col :span="12">
+                                                        <div class="grid-content bg-purple-light"
+                                                             style="margin-top: 13px">{{ sub.file }}
+                                                        </div>
+                                                    </el-col>
+                                                    <el-col :span="8">
+                                                        <div class="grid-content bg-purple-light"
+                                                             style="margin-top: 13px">{{ sub.fileSize }}
                                                         </div>
                                                     </el-col>
                                                 </el-row>
@@ -370,6 +396,7 @@ export default {
             activeName2: 'first',
             myRole: "产品经理",
             indexs: 0,
+            searchDetail:'false',
             items: [
                 {title1: "作业名称", title2: "作业形式", title3: "状态", title4: "类型", title5: "交付"},
             ],
@@ -405,7 +432,7 @@ export default {
                 {role: "小组长"}, {role: "产品经理"}, {role: "计划质量经理"}, {role: "开发经理"}, {role: "测试经理"}
             ],
             submit: [
-                {subTime: "2023.05.13 11:30", score: "未评分", file: "作业"}
+                {subTime: "2023.05.13 11:30", score: "未评分", file: "作业",fileSize:"125KB"}
             ],
             cla: [
                 {title1: "附件名", title2: "大小"}
@@ -457,11 +484,17 @@ export default {
         clicks(index) {
             this.indexs = index;
         },
-        search() {
-
+        write(index) {
+            index;             //对应写作业操作方法
         },
-        write() {
-
+        download(index) {
+            index;               //下载对应文件的方法
+        },
+        subtasks(index){
+            index;              //对应任务分配方法
+        },
+        confirm(){
+                                 //对应写作业的确认按钮
         }
     },
 
@@ -483,6 +516,27 @@ export default {
 }
 
 .el-input {
+    width: 100%;
+}
+.text {
+    font-size: 14px;
+}
+
+.item {
+    margin-bottom: 18px;
+}
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+    text-align: left;
+}
+.clearfix:after {
+    clear: both
+}
+
+.box-card {
     width: 100%;
 }
 </style>

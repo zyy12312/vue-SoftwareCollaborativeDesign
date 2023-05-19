@@ -73,5 +73,8 @@ export default {
 </script>
 
 <style scoped>
-
+::v-deep .el-tabs__nav-scroll{
+    width:75%;
+    margin:0 auto
+}
 </style>

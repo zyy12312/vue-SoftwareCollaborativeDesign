@@ -115,10 +115,10 @@ export const teacherRoutes = [
                 redirect : "/discuss"
             },
             //教师端与各个团队交流
-            {
-                path: "chat",
-                component: () => import('@/views/teacher/Chat')
-            },
+            // {
+            //     path: "chat",
+            //     component: () => import('@/views/teacher/')
+            // },
             //教师端成绩管理
             {
                 path: "grade",

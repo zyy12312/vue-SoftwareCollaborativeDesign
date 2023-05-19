@@ -11,26 +11,26 @@
                         </div>
                         <div v-for="cla in clas" :key="cla.title1" class="team font">
                             <el-row>
-                                <el-col>
+                                <el-col :span="8">
                                     <div class="grid-content bg-purple">{{ cla.title1 }}</div>
                                 </el-col>
-                                <el-col>
+                                <el-col :span="8">
                                     <div class="grid-content bg-purple-light">{{ cla.title2 }}</div>
                                 </el-col>
-                                <el-col>
+                                <el-col :span="8">
                                     <div class="grid-content bg-purple">{{ cla.title3 }}</div>
                                 </el-col>
                             </el-row>
                         </div>
                         <div v-for="team in teams" :key="team.studentName" class="text team">
                             <el-row>
-                                <el-col>
+                                <el-col :span="8">
                                     <div class="grid-content bg-purple">{{ team.studentID }}</div>
                                 </el-col>
-                                <el-col>
+                                <el-col :span="8">
                                     <div class="grid-content bg-purple-light">{{ team.studentName }}</div>
                                 </el-col>
-                                <el-col>
+                                <el-col :span="8">
                                     <div class="grid-content bg-purple">{{ team.character }}</div>
                                 </el-col>
                             </el-row>

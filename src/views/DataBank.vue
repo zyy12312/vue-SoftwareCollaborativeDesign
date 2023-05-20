@@ -28,7 +28,7 @@
                     </el-col>
                     <el-col :span="4">
                         <div class="grid-content bg-purple-light">
-                            <el-button type="text" @click="dialogFormVisible = true;getIndex(task.index)" style="font-size: 16px">
+                            <el-button type="text" @click="dialogFormVisible = true;getIndex(task.index);download(task.index)" style="font-size: 16px">
                                 <i class="el-icon-download"></i>
                             </el-button>
                             <el-dialog title="文件下载" :visible.sync="dialogFormVisible" v-if="indexs===task.index">
@@ -79,6 +79,9 @@ export default {
         getIndex(index){
             this.indexs=index;
         },
+        download(index){
+            this.indexs=index;                   //下载对应资料的方法
+        }
     }
 }
 </script>

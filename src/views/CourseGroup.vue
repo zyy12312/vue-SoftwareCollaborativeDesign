@@ -3,7 +3,6 @@
        <el-card class="box-card" v-if="haveGroup==='true'"><!--根据haveGroup的值判断card-->
           <div slot="header" class="clearfix">
               <span >分组详情</span>
-              <el-button style="float: right; padding: 3px 0" type="text" @click="goChat">交流入口</el-button>
           </div>
           <div v-for="cla in clas" :key="cla.title1" class="item font">
               <el-row>

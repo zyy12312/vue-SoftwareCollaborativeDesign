@@ -9,8 +9,6 @@
                         <el-menu-item style="text-align: left">授课教师<el-avatar shape="circle" size="large" src="assets/logo.png" /></el-menu-item>
                         <el-menu-item index="1" ><i class="el-icon-s-custom"></i><a href="https://www.ele.me" target="_blank" >班级成员</a></el-menu-item>
                         <el-menu-item index="2" ><i class="el-icon-star-off"></i><a href="https://www.ele.me" target="_blank" >课程信息</a></el-menu-item>
-                        <el-menu-item index="3" ><i class="el-icon-tickets"></i><a href="https://www.ele.me" target="_blank" >点名记录</a></el-menu-item>
-                        <el-menu-item index="4" ><i class="el-icon-news"></i><a href="https://www.ele.me" target="_blank" >课堂报告</a></el-menu-item>
                         <el-menu-item index="5" ><i class="el-icon-s-marketing"></i><a href="https://www.ele.me" target="_blank" >成绩</a></el-menu-item>
                         <el-menu-item index="6" ><i class="el-icon-pie-chart"></i><a href="https://www.ele.me" target="_blank" >学习分析</a></el-menu-item>
                     </el-menu>

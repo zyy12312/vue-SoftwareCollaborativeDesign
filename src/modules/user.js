@@ -1,4 +1,4 @@
-
+import {getToken} from "@/utils/auth";
 
 
 const getDefaultState = () => {

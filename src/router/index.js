@@ -9,6 +9,11 @@ import TeacherLayout from "@/layouts/TeacherLayout.vue";
 //基本路由表
 export const baseRoutes = [
     {
+        path: "/",
+        redirect: "/login",
+        hidden: true
+    },
+    {
         path : "/login",
         component : () => import('@/views/LoginPage'),
         hidden : true
@@ -18,11 +23,11 @@ export const baseRoutes = [
         path : "/DiscussDetail",
         name : "DiscussDetail",
         component : () => import('@/views/DiscussDetail'),
-        hidden : true
+        hidden : false
     },
     {
         path: "/404",
-        component : ()=> import('@/views/404'),
+        component : ()=> import('@/views/404.vue'),
         hidden: true
     },
     {
@@ -39,7 +44,9 @@ export const baseRoutes = [
         component : ()=> import('@/views/Information'),
         hidden: true
     },
-
+    // studentRoutes,
+    // teacherRoutes,
+    { path: '*', redirect: '/404', hidden: true }
 ]
 
 //学生端路由表
@@ -117,7 +124,7 @@ export const teacherRoutes = [
             //教师端与各个团队交流
             // {
             //     path: "chat",
-            //     component: () => import('@/views/teacher/')
+            //     component: () => import('@/views/teacher/Chat')
             // },
             //教师查看作业详情
             {
@@ -141,10 +148,27 @@ const createRouter = () => new Router(
     }
 )
 
+const createStudentRouter = () => new Router(
+    {
+        scrollBehavior: () => ({ y: 0 }),
+        routes: baseRoutes.concat(studentRoutes)
+    }
+)
+const createTeacherRouter = () => new Router(
+    {
+        scrollBehavior: () => ({ y: 0 }),
+        routes: baseRoutes.concat(teacherRoutes)
+    }
+)
 const router = createRouter()
 
 export function resetRouter() {
-    const newRouter = createRouter()
+    let newRouter = createRouter()
+    // if (true==true) {
+        newRouter = createStudentRouter()
+    // } else {
+        newRouter = createTeacherRouter()
+    // }
     router.matcher = newRouter.matcher // reset router
 }
 

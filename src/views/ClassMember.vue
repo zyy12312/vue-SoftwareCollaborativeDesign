@@ -1,84 +1,175 @@
 <template>
-<el-main >
-    <el-card class="box-card">
-        <div slot="header" class="clearfix">
-            <span  style="float: right;font-size: 14px" >本班级总共有 {{teacherNumber}}位教师 {{studentNumber}}名学生</span>
-        </div>
-    </el-card>
-    <el-card class="box-card">
-        <div slot="header" class="clearfix" style="text-align: left">
+    <el-main>
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span style="float: right;font-size: 14px">本班级总共有 {{ teacherNumber }}位教师 {{
+                    studentNumber
+                    }}名学生</span>
+            </div>
+        </el-card>
+        <el-card class="box-card">
+            <div slot="header" class="clearfix" style="text-align: left">
         <span v-for="title in titles" v-bind:key="title.title1">
-                <el-row >
-                    <el-col :span="12"><div class="grid-content bg-purple-light" >{{title.title1}}</div></el-col>
-                    <el-col :span="4"><div class="grid-content bg-purple-light">{{title.title2}}</div></el-col>
-                    <el-col :span="4"><div class="grid-content bg-purple-light">{{title.title3}}</div></el-col>
-                    <el-col :span="4"><div class="grid-content bg-purple-light">{{title.title4}}</div></el-col>
+                <el-row>
+                    <el-col :span="12"><div class="grid-content bg-purple-light">{{ title.title1 }}</div></el-col>
+                    <el-col :span="4"><div class="grid-content bg-purple-light">{{ title.title2 }}</div></el-col>
+                    <el-col :span="4"><div class="grid-content bg-purple-light">{{ title.title3 }}</div></el-col>
+                    <el-col :span="4"><div class="grid-content bg-purple-light">{{ title.title4 }}</div></el-col>
                 </el-row>
                 </span>
-        </div>
-        <div v-for="(student,id) in pageList" :key="id" class="text item" style="text-align: left">
-            <el-row>
-                <el-col :span="12">
-                    <div class="grid-content bg-purple-light" style="margin-top: 10px">
-                        <el-avatar round width="50px" height="50px" :src="student.avatarURL"></el-avatar>
-                        {{student.name}}   {{student.account}}
-                    </div>
-                </el-col>
-                <el-col :span="4">
-                    <div class="grid-content bg-purple-light" style="margin-top: 20px">{{student.role}}</div>
-                </el-col>
-                <el-col :span="4">
-                    <div class="grid-content bg-purple-light" style="margin-top: 20px">{{student.sex}}</div>
-                </el-col>
-                <el-col :span="4" v-if="student.role==='学生'">
-                    <div class="grid-content bg-purple-light" style="margin-top: 20px">第{{student.teamId}}组</div>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="block">
-            <el-pagination
-                backgroud
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="current"
-                :page-sizes="[1,2,5,10]"
-                :page-size="pagesize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="total">
-            </el-pagination>
-        </div>
-    </el-card>
-</el-main>
+            </div>
+            <div v-for="(student,id) in pageList" :key="id" class="text item" style="text-align: left">
+                <el-row>
+                    <el-col :span="12">
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">
+                            <el-avatar round width="50px" height="50px" :src="student.avatarURL"></el-avatar>
+                            {{ student.name }} {{ student.account }}
+                        </div>
+                    </el-col>
+                    <el-col :span="4">
+                        <div class="grid-content bg-purple-light" style="margin-top: 20px">{{ student.role }}</div>
+                    </el-col>
+                    <el-col :span="4">
+                        <div class="grid-content bg-purple-light" style="margin-top: 20px">{{ student.sex }}</div>
+                    </el-col>
+                    <el-col :span="4" v-if="student.role==='学生'">
+                        <div class="grid-content bg-purple-light" style="margin-top: 20px">第{{ student.teamId }}组
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+            <div class="block">
+                <el-pagination
+                        backgroud
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="current"
+                        :page-sizes="[1,2,5,10]"
+                        :page-size="pagesize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="total">
+                </el-pagination>
+            </div>
+        </el-card>
+    </el-main>
 </template>
 
-<script >
+<script>
 
 export default {
-    name:"ClassMember",
+    name: "ClassMember",
     data() {
         return {
             activeName: 'first',
-            teacherNumber:1,
-            studentNumber:10,
-            current:1, //初始页
-            pagesize:10,
-            total:0,//总条数
-            pageList:[],//循环数据
-            students:[
-                {id:1,account:"1001",name:"林董",avatarURL:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",role:"教师",sex:"男",teamId:"无"},
-                {id:2,account:"10001",name:"郑总",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"女",teamId:"5"},
-                {id:3,account:"10002",name:"李都",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"6"},
-                {id:4,account:"10003",name:"李是",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"8"},
-                {id:5,account:"10004",name:"李等等",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"1"},
-                {id:6,account:"10005",name:"老六",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"2"},
-                {id:7,account:"10006",name:"宝宝",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"3"},
-                {id:8,account:"10007",name:"导师",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"2"},
-                {id:9,account:"10008",name:"刘伟",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"3"},
-                {id:10,account:"10009",name:"小丑",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"5"},
-                {id:11,account:"100010",name:"坤哥",avatarURL:"https://img01.yzcdn.cn/vant/cat.jpeg",role:"学生",sex:"男",teamId:"5"},
+            teacherNumber: 1,
+            studentNumber: 10,
+            current: 1, //初始页
+            pagesize: 10,
+            total: 0,//总条数
+            pageList: [],//循环数据
+            students: [
+                {
+                    id: 1,
+                    account: "1001",
+                    name: "林董",
+                    avatarURL: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+                    role: "教师",
+                    sex: "男",
+                    teamId: "无"
+                },
+                {
+                    id: 2,
+                    account: "10001",
+                    name: "郑总",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "女",
+                    teamId: "5"
+                },
+                {
+                    id: 3,
+                    account: "10002",
+                    name: "李都",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "男",
+                    teamId: "6"
+                },
+                {
+                    id: 4,
+                    account: "10003",
+                    name: "李是",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "男",
+                    teamId: "8"
+                },
+                {
+                    id: 5,
+                    account: "10004",
+                    name: "李等等",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "男",
+                    teamId: "1"
+                },
+                {
+                    id: 6,
+                    account: "10005",
+                    name: "老六",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "男",
+                    teamId: "2"
+                },
+                {
+                    id: 7,
+                    account: "10006",
+                    name: "宝宝",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "男",
+                    teamId: "3"
+                },
+                {
+                    id: 8,
+                    account: "10007",
+                    name: "导师",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "男",
+                    teamId: "2"
+                },
+                {
+                    id: 9,
+                    account: "10008",
+                    name: "刘伟",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "男",
+                    teamId: "3"
+                },
+                {
+                    id: 10,
+                    account: "10009",
+                    name: "小丑",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "男",
+                    teamId: "5"
+                },
+                {
+                    id: 11,
+                    account: "100010",
+                    name: "坤哥",
+                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
+                    role: "学生",
+                    sex: "男",
+                    teamId: "5"
+                },
             ],
-            titles:[
-                {title1:"班级成员",title2:"课程角色",title3:"性别",title4:"学生组号"}
+            titles: [
+                {title1: "班级成员", title2: "课程角色", title3: "性别", title4: "学生组号"}
             ]
         };
     },

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {Message, MessageBox} from "element-ui";
-import store from "@/api/store";
+import index from "@/store";
+import {getToken} from "@/utils/auth";
 
 const service = axios.create(
     {
@@ -14,11 +15,11 @@ service.interceptors.request.use(
     config => {
         // do something before request is sent
 
-        if (store.getters.token) {
+        if (index.getters.token) {
             // let each request carry token
             // ['X-Token'] is a custom headers key
             // please modify it according to the actual situation
-            // config.headers = getToken()
+            config.headers = getToken()
         }
         return config
     },
@@ -47,7 +48,7 @@ service.interceptors.response.use(
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                    store.dispatch('user/resetToken').then(() => {
+                    index.dispatch('user/resetToken').then(() => {
                         location.reload()
                     })
                 })

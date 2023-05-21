@@ -1,29 +1,30 @@
 <template>
   <div id="app">
-      <NavBar></NavBar>
+<!--      <NavBar></NavBar>-->
 <!--      <AllNavigation></AllNavigation>-->
-      <PageTitle></PageTitle>
-      <NavFoot></NavFoot>
+<!--      <PageTitle></PageTitle>-->
+<!--      <NavFoot></NavFoot>-->
+      <router-view></router-view>
   </div>
 </template>
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 // import FileUpload from "@/components/FileUpload.vue";
-import NavBar from "@/views/NavBar.vue";
-import NavFoot from "@/views/NavFoot.vue";
+// import NavBar from "@/views/NavBar.vue";
+// import NavFoot from "@/views/NavFoot.vue";
 // import AllNavigation from "@/views/AllNavigation.vue";
-import PageTitle from "@/views/PageTitle.vue";
+// import PageTitle from "@/views/PageTitle.vue";
 //import StudyDiscuss from "@/components/StudyDiscuss.vue";
 
 export default {
   name: 'App',
   components: {
-      PageTitle,
+      // PageTitle,
       // AllNavigation,
       //StudyDiscuss,
-      NavFoot,
-      NavBar,
+      // NavFoot,
+      // NavBar,
       // FileUpload,
     // HelloWorld
   }

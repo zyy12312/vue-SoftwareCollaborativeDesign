@@ -287,6 +287,9 @@ export default {
         publish(dataID){
             console.log("发布资料，资料编号："+dataID);
         },
+        edit_confirm(dataID,dataName){
+            console.log("完成第"+dataID+"个资料的编辑操作，修改后的资料名称："+dataName);
+        },
         removeItem(index) {
             this.$confirm("此操作将删除信息, 是否继续?", "提示", {
                 confirmButtonText: "确定",

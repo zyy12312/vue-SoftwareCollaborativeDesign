@@ -31,13 +31,6 @@ export const baseRoutes = [
         hidden: true
     },
     {
-        path : "/discussdetail",
-        name : "DiscussDetail",
-        component : () => import('@/views/DiscussDetail'),
-        // redirect:"/homepage/studydiscuss",
-        hidden : false
-    },
-    {
         path: '/basepage',
         component :()=>import('@/views/BasePage.vue'),
         redirect: '/homepage',

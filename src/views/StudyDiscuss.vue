@@ -120,7 +120,7 @@ export default {
         },
         goDiscussDetail() {
             console.log(this.$router.currentRoute.fullPath)
-            router.push('/studydiscuss' + '/discussdetail');
+            router.push('/basepage' + '/discussdetail');
         },
         getIndex(index) {
             this.indexs = index;

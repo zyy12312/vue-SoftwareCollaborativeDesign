@@ -21,9 +21,13 @@
             <div v-for="(student,id) in pageList" :key="id" class="text item" style="text-align: left">
                 <el-row>
                     <el-col :span="12">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">
-                            <el-avatar round width="50px" height="50px" :src="student.avatarURL"></el-avatar>
-                            {{ student.name }} {{ student.account }}
+                        <div class="grid-content bg-purple-light profile" style="margin-top: 10px">
+                            <el-avatar round width="50px" height="50px" :src="student.avatarURL" class="avatar"></el-avatar>
+                            <div class="info">
+                                <div class="name">{{ student.name }}</div>
+                                <div class="student-id">{{ student.account }}</div>
+                            </div>
+
                         </div>
                     </el-col>
                     <el-col :span="4">
@@ -216,5 +220,31 @@ export default {
 
 
 <style scoped>
+.profile {
+    display: flex;
+    align-items: center;
+}
 
+.avatar {
+    width: 50px;
+    height: 50px;
+    /* 添加其他样式属性 */
+}
+
+.info {
+    margin-left: 10px;
+    /* 添加其他样式属性 */
+}
+
+.name {
+    font-size: 16px;
+    font-weight: bold;
+    /* 添加其他样式属性 */
+}
+
+.student-id {
+    font-size: 14px;
+    color: gray;
+    /* 添加其他样式属性 */
+}
 </style>

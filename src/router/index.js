@@ -84,6 +84,13 @@ export const baseRoutes = [
                 component :()=>import('@/views/StudentMark.vue'),
                 hidden: true
             },
+            //修改个人信息
+            {
+                path: "/modifyinfo",
+                name: "ModifyInfo",
+                component :()=>import('@/views/ModifyInfo.vue'),
+                hidden: true
+            },
         ],
         hidden: true
     },

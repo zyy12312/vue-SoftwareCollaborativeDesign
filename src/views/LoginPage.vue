@@ -12,7 +12,7 @@
         </span>
                 <el-input
                         ref="username"
-                        v-model="user.account"
+                        v-model="user.username"
                         placeholder="Username"
                         name="username"
                         tabindex="1"
@@ -74,11 +74,11 @@ export default {
         }
         return {
             user: {
-                account: '',
+                username: '',
                 password: ''
             },
             loginRules: {
-                account: [{ required: true, trigger: 'blur', validator: validateUsername }],
+                username: [{ required: true, trigger: 'blur', validator: validateUsername }],
                 password: [{ required: true, trigger: 'blur', validator: validatePassword }]
             },
             loading: false,

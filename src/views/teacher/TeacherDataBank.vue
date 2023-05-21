@@ -31,7 +31,7 @@
                         <el-button type="text" @click="dialogFormVisible_download = true;getIndex(data.index)" style="font-size: 16px">
                             <i class="el-icon-download"></i>
                         </el-button>
-                        <el-dialog title="文件下载" :visible.sync="dialogFormVisible_download" v-if="indexs===data.index">
+                        <el-dialog title="文件下载" :visible.sync="dialogFormVisible_download" v-if="indexs===data.index" append-to-body>
                             <el-row>
                                 <el-col :span="20">
                                     <div class="grid-content bg-purple-dark" style="margin-top: 13px;text-align: left">{{data.title}}</div>
@@ -50,7 +50,7 @@
                     </el-col>
                     <el-col :span="2">
                         <el-button type="success" plain @click="dialogFormVisible_edit = true;">编辑</el-button>
-                        <el-dialog :visible.sync="dialogFormVisible_edit" >
+                        <el-dialog :visible.sync="dialogFormVisible_edit" append-to-body>
                             <div>
                                 <el-input v-model="inputName">
                                     <template slot="prepend">资料名称：</template>
@@ -61,7 +61,7 @@
                                            type="text"
                                            @click="dialogFormVisible_upload = true">上传文件</el-button>
                                 <el-dialog title="上传文件"
-                                           :visible.sync="dialogFormVisible_upload">
+                                           :visible.sync="dialogFormVisible_upload" append-to-body>
                                     <el-form :model="form">
                                         <el-form-item :label-width="formLabelWidth">
                                             <div class="upload">
@@ -111,7 +111,7 @@
             </div>
             <div class="grid-content bg-purple-light" >
                 <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px" >添加资料</el-button>
-                <el-dialog :visible.sync="dialogFormVisible_add" >
+                <el-dialog :visible.sync="dialogFormVisible_add" append-to-body>
                     <div>
                         <el-input v-model="inputName">
                             <template slot="prepend">资料名称：</template>
@@ -122,7 +122,7 @@
                                        type="text"
                                        @click="dialogFormVisible_upload = true">上传文件</el-button>
                             <el-dialog title="上传文件"
-                                       :visible.sync="dialogFormVisible_upload">
+                                       :visible.sync="dialogFormVisible_upload" append-to-body>
                                 <el-form :model="form">
                                     <el-form-item :label-width="formLabelWidth">
                                         <div class="upload">

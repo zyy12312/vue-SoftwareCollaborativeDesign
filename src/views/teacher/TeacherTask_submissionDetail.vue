@@ -35,7 +35,7 @@
                             <el-button type="warning" plain @click="dialogFormVisible = true;getIndex(submission.index)"
                                        style="font-size: 16px">查看作业
                             </el-button>
-                            <el-dialog title="作业详情" :visible.sync="dialogFormVisible" v-if="indexs===submission.index">
+                            <el-dialog title="作业详情" :visible.sync="dialogFormVisible" v-if="indexs===submission.index" append-to-body>
                                 <el-tabs type="card">
                                     <el-card>
                                                 <el-row>
@@ -112,7 +112,7 @@
                                                         <div class="grid-content bg-purple-light">
                                                             <el-button style="float: right; padding: 3px 0" type="text" @click="dialogFormVisible_comment = true;">评分
                                                             </el-button>
-                                                            <el-dialog :visible.sync="dialogFormVisible_comment" >
+                                                            <el-dialog :visible.sync="dialogFormVisible_comment" append-to-body>
                                                                 <div>
                                                                     <el-input v-model="score">
                                                                         <template slot="prepend">分数：</template>

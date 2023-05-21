@@ -41,20 +41,21 @@
                     </el-col>
                     <el-col :span="2" v-if="task.status === '进行中'">
                         <el-button type="success" plain @click="dialogFormVisible_edit = true;">编辑</el-button>
-                        <el-dialog :visible.sync="dialogFormVisible_edit" >
+                        <el-dialog :visible.sync="dialogFormVisible_edit" append-to-body>
                             <div>
-                                <el-input v-model="inputTitle">
+                                <el-input v-model="edited_task.inputTitle">
                                     <template slot="prepend">标题：</template>
                                 </el-input>
                             </div>
+
                             <div>
-                                <el-input v-model="inputDetail">
+                                <el-input v-model="edited_task.inputDetail">
                                     <template slot="prepend">详情：</template>
                                 </el-input>
 
                             </div>
                             <div>
-                                <el-input v-model="inputDeadline">
+                                <el-input v-model="edited_task.inputDeadline">
                                     <template slot="prepend">截止日期：</template>
                                 </el-input>
                             </div>
@@ -72,7 +73,7 @@
                                            type="text"
                                            @click="dialogFormVisible_upload = true">上传文件</el-button>
                                 <el-dialog title="上传文件"
-                                           :visible.sync="dialogFormVisible_upload">
+                                           :visible.sync="dialogFormVisible_upload" append-to-body>
                                     <el-form :model="form">
                                         <el-form-item :label-width="formLabelWidth">
                                             <div class="upload">
@@ -111,7 +112,7 @@
                                 <el-button
                                     @click="dialogFormVisible_edit = false">取 消</el-button>
                                 <el-button type="primary"
-                                           @click="dialogFormVisible_edit = false">确 定</el-button>
+                                           @click="dialogFormVisible_edit = false; editTaskConfirm()">确 定</el-button>
                             </div>
                         </el-dialog>
                     </el-col>
@@ -119,7 +120,7 @@
                         <el-button type="success" plain disabled>编辑</el-button>
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="danger" plain @click="removeItem(index)">删除</el-button>
+                        <el-button type="danger" plain @click="deleteTaskConfirm(index)">删除</el-button>
                     </el-col>
                     <el-col :span="2">
                         <el-button type="warning" plain @click="checkItem(index)">批阅</el-button>
@@ -128,20 +129,20 @@
             </div>
             <div class="grid-content bg-purple-light" >
                 <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px" >添加作业</el-button>
-                <el-dialog :visible.sync="dialogFormVisible_add" >
+                <el-dialog :visible.sync="dialogFormVisible_add" append-to-body>
                     <div>
-                        <el-input v-model="inputTitle">
+                        <el-input v-model="added_task.inputTitle">
                             <template slot="prepend">标题：</template>
                         </el-input>
                     </div>
                     <div>
-                        <el-input v-model="inputDetail">
+                        <el-input v-model="added_task.inputDetail">
                             <template slot="prepend">详情：</template>
                         </el-input>
 
                     </div>
                     <div>
-                        <el-input v-model="inputDeadline">
+                        <el-input v-model="added_task.inputDeadline">
                             <template slot="prepend">截止日期：</template>
                         </el-input>
                     </div>
@@ -159,7 +160,7 @@
                                        type="text"
                                        @click="dialogFormVisible_upload = true">上传文件</el-button>
                             <el-dialog title="提交作业"
-                                       :visible.sync="dialogFormVisible_upload">
+                                       :visible.sync="dialogFormVisible_upload" append-to-body>
                                 <el-form :model="form">
                                     <el-form-item :label-width="formLabelWidth">
                                         <div class="upload">
@@ -197,7 +198,7 @@
                         <el-button
                             @click="dialogFormVisible_add = false">取 消</el-button>
                         <el-button type="primary"
-                                   @click="dialogFormVisible_add = false">确 定</el-button>
+                                   @click="dialogFormVisible_add = false; addTaskConfirm(added_task)">确 定</el-button>
                     </div>
                 </el-dialog>
             </div>
@@ -208,10 +209,23 @@
 
 <script>
 
+import {createTask, editTask} from "@/api/task";
+import {Message} from "element-ui";
+
 export default {
     name: "TeacherTask",
     data() {
         return {
+            edited_task: {
+                inputTitle: '',
+                inputDetail: '',
+                inputDeadline: ''
+            },
+            added_task: {
+                inputTitle: '',
+                inputDetail: '',
+                inputDeadline: ''
+            },
             dialogFormVisible_upload: false,
             dialogFormVisible_edit: false,
             dialogFormVisible_add: false,
@@ -275,6 +289,69 @@ export default {
         }
     },
     methods: {
+        //编辑任务
+        editTaskConfirm(){
+            console.log("edit1:inputTitle="+this.edited_task.inputTitle)
+            editTask(this.edited_task)
+                .then((res)=>{
+                    console.log("edit:inputTitle="+this.edited_task.inputTitle)
+                    if (res.data.code===200){
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
+        },
+
+        //新建任务
+        addTaskConfirm(){
+            console.log("add1:inputTitle="+this.added_task.inputTitle)
+            createTask(this.added_task)
+                .then((res)=>{
+                    console.log("add2:inputTitle="+this.added_task.inputTitle)
+                    if (res.data.code===200){
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
+        },
+
+        //删除任务
+        deleteTaskConfirm(index){
+            this.$confirm("此操作将删除信息, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(() => {
+                    this.items.splice(index, 1);
+                    this.$message({
+                        type: "success",
+                        message: "删除成功!"
+                    });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消删除"
+                    });
+                });
+            console.log("delete1:deleted_id="+this.tasks[index].id)
+            createTask(this.tasks[index].id)
+                .then((res)=>{
+                    console.log("delete2:deleted_id="+this.tasks[index].id)
+                    if (res.data.code===200){
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
+        },
+        
+        uploadFile(){
+
+        },
         handleDelete(row, index) {
             this.$notify({
                 title: 'Success',
@@ -333,26 +410,6 @@ export default {
         },
         publish(taskID){
             console.log("发布任务，任务编号："+taskID);
-        },
-        removeItem(index) {
-            this.$confirm("此操作将删除信息, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            })
-                .then(() => {
-                    this.items.splice(index, 1);
-                    this.$message({
-                        type: "success",
-                        message: "删除成功!"
-                    });
-                })
-                .catch(() => {
-                    this.$message({
-                        type: "info",
-                        message: "已取消删除"
-                    });
-                });
         },
         checkItem(index) {
             console.log("批阅作业详情。作业编号："+index)

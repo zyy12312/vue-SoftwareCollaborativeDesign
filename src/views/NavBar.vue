@@ -5,15 +5,15 @@
                 <img src="../assets/logo.png" >
             </a>
         </div>
-        <div class="buttons-middle">
+        <div class="personal-buttons profile">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" active-text-color=" #74759B" >
-                <el-menu-item index="1" style="color: #eef4fa;font-family: '微软雅黑 Light',serif;font-size: 18px">
-                    <a href="https://www.ele.me" target="_blank" @click="goModifyInfo">修改个人信息</a></el-menu-item>
+                <el-submenu index="1" >
+                    <template slot="title"><a style="color: #eef4fa;font-family: '微软雅黑 Light',serif;font-size: 18px">我的选择</a></template>
+                    <el-menu-item index="1-1" @click="$router.push('/modifyinfo')">修改个人信息</el-menu-item>
+                    <el-menu-item index="1-2" @click="$router.push('/login')">退出登录</el-menu-item>
+                </el-submenu>
             </el-menu>
-        </div>
-        <div class="personal-buttons">
-            <el-button style=" padding: 10px ;color: #f5eefa;font-family: '微软雅黑 Light',serif;font-size: 15px" type="text" @click="goLoginPage">退出登录</el-button>
-            <el-avatar shape="circle" size="large" src="../assets/logo.png" />
+            <el-avatar round width="50px" height="50px" :src="avaterURL" class="avatar"/>
 
         </div>
     </el-header>
@@ -25,6 +25,7 @@ export default {
     data(){
         return {
             activeIndex: '1',
+            avaterURL: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
         };
     },
     methods:{
@@ -42,7 +43,15 @@ export default {
 </script>
 
 <style scoped>
-
+.profile {
+    display: flex;
+    align-items: center;
+}
+.avatar {
+    width: 50px;
+    height: 50px;
+    /* 添加其他样式属性 */
+}
     .school-icon{
         //background: #2c3e50;
         height: 100%;

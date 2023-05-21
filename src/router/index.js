@@ -44,14 +44,15 @@ export const baseRoutes = [
                         path: "studydiscuss",
                         component : ()=> import('@/views/StudyDiscuss.vue'),
                         children: [
-                            {
-                                path : "/discussdetail",
-                                name : "DiscussDetail",
-                                component : () => import('@/views/DiscussDetail'),
-                                hidden : false
-                            }
+
                         ],
                         hidden: true
+                    },
+                    {
+                        path : "/discussdetail",
+                        name : "DiscussDetail",
+                        component : () => import('@/views/DiscussDetail'),
+                        hidden : false
                     }
                 ],
                 hidden: true

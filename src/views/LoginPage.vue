@@ -1,6 +1,6 @@
 <template>
     <div class="login-container">
-        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+        <el-form ref="loginForm" :model="user" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
             <div class="title-container">
                 <h3 class="title">Login Form</h3>
@@ -12,10 +12,9 @@
         </span>
                 <el-input
                         ref="username"
-                        v-model="loginForm.username"
+                        v-model="user.account"
                         placeholder="Username"
                         name="username"
-                        type="text"
                         tabindex="1"
                         auto-complete="on"
                 />
@@ -28,7 +27,7 @@
                 <el-input
                         :key="passwordType"
                         ref="password"
-                        v-model="loginForm.password"
+                        v-model="user.password"
                         :type="passwordType"
                         placeholder="Password"
                         name="password"
@@ -55,6 +54,7 @@
 <script>
 import { validUsername } from '@/utils/validate'
 
+
 export default {
     name: 'LoginPage',
     data() {
@@ -73,12 +73,12 @@ export default {
             }
         }
         return {
-            loginForm: {
-                username: 'admin',
-                password: '111111'
+            user: {
+                account: '',
+                password: ''
             },
             loginRules: {
-                username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+                account: [{ required: true, trigger: 'blur', validator: validateUsername }],
                 password: [{ required: true, trigger: 'blur', validator: validatePassword }]
             },
             loading: false,
@@ -109,8 +109,9 @@ export default {
             this.$refs.loginForm.validate(valid => {
                 if (valid) {
                     this.loading = true
-                    this.$store.dispatch('user/login', this.loginForm).then(() => {
-                        this.$router.push({ path: this.redirect || '/' })
+                    console.log("logining")
+                    this.$store.dispatch('user/login', this.user).then(() => {
+                        this.$router.push('/basepage')
                         this.loading = false
                     }).catch(() => {
                         this.loading = false

@@ -36,7 +36,7 @@
                             <el-button type="text" @click="dialogFormVisible = true;getIndex(task.index)"
                                        style="font-size: 16px">查看作业
                             </el-button>
-                            <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs===task.index">
+                            <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs===task.index" append-to-body>
                                 <el-row>
                                     <el-col :span="20">
                                         <div class="grid-content bg-purple-dark"
@@ -46,13 +46,51 @@
                                     </el-col>
                                     <el-col :span="4">
                                         <div class="grid-content bg-purple-light" v-if="task.leader===myRole">
-                                            <el-button style="float: right; padding: 3px 0;margin-top: 13px" type="text"
-                                                       @click="write(index)">提交
+                                            <el-button style="float: right; padding: 3px 0;margin-top: 13px" type="text" @click="dialogFormVisibles = true">提交
                                             </el-button>
+                                            <el-dialog title="提交作业"
+                                                       :visible.sync="dialogFormVisibles" append-to-body>
+                                                <el-form :model="form">
+                                                    <el-form-item label="作业描述"
+                                                                  :label-width="formLabelWidth">
+                                                        <el-input v-model="form.name"
+                                                                  auto-complete="off"></el-input>
+                                                    </el-form-item>
+                                                    <el-form-item label="作业提交区域"
+                                                                  :label-width="formLabelWidth">
+                                                        <div class="upload">
+                                                            <el-upload
+                                                                class="upload-demo"
+                                                                ref="upload"
+                                                                action="https://jsonplaceholder.typicode.com/posts/"
+                                                                :on-preview="handlePreview"
+                                                                :on-remove="handleRemove"
+                                                                :file-list="fileList"
+                                                                :auto-upload="false">
+                                                                <el-button slot="trigger"
+                                                                           size="small"
+                                                                           type="primary">选取文件</el-button>
+                                                                <el-button
+                                                                    style="margin-left: 10px;"
+                                                                    size="small"
+                                                                    type="success"
+                                                                    @click="submitUpload">上传到服务器</el-button>
+                                                                <div slot="tip"
+                                                                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                                            </el-upload>
+                                                        </div>
+                                                    </el-form-item>
+                                                </el-form>
+                                                <div slot="footer" class="dialog-footer">
+                                                    <el-button
+                                                        @click="dialogFormVisibles = false">取 消</el-button>
+                                                    <el-button type="primary"
+                                                               @click="dialogFormVisibles = false;confirm">确 定</el-button>
+                                                </div>
+                                            </el-dialog>
                                         </div>
                                         <div class="grid-content bg-purple-light" v-else>
-                                            <el-button style="float: right; padding: 3px 0;margin-top: 13px" type="text"
-                                                       @click="write(index)" disabled>提交
+                                            <el-button style="float: right; padding: 3px 0;margin-top: 13px" type="text" disabled>提交
                                             </el-button>
                                         </div>
                                     </el-col>
@@ -118,7 +156,7 @@
                                                         <el-button type="text" @click="dialogFormVisible2 = true">
                                                             任务分配
                                                         </el-button>
-                                                        <el-dialog title="任务分配" :visible.sync="dialogFormVisible2">
+                                                        <el-dialog title="任务分配" :visible.sync="dialogFormVisible2" append-to-body>
                                                             <el-card class="box-card">
                                                                 <div slot="header" class="clearfix">
                                                                     <span>
@@ -127,10 +165,17 @@
                                                                                     class="grid-content bg-purple-light"
                                                                                     style="margin-top: 13px;text-align: left">
                                                                                 <el-form :model="form">
-                                                                               <el-form-item label="任务分配说明："
+                                                                               <el-form-item label="截止时间："
                                                                                              :label-width="formLabelWidth">
-                                                                              <el-input v-model="form.name"
-                                                                                        auto-complete="off"></el-input>
+                                                                              <div class="block">
+                                                                                 <el-date-picker
+                                                                                        v-model="value2"
+                                                                                        type="datetime"
+                                                                                        placeholder="选择日期时间"
+                                                                                        align="right"
+                                                                                        :picker-options="pickerOptions1">
+                                                                                 </el-date-picker>
+                                                                              </div>
                                                                               </el-form-item>
                                                                                 </el-form></div>
                                                                             </el-col>
@@ -163,10 +208,10 @@
                                                                 </div>
                                                             </el-card>
                                                             <div slot="footer" class="dialog-footer">
-                                                                <el-button @click="dialogFormVisible = false">取 消
+                                                                <el-button @click="dialogFormVisible2 = false">取 消
                                                                 </el-button>
                                                                 <el-button type="primary"
-                                                                           @click="dialogFormVisible = false">确 定
+                                                                           @click="dialogFormVisible2 = false">确 定
                                                                 </el-button>
                                                             </div>
                                                         </el-dialog>
@@ -270,7 +315,7 @@
                                                 </el-col>
                                             </el-row>
                                         </el-card>
-                                        <el-card v-if="searchDetail==='false'">
+                                        <el-card >
                                             <div slot="header" class="clearfix">
                                                       <span v-for="cl in clas" v-bind:key="cl.title1">
                                                           <el-row>
@@ -284,7 +329,7 @@
                                                                                  type="text"
                                                                                  @click="dialogFormVisible1 = true">写作业</el-button>
                                                                       <el-dialog title="提交作业"
-                                                                                 :visible.sync="dialogFormVisible1">
+                                                                                 :visible.sync="dialogFormVisible1" append-to-body>
                                                                       <el-form :model="form">
                                                                            <el-form-item label="作业名称"
                                                                                          :label-width="formLabelWidth">
@@ -318,9 +363,9 @@
                                                                       </el-form>
                                                                           <div slot="footer" class="dialog-footer">
                                                              <el-button
-                                                                     @click="dialogFormVisible = false">取 消</el-button>
+                                                                     @click="dialogFormVisible1 = false">取 消</el-button>
                                                                <el-button type="primary"
-                                                                          @click="dialogFormVisible = false;confirm">确 定</el-button>
+                                                                          @click="dialogFormVisible1 = false;confirm">确 定</el-button>
                                                              </div>
                                                               </el-dialog>
                                                                   </div>
@@ -342,35 +387,45 @@
                                                     </el-col>
                                                     <el-col :span="4">
                                                         <div class="grid-content bg-purple-light">
-                                                            <el-button style="float: right; padding: 3px 0" type="text" @click="searchDetail='true'">查看详情</el-button>
-                                                        </div>
-                                                    </el-col>
-                                                </el-row>
-                                            </div>
-                                        </el-card>
-                                        <el-card class="box-card" v-else>
-                                            <div slot="header" class="clearfix">
-                                                <span>作业</span>
-                                                <el-button style="float: right; padding: 3px 0" type="text" @click="searchDetail='false'"><i class="el-icon-close"></i></el-button>
-                                            </div>
-                                            <div v-for="cl in cla" :key="cl" class="text item" style="text-align: left">
-                                                <el-row>
-                                                    <el-col :span="12"><div
-                                                        class="grid-content bg-purple-light">{{ cl.title1 }}</div></el-col>
-                                                    <el-col :span="8"><div
-                                                        class="grid-content bg-purple-light">{{ cl.title2 }}</div></el-col>
-                                                </el-row>
-                                            </div>
-                                            <div v-for="sub in submit" :key="sub" style="text-align: left">
-                                                <el-row>
-                                                    <el-col :span="12">
-                                                        <div class="grid-content bg-purple-light"
-                                                             style="margin-top: 13px">{{ sub.file }}
-                                                        </div>
-                                                    </el-col>
-                                                    <el-col :span="8">
-                                                        <div class="grid-content bg-purple-light"
-                                                             style="margin-top: 13px">{{ sub.fileSize }}
+                                                            <el-button style="float: right; padding: 3px 0" type="text" @click="searchDetail=true">查看详情</el-button>
+                                                            <el-dialog title="提交作业"
+                                                                       :visible.sync="searchDetail" append-to-body>
+                                                                <el-form :model="form">
+                                                                    <div slot="header" class="clearfix">
+                                                                        <span>作业</span>
+                                                                        <el-button style="float: right; padding: 3px 0" type="text" @click="searchDetail=false"><i class="el-icon-close"></i></el-button>
+                                                                    </div>
+                                                                    <div v-for="cl in cla" :key="cl" class="text item" style="text-align: left">
+                                                                        <el-row>
+                                                                            <el-col :span="12"><div
+                                                                                class="grid-content bg-purple-light">{{ cl.title1 }}</div></el-col>
+                                                                            <el-col :span="8"><div
+                                                                                class="grid-content bg-purple-light">{{ cl.title2 }}</div></el-col>
+                                                                        </el-row>
+                                                                    </div>
+                                                                    <div v-for="sub in submit" :key="sub" style="text-align: left">
+                                                                        <el-row>
+                                                                            <el-col :span="12">
+                                                                                <div class="grid-content bg-purple-light"
+                                                                                     style="margin-top: 13px">{{ sub.file }}
+                                                                                </div>
+                                                                            </el-col>
+                                                                            <el-col :span="8">
+                                                                                <div class="grid-content bg-purple-light"
+                                                                                     style="margin-top: 13px">{{ sub.fileSize }}
+                                                                                </div>
+                                                                            </el-col>
+                                                                        </el-row>
+                                                                    </div>
+                                                                </el-form>
+                                                                <div slot="footer" class="dialog-footer">
+                                                                    <el-button
+                                                                        @click="searchDetail = false">取 消</el-button>
+                                                                    <el-button type="primary"
+                                                                               @click="searchDetail = false;confirm">确 定</el-button>
+                                                                </div>
+
+                                                            </el-dialog>
                                                         </div>
                                                     </el-col>
                                                 </el-row>
@@ -396,7 +451,31 @@ export default {
             activeName2: 'first',
             myRole: "产品经理",
             indexs: 0,
-            searchDetail:'false',
+            searchDetail:false,
+            pickerOptions1: {
+                shortcuts: [{
+                    text: '今天',
+                    onClick(picker) {
+                        picker.$emit('pick', new Date());
+                    }
+                }, {
+                    text: '昨天',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24);
+                        picker.$emit('pick', date);
+                    }
+                }, {
+                    text: '一周前',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', date);
+                    }
+                }]
+            },
+            value1: '',
+            value2: '',
             items: [
                 {title1: "作业名称", title2: "作业形式", title3: "状态", title4: "类型", title5: "交付"},
             ],
@@ -443,6 +522,7 @@ export default {
                 {title1: "交付历史与批改记录", title2: "原始成绩"}
             ],
             dialogFormVisible: false,
+            dialogFormVisibles: false,
             dialogFormVisible1: false,
             dialogFormVisible2: false,
             dialogFormVisible3: false,

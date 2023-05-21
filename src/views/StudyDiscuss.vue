@@ -37,7 +37,7 @@ export default {
 
     methods: {
         removeItem(index) {
-            console.log("remove Item Index:"+index)
+            // console.log("remove Item Index:"+index)
             this.$confirm("此操作将删除信息, 是否继续?", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -58,12 +58,8 @@ export default {
                 });
         },
         goDiscussDetail(item) {
-            router.push({
-                name: 'DiscussDetail',
-                query: {
-                    item: item,
-                }
-            });
+            console.log(this.$router.currentRoute.fullPath)
+            router.push('/discussdetail',item);
         },
         getIndex(index){
             this.indexs=index;

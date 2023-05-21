@@ -9,7 +9,7 @@
                 <el-col :span="24" style="text-align: right">
                     <div class="grid-content bg-purple-dark" >
                         <div style="font-size: 14px">{{ info.name }}</div>
-                        <div style="font-size: 14px"> {{info.info}}<el-avatar round width="50px" height="50px" :src="info.url"></el-avatar></div>
+                        <div style="font-size: 14px"> {{info.detail}}<el-avatar round width="50px" height="50px" :src="info.url"></el-avatar></div>
                     </div>
 
                 </el-col>
@@ -18,24 +18,24 @@
                 <el-col :span="24" style="text-align: left">
                     <div class="grid-content bg-purple-dark" >
                         <div style="font-size: 14px">{{ info.name }}</div>
-                        <div style="font-size: 14px"><el-avatar round width="50px" height="50px" :src="info.url"></el-avatar> {{info.info}}</div>
+                        <div style="font-size: 14px"><el-avatar round width="50px" height="50px" :src="info.url"></el-avatar> {{info.detail}}</div>
                     </div>
                 </el-col>
             </el-row>
 
         </div>
         <el-row>
-            <el-col :span="20"><div class="grid-content bg-purple " >
+            <el-col :span="20"><div class="grid-content bg-purple " :model="textarea">
                 <el-input
                     type="textarea"
                     :rows="2"
                     placeholder="请输入内容"
-                    v-model="textarea"
+                    v-model="textarea.detail"
                     class="box">
                 </el-input>
             </div></el-col>
             <el-col :span="4"><div class="grid-content bg-purple-light">
-                    <el-button type="primary" style="margin-top: 10px" @click="send">发送</el-button>
+                    <el-button type="primary" style="margin-top: 10px" @click="sends(textarea)">发送</el-button>
             </div></el-col>
         </el-row>
 
@@ -47,6 +47,10 @@
 <script >
 
 
+import {Message} from "element-ui";
+import {getAllUserList} from "@/api/user";
+import {getMessageList, sendMessage} from "@/api/communication";
+
 export default {
     name:"GroupChat",
     computed: {
@@ -54,18 +58,54 @@ export default {
     },
     data(){
         return {
-            textarea: '',
-            myName:"张三",
+            textarea: {detail:"",sendTime:"",senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.teamId},
+            myName:this.$store.getters.user.name,
+            url:this.$store.getters.user.avatarURL,
             infos:[
-                {info:"你到底是谁？",name:"张三",url:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"},
-                {info:"你猜猜我是谁",name:"李四",url:"https://img01.yzcdn.cn/vant/cat.jpeg"},
-                {info:"你信不信我给你啪啪两下！",name:"张三",url:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"},
-            ]
+                {detail:"你到底是谁？",name:"张三",sendTime:"",senderID:"",teamID:""},
+                {detail:"你猜猜我是谁",name:"李四",sendTime:"",senderID:"",teamID:""},
+                {detail:"你信不信我给你啪啪两下！",name:"张三",sendTime:"",senderID:"",teamID:""},
+            ],
+            users:[
+                {name:"",avaterURL: "",teamId:""}
+            ],
+            send: {detail:"",sendTime:"",senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.teamId}
+
         }
     },
+    mounted() {
+        getAllUserList().then((res)=>{
+            if (res.data.code===200 && res.data.teamId===this.$store.getters.user.teamId){
+                let resultbody = res.data.data
+                this.users = resultbody
+                Message.success(res.data.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
+        getMessageList(this.$store.getters.user.teamId).then((res)=>{
+            if (res.data.code===200){
+                let resultbody = res.data.data
+                this.infos = resultbody
+                Message.success(res.data.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
+    },
     methods:{
-        send(){
-
+        sends(){
+            console.log("详情:"+this.textarea.detail)
+            sendMessage(this.textarea)
+                .then((res)=>{
+                    if (res.data.code===200){
+                        // let resultbody = res.data.data
+                        // this.discuss = resultbody
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
         },
         open8() {
             this.$notify({
@@ -74,6 +114,7 @@ export default {
                 position: 'bottom-right'
             });
         },
+
     }
 }
 </script>

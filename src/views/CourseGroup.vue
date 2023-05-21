@@ -1,6 +1,6 @@
 <template>
     <el-main>
-        <el-card class="box-card" v-if="haveGroup==='true'"><!--根据haveGroup的值判断card-->
+        <el-card class="box-card" v-if="haveGroup!=null"><!--根据haveGroup的值判断card-->
             <div slot="header" class="clearfix">
                 <span>分组详情</span>
             </div>
@@ -39,12 +39,12 @@
                 </el-button>
                 <a v-if="inv.status==='已拒绝'">
                     <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
-                               @click="accept;inv.status='已接受';user.teamId=inv.teamId;haveGroup='true'" disabled>接受邀请
+                               @click="accept;inv.status='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId" disabled>接受邀请
                     </el-button>
                 </a>
                 <a v-else>
                     <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
-                               @click="accept;inv.status='已接受';user.teamId=inv.teamId;haveGroup='true'">接受邀请
+                               @click="accept;inv.status='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId">接受邀请
                     </el-button>
                 </a></div>
             <div slot="header" class="clearfix" v-else-if="inv.status==='已拒绝'">
@@ -53,7 +53,7 @@
                     拒绝邀请
                 </el-button>
                 <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
-                           @click="accept;inv.status='已接受';user.teamId=inv.teamId;haveGroup='true'" disabled>接受邀请
+                           @click="accept;inv.status='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId" disabled>接受邀请
                 </el-button>
             </div>
             <div v-for="cla in clasp" :key="cla.title1" class="item font">
@@ -104,10 +104,10 @@ export default {
     el: "group",
     data() {
         return {
-            haveGroup: "false",
+            haveGroup:this.$store.getters.user.teamId,
             id: "",
             user: [
-                {teamId: "无"}
+                {teamId: this.$store.getters.user.teamId}
             ],
             items: [
                 {teamId: "第五组", member: "张三", position: "小组长"},
@@ -135,6 +135,7 @@ export default {
         goChat() {
             this.$router.push("/ChatRoom");
         },
+
         accept() {
 
         },

@@ -10,6 +10,17 @@ import TeacherLayout from "@/layouts/TeacherLayout.vue";
 export const baseRoutes = [
     {
         path: "/",
+        redirect: "/signIn",
+        hidden: true
+    },
+    {
+        path : "/signIn",
+        component : () => import('@/views/SignInPage'),
+        hidden : true
+    },
+
+    {
+        path: "/",
         redirect: "/login",
         hidden: true
     },

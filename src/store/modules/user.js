@@ -42,6 +42,21 @@ const actions = {
         })
     },
 
+    // user signIn
+    signIn({ commit }, userInfo) {
+        const { account, username, password, password_confirm, role, sex} = userInfo
+        return new Promise((resolve, reject) => {
+            signIn({ account: account.trim(), username: username.trim(), password: password, password_confirm: password_confirm, sex: sex(), role: role(), }).then(response => {
+                const { data } = response
+                commit('SET_TOKEN', data.token)
+                setToken(data.token)
+                resolve()
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    },
+
     // get user info
     getInfo({ commit, state }) {
         return new Promise((resolve, reject) => {

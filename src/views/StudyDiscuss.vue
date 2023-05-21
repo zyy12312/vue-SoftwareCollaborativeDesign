@@ -58,12 +58,7 @@ export default {
                 });
         },
         goDiscussDetail(item) {
-            router.push({
-                name: 'DiscussDetail',
-                query: {
-                    item: item,
-                }
-            });
+            router.push('/discussdetail',item);
         },
         getIndex(index){
             this.indexs=index;

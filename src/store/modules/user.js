@@ -1,4 +1,5 @@
-import {getToken} from "@/utils/auth";
+import {getToken, setToken} from "@/utils/auth";
+import {login} from "@/api/user";
 
 
 const getDefaultState = () => {
@@ -27,19 +28,20 @@ const mutations = {
 
 const actions = {
     // user login
-    // login({ commit }, userInfo) {
-    //     const { username, password } = userInfo
-    //     return new Promise((resolve, reject) => {
-    //         login({ username: username.trim(), password: password }).then(response => {
-    //             const { data } = response
-    //             commit('SET_TOKEN', data.token)
-    //             setToken(data.token)
-    //             resolve()
-    //         }).catch(error => {
-    //             reject(error)
-    //         })
-    //     })
-    // },
+    login({ commit }, userInfo) {
+        // const { username, password } = userInfo
+        return new Promise((resolve, reject) => {
+            login({ account: userInfo.account.trim(), password: userInfo.password.trim() }).then(response => {
+                const { data } = response.data
+                commit('SET_TOKEN', data.token)
+                this.$store.getters.user = data.User
+                setToken(data.token)
+                resolve()
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    },
     //
     // // get user info
     // getInfo({ commit, state }) {

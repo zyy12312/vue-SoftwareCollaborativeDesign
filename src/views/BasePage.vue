@@ -14,8 +14,11 @@ import NavBar from "@/views/NavBar.vue";
 import NavFoot from "@/views/NavFoot.vue";
 
 export default defineComponent({
-    name: "TestPage",
-    components: {NavFoot, NavBar}
+    name: "BasePage",
+    components: {NavFoot, NavBar},
+    mounted() {
+        console.log(this.$route.path)
+    }
 })
 </script>
 

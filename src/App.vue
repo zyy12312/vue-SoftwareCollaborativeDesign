@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
-<!--      <NavBar></NavBar>-->
-<!--      <AllNavigation></AllNavigation>-->
-<!--      <PageTitle></PageTitle>-->
-<!--      <NavFoot></NavFoot>-->
-      <router-view></router-view>
-  </div>
+    <div id="app">
+<!--        <NavBar></NavBar>-->
+
+        <router-view/>
+
+<!--        <NavFoot></NavFoot>-->
+    </div>
 </template>
 
 <script>
@@ -14,19 +14,14 @@
 // import NavBar from "@/views/NavBar.vue";
 // import NavFoot from "@/views/NavFoot.vue";
 // import AllNavigation from "@/views/AllNavigation.vue";
-// import PageTitle from "@/views/Page.vue";
+// import PageTitle from "@/views/HomePage.vue";
 //import StudyDiscuss from "@/components/StudyDiscuss.vue";
+
+
 
 export default {
   name: 'App',
   components: {
-      // PageTitle,
-      // AllNavigation,
-      //StudyDiscuss,
-      // NavFoot,
-      // NavBar,
-      // FileUpload,
-    // HelloWorld
   }
 }
 </script>

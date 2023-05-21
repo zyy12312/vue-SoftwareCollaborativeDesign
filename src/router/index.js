@@ -8,17 +8,12 @@ import TeacherLayout from "@/layouts/TeacherLayout.vue";
 
 //基本路由表
 export const baseRoutes = [
-    {
-        path: "/",
-        redirect: "/signIn",
-        hidden: true
-    },
+
     {
         path : "/signIn",
         component : () => import('@/views/SignInPage'),
         hidden : true
     },
-
     {
         path: "/",
         redirect: "/login",
@@ -31,48 +26,40 @@ export const baseRoutes = [
     },
 
     {
-        path : "/DiscussDetail",
-        name : "DiscussDetail",
-        component : () => import('@/views/DiscussDetail'),
-        hidden : false
-    },
-    {
         path: "/404",
         component : ()=> import('@/views/404.vue'),
         hidden: true
     },
     {
-        path: "/discuss",
-        component : ()=> import('@/views/Discuss'),
-        hidden: true
-    },
-    {
-        path : "/DiscussDetail",
-        name : "DiscussDetail",
-        component : () => import('@/views/DiscussDetail'),
-        hidden : false
-    },
-    {
-        path: "/task",
-        component :() =>import('@/views/Task')
-    },
-    //主页面
-    {
-        path: "/main",
-        component :()=> import('@/views/Test.vue'),
-        children : [
-            //初始页面
+        path: '/basepage',
+        component :()=>import('@/views/BasePage.vue'),
+        redirect: '/homepage',
+        children: [
             {
-                path: "/basepage",
-                name:"BasePage",
-                component : ()=> import('@/views/Page.vue'),
+                path: '/homepage',
+                component :()=>import('@/views/HomePage.vue'),
+                children: [
+                    //发帖详情
+                    {
+                        path: "discuss",
+                        component : ()=> import('@/views/Discuss'),
+                        children: [
+                            {
+                                path : "discussdetail",
+                                name : "DiscussDetail",
+                                component : () => import('@/views/DiscussDetail'),
+                                hidden : false
+                            },
+                        ],
+                        hidden: true
+                    },
+                ],
                 hidden: true
             },
-            //班级成员
             {
                 path: "/classmember",
                 name:"ClassMember",
-                component : ()=> import('@/views/ClassMember'),
+                component : ()=> import('@/views/ClassMember.vue'),
                 hidden: true
             },
             //课程信息
@@ -96,16 +83,36 @@ export const baseRoutes = [
                 component :()=>import('@/views/StudentMark.vue'),
                 hidden: true
             },
-            // //发帖讨论
-            // {
-            //     path: "discuss",
-            //     redirect : "/discuss"
-            // },
-            // //团队内交流
-            // {
-            //     path: "chat",
-            //     component: () => import('@/views/student/Chat')
-            // }
+        ],
+        hidden: true
+    },
+
+
+    {
+        path: "/task",
+        component :() =>import('@/views/Task'),
+        hidden: true
+    },
+    //主页面
+    {
+        path: "/main",
+        component :()=> import('@/views/BasePage.vue'),
+        children : [
+            //初始页面
+            {
+                path: "/basepage",
+                name:"BasePage",
+                component : ()=> import('@/views/HomePage.vue'),
+                children :[
+                    {
+                        path: "classmember",
+                        name:"ClassMember",
+                        component : ()=> import('@/views/ClassMember'),
+                        hidden: true
+                    }
+                ],
+                hidden: true
+            },
         ],
         hidden: false
     },

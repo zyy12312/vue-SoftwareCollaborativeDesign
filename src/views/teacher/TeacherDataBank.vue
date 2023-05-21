@@ -9,6 +9,8 @@
                         <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title3}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title4}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title5}}</div></el-col>
+                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title6}}</div></el-col>
+                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title7}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">发布</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">编辑</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">删除</div></el-col>
@@ -17,15 +19,15 @@
             </div>
             <div v-for="(data,index) in datas" v-bind:key="index">
                 <el-row>
-<!--                资料名称dataName，附件名称attachmentName，附件大小attachmentSize，下载图标，资料状态（未发布，已发布）-->
+<!--                title1:"资料标题",title2:"资料详情",title3:"附件名称",title4:"下载",title5:"资料状态",title6:"创建时间",title7:"发布时间"-->
                     <el-col :span="5">
-                        <div class="grid-content bg-purple-light" style="margin-top: 5px">{{data.dataName}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 5px">{{data.title}}</div>
                     </el-col>
                     <el-col :span="3">
-                        <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">{{data.attachmentName}}</div>
+                        <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">{{data.description}}</div>
                     </el-col>
                     <el-col :span="3">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.attachmentSize}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.fileName}}</div>
                     </el-col>
                     <el-col :span="3">
                         <el-button type="text" @click="dialogFormVisible_download = true;getIndex(data.index)" style="font-size: 16px">
@@ -40,13 +42,19 @@
                         </el-dialog>
                     </el-col>
                     <el-col :span="3">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.status}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.state}}</div>
                     </el-col>
-                    <el-col :span="2" v-if="data.status === '未发布'">
-                        <el-button type="primary" plain @click="publish(data.id)">发布</el-button>
+                    <el-col :span="3">
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.createTime}}</div>
+                    </el-col>
+                    <el-col :span="3">
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.releaseTime}}</div>
+                    </el-col>
+                    <el-col :span="2" v-if="data.state === '未发布'">
+                        <el-button type="primary" plain @click="publishData(data.id)">发布</el-button>
                     </el-col>
                     <el-col :span="2" v-else>
-                        <el-button type="primary" plain disabled>发布</el-button>
+                        <el-button type="primary" plain disabled >发布</el-button>
                     </el-col>
                     <el-col :span="2">
                         <el-button type="success" plain @click="dialogFormVisible_edit = true;">编辑</el-button>
@@ -100,12 +108,12 @@
                                 <el-button
                                     @click="dialogFormVisible_edit = false">取 消</el-button>
                                 <el-button type="primary"
-                                           @click="dialogFormVisible_edit = false">确 定</el-button>
+                                           @click="dialogFormVisible_edit = false; editDataConfirm(index)">确 定</el-button>
                             </div>
                         </el-dialog>
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="danger" plain @click="removeItem(index)">删除</el-button>
+                        <el-button type="danger" plain @click="deleteDataConfirm(data.id)">删除</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -160,7 +168,7 @@
                         <el-button
                             @click="dialogFormVisible_add = false">取 消</el-button>
                         <el-button type="primary"
-                                   @click="dialogFormVisible_add = false">确 定</el-button>
+                                   @click="dialogFormVisible_add = false; addDataConfirm(index)">确 定</el-button>
                     </div>
                 </el-dialog>
             </div>
@@ -170,10 +178,31 @@
 </template>
 
 <script>
+import {Message} from "element-ui";
+import {createMaterial, deleteMaterial, editMaterial, releaseMaterial} from "@/api/material";
+
 export default {
     name: "TeacherDataBank",
     data() {
         return {
+            edited_data: {
+                id: '',
+                state: '',
+                title: '',
+                createTime: '',
+                description: '',
+                releaseTime: '',
+                fileURLs: '',
+            },
+            added_data: {
+                id: '',
+                state: '',
+                title: '',
+                createTime: '',
+                description: '',
+                releaseTime: '',
+                fileURLs: '',
+            },
             dialogFormVisible_upload: false,
             dialogFormVisible_edit: false,
             dialogFormVisible_add: false,
@@ -198,26 +227,35 @@ export default {
             indexs:0,
             datas: [{
                 id: '201',
-                dataName: '需求分析课件',
-                attachmentName: '需求分析2023-3-3.pptx',
-                attachmentSize: '178MB',
-                status: '已发布'
+                state: '已发布',
+                title: '需求分析报告要求',
+                createTime: '2023-03-23 09:00:00',
+                description: '需求分析报告要求ppt，包含上课要点',
+                releaseTime: '2023-03-24 09:00:00',
+                fileURLs: 'v1/v2/v3/v4/需求报告.pptx',
+                fileName: ''
             },{
-                id: '202',
-                dataName: '需求分析报告要求',
-                attachmentName: '模版1.docx',
-                attachmentSize: '11MB',
-                status: '已发布'
+                id: '201',
+                state: '已发布',
+                title: '系统设计课件',
+                createTime: '2023-03-23 09:00:00',
+                description: '系统设计课件ppt，包含上课要点',
+                releaseTime: '2023-04-24 09:00:00',
+                fileURLs: 'v1/v2/v3/v4/系统设计课件.pptx',
+                fileName: ''
             },{
-                id: '203',
-                dataName: '系统设计课件',
-                attachmentName: '系统设计课件2023-5-13.pptx',
-                attachmentSize: '112MB',
-                status: '未发布'
+                id: '201',
+                state: '未发布',
+                title: '代码提交要求',
+                createTime: '2023-04-23 09:00:00',
+                description: '代码提交要求ppt，包含上课要点',
+                releaseTime: '',
+                fileURLs: 'v1/v2/v3/v4/代码提交要求.pptx',
+                fileName: ''
             }
             ],
             items:[
-                {title1:"资料名称",title2:"附件名称",title3:"附件大小",title4:"下载",title5:"资料状态"}
+                {title1:"资料标题",title2:"资料详情",title3:"附件名称",title4:"下载",title5:"资料状态",title6:"创建时间",title7:"发布时间"}
             ],
             characters: [],
             inputName: '',
@@ -228,15 +266,93 @@ export default {
         }
     },
     methods: {
-        handleDelete(row, index) {
-            this.$notify({
-                title: 'Success',
-                message: 'Delete Successfully',
-                type: 'success',
-                duration: 2000
+        //编辑资料
+        editDataConfirm(index){
+            this.edited_data.id=this.datas[index].id
+            this.edited_data.character=this.datas[index].character
+            this.edited_data.state=this.datas[index].state
+            console.log("edit1:inputTitle="+this.edited_data.inputTitle)
+            // console.log("edit1:id="+this.edited_data.id)
+            editMaterial(this.edited_data)
+                .then((res)=>{
+                    console.log("edit:inputTitle="+this.edited_data.inputTitle)
+                    if (res.data.code===200){
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
             })
-            this.list.splice(index, 1)
         },
+        edit_confirm(dataID,dataName){
+            console.log("完成第"+dataID+"个资料的编辑操作，修改后的资料名称："+dataName);
+        },
+
+
+        //新建资料
+        addDataConfirm(index){
+            this.edited_data.id=this.datas[index].id
+            this.edited_data.character=this.datas[index].character
+            this.edited_data.state=this.datas[index].state
+            console.log("add1:inputTitle="+this.added_data.inputTitle)
+            createMaterial(this.added_data)
+                .then((res)=>{
+                    console.log("add2:inputTitle="+this.added_data.inputTitle)
+                    if (res.data.code===200){
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
+        },
+
+        //删除资料
+        deleteDataConfirm(dataId){
+            this.$confirm("此操作将删除该资料, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(() => {
+                    this.titles.splice(dataId, 1);
+                    this.$message({
+                        type: "success",
+                        message: "删除成功!"
+                    });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消删除"
+                    });
+                });
+            console.log("delete1:deleted_id="+dataId)
+            deleteMaterial(dataId)
+                .then((res)=>{
+                    console.log("delete2:deleted_id="+dataId)
+                    if (res.data.code===200){
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
+        },
+        
+        //发布资料
+        publishData(dataID){
+            console.log("publish1:published_id="+dataID)
+            let dataIDList = [dataID]
+            releaseMaterial(dataIDList)
+                .then((res)=>{
+                    console.log("publish2:published_id="+dataID)
+                    if (res.data.code===200){
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
+        },
+
+
         handleClick(tab, event) {
             console.log(tab, event);
         },
@@ -255,23 +371,6 @@ export default {
         clicks(index){
             this.indexs=index;
         },
-        search(){
-
-        },
-        write(){
-
-        },
-        querySearch(queryString, cb) {
-            var characters = this.characters;
-            var results = queryString ? characters.filter(this.createFilter(queryString)) : characters;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
-        createFilter(queryString) {
-            return (restaurant) => {
-                return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-            };
-        },
         loadAll() {
             return [
                 { "value": "小组长"},
@@ -281,36 +380,8 @@ export default {
                 { "value": "测试经理"},
             ];
         },
-        handleSelect(item) {
-            console.log(item);
-        },
-        publish(dataID){
-            console.log("发布资料，资料编号："+dataID);
-        },
-        edit_confirm(dataID,dataName){
-            console.log("完成第"+dataID+"个资料的编辑操作，修改后的资料名称："+dataName);
-        },
-        removeItem(index) {
-            this.$confirm("此操作将删除信息, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            })
-                .then(() => {
-                    this.items.splice(index, 1);
-                    this.$message({
-                        type: "success",
-                        message: "删除成功!"
-                    });
-                })
-                .catch(() => {
-                    this.$message({
-                        type: "info",
-                        message: "已取消删除"
-                    });
-                });
-        },
     },
+
     mounted() {
         this.characters = this.loadAll();
     }

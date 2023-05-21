@@ -2,13 +2,13 @@
     <el-main>
         <el-card>
             <div slot="header" class="clearfix">
-                <span v-for="item in items" v-bind:key="item.title1">
+                <span v-for="title in titles" v-bind:key="title.title1">
                     <el-row >
-                        <el-col :span="7"><div class="grid-content bg-purple-light" >{{item.title1}}</div></el-col>
-                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title2}}</div></el-col>
-                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title3}}</div></el-col>
-                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title4}}</div></el-col>
-                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title5}}</div></el-col>
+                        <el-col :span="7"><div class="grid-content bg-purple-light" >{{title.title1}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{title.title2}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{title.title3}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{title.title4}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{title.title5}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">发布</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">编辑</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">删除</div></el-col>
@@ -34,7 +34,7 @@
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.status}}</div>
                     </el-col>
                     <el-col :span="2" v-if="task.status === '未开始'">
-                        <el-button type="primary" plain @click="publish(task.id)">发布</el-button>
+                        <el-button type="primary" plain @click="publishTask(task.id)">发布</el-button>
                     </el-col>
                     <el-col :span="2" v-else>
                         <el-button type="primary" plain disabled>发布</el-button>
@@ -112,7 +112,7 @@
                                 <el-button
                                     @click="dialogFormVisible_edit = false">取 消</el-button>
                                 <el-button type="primary"
-                                           @click="dialogFormVisible_edit = false; editTaskConfirm()">确 定</el-button>
+                                           @click="dialogFormVisible_edit = false; editTaskConfirm(index)">确 定</el-button>
                             </div>
                         </el-dialog>
                     </el-col>
@@ -120,10 +120,10 @@
                         <el-button type="success" plain disabled>编辑</el-button>
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="danger" plain @click="deleteTaskConfirm(index)">删除</el-button>
+                        <el-button type="danger" plain @click="deleteTaskConfirm(task.id)">删除</el-button>
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="warning" plain @click="checkItem(index)">批阅</el-button>
+                        <el-button type="warning" plain @click="checkItem(task.id)">批阅</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -198,7 +198,7 @@
                         <el-button
                             @click="dialogFormVisible_add = false">取 消</el-button>
                         <el-button type="primary"
-                                   @click="dialogFormVisible_add = false; addTaskConfirm(added_task)">确 定</el-button>
+                                   @click="dialogFormVisible_add = false; addTaskConfirm(index)">确 定</el-button>
                     </div>
                 </el-dialog>
             </div>
@@ -210,7 +210,7 @@
 
 <script>
 
-import {createTask, editTask} from "@/api/task";
+import {createTask, deleteTask, editTask, releaseTask} from "@/api/task";
 import {Message} from "element-ui";
 
 export default {
@@ -220,12 +220,18 @@ export default {
             edited_task: {
                 inputTitle: '',
                 inputDetail: '',
-                inputDeadline: ''
+                inputDeadline: '',
+                id: '',
+                characterType: '',
+                state: '',
             },
             added_task: {
                 inputTitle: '',
                 inputDetail: '',
-                inputDeadline: ''
+                inputDeadline: '',
+                id: '',
+                characterType: '',
+                state: '',
             },
             dialogFormVisible_upload: false,
             dialogFormVisible_edit: false,
@@ -284,15 +290,19 @@ export default {
                 status: '未开始'
             },
             ],
-            items:[
+            titles:[
                 {title1:"作业标题",title2:"截止时间",title3:"作业负责人",title4:"已交/总计",title5:"作业状态"}
             ]
         }
     },
     methods: {
         //编辑任务
-        editTaskConfirm(){
+        editTaskConfirm(index){
+            this.edited_task.id=this.tasks[index].id
+            this.edited_task.character=this.tasks[index].character
+            this.edited_task.status=this.tasks[index].status
             console.log("edit1:inputTitle="+this.edited_task.inputTitle)
+            // console.log("edit1:id="+this.edited_task.id)
             editTask(this.edited_task)
                 .then((res)=>{
                     console.log("edit:inputTitle="+this.edited_task.inputTitle)
@@ -305,7 +315,10 @@ export default {
         },
 
         //新建任务
-        addTaskConfirm(){
+        addTaskConfirm(index){
+            this.edited_task.id=this.tasks[index].id
+            this.edited_task.character=this.tasks[index].character
+            this.edited_task.status=this.tasks[index].status
             console.log("add1:inputTitle="+this.added_task.inputTitle)
             createTask(this.added_task)
                 .then((res)=>{
@@ -319,14 +332,14 @@ export default {
         },
 
         //删除任务
-        deleteTaskConfirm(index){
+        deleteTaskConfirm(taskId){
             this.$confirm("此操作将删除信息, 是否继续?", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
             })
                 .then(() => {
-                    this.items.splice(index, 1);
+                    this.titles.splice(taskId, 1);
                     this.$message({
                         type: "success",
                         message: "删除成功!"
@@ -338,10 +351,11 @@ export default {
                         message: "已取消删除"
                     });
                 });
-            console.log("delete1:deleted_id="+this.tasks[index].id)
-            createTask(this.tasks[index].id)
+            console.log("delete1:deleted_id="+taskId)
+            let taskIDList = [taskId]
+            deleteTask(taskIDList)
                 .then((res)=>{
-                    console.log("delete2:deleted_id="+this.tasks[index].id)
+                    console.log("delete2:deleted_id="+taskId)
                     if (res.data.code===200){
                         Message.success(res.data.msg)
                     }
@@ -349,22 +363,21 @@ export default {
                 Message.error(err)
             })
         },
-        
-        uploadFile(){
 
-        },
-        handleDelete(row, index) {
-            this.$notify({
-                title: 'Success',
-                message: 'Delete Successfully',
-                type: 'success',
-                duration: 2000
+        //发布任务
+        publishTask(taskId){
+            console.log("publish1:published_id="+taskId)
+            releaseTask(taskId)
+                .then((res)=>{
+                    console.log("publish2:published_id="+taskId)
+                    if (res.data.code===200){
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
             })
-            this.list.splice(index, 1)
         },
-        handleClick(tab, event) {
-            console.log(tab, event);
-        },
+
         submitUpload() {
             this.$refs.upload.submit();
         },
@@ -373,18 +386,6 @@ export default {
         },
         handlePreview(file) {
             console.log(file);
-        },
-        getIndex(index){
-            this.indexs=index;
-        },
-        clicks(index){
-            this.indexs=index;
-        },
-        search(){
-
-        },
-        write(){
-
         },
         querySearch(queryString, cb) {
             var characters = this.characters;
@@ -409,16 +410,15 @@ export default {
         handleSelect(item) {
             console.log(item);
         },
-        publish(taskID){
-            console.log("发布任务，任务编号："+taskID);
-        },
-        checkItem(index) {
-            console.log("批阅作业详情。作业编号："+index)
+
+        //跳转至批阅作业详情界面
+        checkItem(taskId) {
+            console.log("批阅作业详情。作业编号："+taskId)
             // console.log("cp"+this.$router.currentRoute.path)
             this.$router.push({
                 path: '/basepage/task_submissionDetail',
                 query: {
-                    taskIndex:index
+                    taskIndex:taskId
                 }
             })
         }

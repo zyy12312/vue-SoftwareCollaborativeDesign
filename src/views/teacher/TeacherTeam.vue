@@ -36,7 +36,33 @@
                             </div>
                         </el-card>
                 </div>
+
         </el-collapse>
+        <div class="grid-content bg-purple-light" >
+            <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px" >添加小组</el-button>
+            <el-dialog :visible.sync="dialogFormVisible_add" append-to-body>
+                <div>
+                    <el-input v-model="added_leader">
+                        <template slot="prepend">组长姓名：</template>
+                    </el-input>
+                </div>
+<!--                <div>-->
+<!--                    <el-autocomplete-->
+<!--                        class="inline-input"-->
+<!--                        v-model="inputCharacter"-->
+<!--                        :fetch-suggestions="querySearch"-->
+<!--                        @select="handleSelect">-->
+<!--                        <template slot="prepend">组长姓名：</template>-->
+<!--                    </el-autocomplete>-->
+<!--                </div>-->
+                <div slot="footer" class="dialog-footer">
+                    <el-button
+                        @click="dialogFormVisible_add = false">取 消</el-button>
+                    <el-button type="primary"
+                               @click="dialogFormVisible_add = false; addTeamConfirm()">确 定</el-button>
+                </div>
+            </el-dialog>
+        </div>
     </el-main>
 
 </template>
@@ -44,12 +70,16 @@
 <script>
 
 
+import {Message} from "element-ui";
+
 export default {
     name: 'TeacherTeam',
 
     el: "#team",
     data() {
         return {
+            dialogFormVisible_add: false,
+            added_leader: '',
             teams:[
                 [
                     {id:"1",teamID:"5",studentID:"2035060301",studentName: "aaa",character:"小组长"},
@@ -73,7 +103,22 @@ export default {
     methods: {
         goChat(teamID){
             console.log("进入讨论界面，小组号："+teamID)
-        }
+        },
+
+        //新建小组
+        // addTeamConfirm(){
+        //     console.log("add1:leader="+this.added_leader)
+        //     createTeam(this.added_leader)
+        //         .then((res)=>{
+        //             console.log("add2:leader="+this.added_leader)
+        //             if (res.data.code===200){
+        //                 Message.success(res.data.msg)
+        //             }
+        //         }).catch((err)=>{
+        //         Message.error(err)
+        //     })
+        // },
+
     }
 
 }

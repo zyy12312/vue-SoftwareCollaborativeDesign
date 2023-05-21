@@ -31,8 +31,8 @@ const actions = {
     login({ commit }, userInfo) {
         // const { username, password } = userInfo
         return new Promise((resolve, reject) => {
-            login({ account: userInfo.account.trim(), password: userInfo.password.trim() }).then(response => {
-                const { data } = response.data
+            login({ username: userInfo.account.trim(), password: userInfo.password.trim() }).then(response => {
+                const { data } = response.data.data
                 commit('SET_TOKEN', data.token)
                 this.$store.getters.user = data.User
                 setToken(data.token)

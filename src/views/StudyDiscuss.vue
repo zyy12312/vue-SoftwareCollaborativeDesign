@@ -57,6 +57,7 @@ import {Message} from "element-ui";
 
 export default {
     name: "StudyDiscuss",
+    components: {},
     el: '#example',
     data() {
         return {

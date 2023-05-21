@@ -70,7 +70,7 @@ export function deleteTask(taskIDList) {
         taskIDList
     })
 }
-export function createMaterial(subtaskIDList) {
+export function deleteSubTask(subtaskIDList) {
     return request({
         url: '/task/deleteSubTask',
         method: 'DELETE',

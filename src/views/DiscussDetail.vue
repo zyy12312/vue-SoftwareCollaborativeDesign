@@ -1,5 +1,6 @@
 <template>
     <el-main>
+
         <el-collapse v-model="activeNames" @change="handleChange">
             <ul id="discuss">
                 <li v-for="item in discuss" v-bind:key="item.question">
@@ -95,8 +96,10 @@
 <script>
 // import {createDiscuss} from '@/api/discuss'
 // import {Message} from "element-ui";
+
 export default {
     name: "DiscussDetail",
+    components: {},
     el: '#discuss',
     data() {
         return {

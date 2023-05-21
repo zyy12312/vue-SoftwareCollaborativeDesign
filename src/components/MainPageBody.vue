@@ -42,6 +42,7 @@ export default ({
         if (currentTag === '/homepage'){
             this.activeName = 'first'
             let basepath = this.$route.path
+            this.$router.fullPath
             // console.log("bp  "+basepath)
             this.$router.push(basepath+this.paths[this.activeName])
         }

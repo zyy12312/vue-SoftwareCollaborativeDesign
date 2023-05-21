@@ -4,7 +4,6 @@
             <keep-alive>
                 <MainPageTitle></MainPageTitle>
                 <!--            <router-view></router-view>-->
-
             </keep-alive>
             <MainPageBody></MainPageBody>
         </el-row>

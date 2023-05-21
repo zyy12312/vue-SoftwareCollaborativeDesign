@@ -65,9 +65,9 @@ export default {
                     });
                 });
         },
-        goDiscussDetail(item) {
+        goDiscussDetail() {
             console.log(this.$router.currentRoute.fullPath)
-            router.push(this.$router.currentRoute + '/discussdetail', item);
+            router.push('/studydiscuss' + '/discussdetail');
         },
         getIndex(index) {
             this.indexs = index;

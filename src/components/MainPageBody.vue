@@ -38,15 +38,24 @@ export default ({
     mounted() {
         let url = window.location.href
         let currentTag = (url).substring((url).lastIndexOf("/"))
-        console.log("current"+currentTag)
-
-        for (let key in this.paths){
-            console.log(key)
-            if (this.paths[key] === currentTag){
-                this.activeName = key
-                break
+        // console.log("current"+currentTag)
+        if (currentTag === '/homepage'){
+            this.activeName = 'first'
+            let basepath = this.$route.path
+            // console.log("bp  "+basepath)
+            this.$router.push(basepath+this.paths[this.activeName])
+        }
+        else {
+            for (let key in this.paths){
+                // console.log(key)
+                if (this.paths[key] === currentTag){
+                    this.activeName = key
+                    break
+                }
             }
         }
+
+
     }
 })
 </script>

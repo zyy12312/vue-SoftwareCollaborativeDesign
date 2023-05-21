@@ -41,18 +41,18 @@ export const baseRoutes = [
                 children: [
                     //发帖详情
                     {
-                        path: "discuss",
-                        component : ()=> import('@/views/Discuss'),
+                        path: "studydiscuss",
+                        component : ()=> import('@/views/StudyDiscuss.vue'),
                         children: [
                             {
-                                path : "discussdetail",
+                                path : "/discussdetail",
                                 name : "DiscussDetail",
                                 component : () => import('@/views/DiscussDetail'),
                                 hidden : false
-                            },
+                            }
                         ],
                         hidden: true
-                    },
+                    }
                 ],
                 hidden: true
             },

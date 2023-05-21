@@ -31,6 +31,13 @@ export const baseRoutes = [
         hidden: true
     },
     {
+        path : "/discussdetail",
+        name : "DiscussDetail",
+        component : () => import('@/views/DiscussDetail'),
+        // redirect:"/homepage/studydiscuss",
+        hidden : false
+    },
+    {
         path: '/basepage',
         component :()=>import('@/views/BasePage.vue'),
         redirect: '/homepage',
@@ -42,17 +49,68 @@ export const baseRoutes = [
                     //发帖详情
                     {
                         path: "studydiscuss",
+                        name : "StudyDiscuss",
                         component : ()=> import('@/views/StudyDiscuss.vue'),
                         children: [
-
+                            {
+                                path : "discussdetail",
+                                name : "DiscussDetail",
+                                component : () => import('@/views/DiscussDetail'),
+                                // redirect:"/homepage/studydiscuss",
+                                hidden : false
+                            },
                         ],
                         hidden: true
                     },
                     {
-                        path : "/discussdetail",
-                        name : "DiscussDetail",
-                        component : () => import('@/views/DiscussDetail'),
-                        hidden : false
+                        path: "chapterdetail",
+                        component : ()=> import('@/views/ChapterDetail.vue'),
+                        hidden: true
+                    },
+                    {
+                        path: "coursegroup",
+                        component : ()=> import('@/views/CourseGroup.vue'),
+                        hidden: true
+                    },
+                    {
+                        path: "groupchat",
+                        component : ()=> import('@/views/GroupChat.vue'),
+                        hidden: true
+                    },
+                    {
+                        path: "databank",
+                        component : ()=> import('@/views/DataBank.vue'),
+                        hidden: true
+                    },
+                    {
+                        path: "studenttask",
+                        component : ()=> import('@/views/StudentTask.vue'),
+                        hidden: true
+                    },
+                    {
+                        path: "studydiscuss",
+                        component : ()=> import('@/views/StudyDiscuss.vue'),
+                        hidden: true
+                    },
+                    {
+                        path: "teacherteam",
+                        component : ()=> import('@/views/teacher/TeacherTeam.vue'),
+                        hidden: true
+                    },
+                    {
+                        path: "teachergrade",
+                        component : ()=> import('@/views/teacher/TeacherGrade.vue'),
+                        hidden: true
+                    },
+                    {
+                        path: "teachertask",
+                        component : ()=> import('@/views/teacher/TeacherTask.vue'),
+                        hidden: true
+                    },
+                    {
+                        path: "teacherdatabank",
+                        component : ()=> import('@/views/teacher/TeacherDataBank.vue'),
+                        hidden: true
                     }
                 ],
                 hidden: true

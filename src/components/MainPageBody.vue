@@ -10,7 +10,7 @@ export default ({
             paths:{
                 "first" : '/chapterdetail',
                 "third" : '/coursegroup',
-                'fourth' : 'groupchat',
+                'fourth' : '/groupchat',
                 "fife" : '/databank',
                 "six" : '/studenttask',
                 "eight" : '/studydiscuss',
@@ -27,15 +27,34 @@ export default ({
             this.indexs = index;
         },
         handleClick(tab) {
-            let basepath = this.$route.path;
-            console.log(basepath+this.paths[tab.name])
+            let basepath = "/homepage";
+             console.log(basepath+this.paths[tab.name])
             this.$router.push(basepath+this.paths[tab.name])
             this.activeName = tab.name
-            console.log(this.activeName);
+            // console.log(this.activeName);
             // console.log(tab, event);
         },
     },
     mounted() {
+        let url = window.location.href
+        let currentTag = (url).substring((url).lastIndexOf("/"))
+        // console.log("current"+currentTag)
+        if (currentTag === '/homepage'){
+            this.activeName = 'first'
+            let basepath = this.$route.path
+            // console.log("bp  "+basepath)
+            this.$router.push(basepath+this.paths[this.activeName])
+        }
+        else {
+            for (let key in this.paths){
+                // console.log(key)
+                if (this.paths[key] === currentTag){
+                    this.activeName = key
+                    break
+                }
+            }
+        }
+
 
     }
 })

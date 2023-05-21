@@ -1,8 +1,10 @@
 <template>
     <el-main>
         <el-row>
-            <MainPageTitle></MainPageTitle>
-<!--            <router-view></router-view>-->
+            <keep-alive>
+                <MainPageTitle></MainPageTitle>
+                <!--            <router-view></router-view>-->
+            </keep-alive>
             <MainPageBody></MainPageBody>
         </el-row>
     </el-main>

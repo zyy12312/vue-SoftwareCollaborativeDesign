@@ -22,7 +22,7 @@ export const baseRoutes = [
     },
     {
         path: "/404",
-        component : ()=> import('@/views/404'),
+        component : ()=> import('@/views/404.vue'),
         hidden: true
     },
     {
@@ -39,7 +39,9 @@ export const baseRoutes = [
         component : ()=> import('@/views/Information'),
         hidden: true
     },
-
+    // studentRoutes,
+    // teacherRoutes,
+    { path: '*', redirect: '/404', hidden: true }
 ]
 
 //学生端路由表
@@ -136,10 +138,27 @@ const createRouter = () => new Router(
     }
 )
 
+const createStudentRouter = () => new Router(
+    {
+        scrollBehavior: () => ({ y: 0 }),
+        routes: baseRoutes.concat(studentRoutes)
+    }
+)
+const createTeacherRouter = () => new Router(
+    {
+        scrollBehavior: () => ({ y: 0 }),
+        routes: baseRoutes.concat(teacherRoutes)
+    }
+)
 const router = createRouter()
 
 export function resetRouter() {
-    const newRouter = createRouter()
+    let newRouter = createRouter()
+    // if (true==true) {
+        newRouter = createStudentRouter()
+    // } else {
+        newRouter = createTeacherRouter()
+    // }
     router.matcher = newRouter.matcher // reset router
 }
 

@@ -28,6 +28,7 @@
                     <el-tab-pane label="教师-成绩" name="fourteen"><TeacherGrade></TeacherGrade></el-tab-pane>
                     <el-tab-pane label="教师-作业" name="fifteen"><TeacherTask></TeacherTask></el-tab-pane>
                     <el-tab-pane label="教师-资料" name="sixteen"><TeacherDataBank></TeacherDataBank></el-tab-pane>
+                    <el-tab-pane label="教师-作业-提交详情" name="seventeen"><TeacherTask_submissionDetail></TeacherTask_submissionDetail></el-tab-pane>
                 </el-tabs>
             </el-col>
         </el-row>
@@ -49,12 +50,13 @@ import StudyDiscuss from "@/views/StudyDiscuss.vue";
 import TeacherGrade from "@/views/teacher/TeacherGrade.vue";
 import TeacherTeam from "@/views/teacher/TeacherTeam.vue";
 import TeacherTask from "@/views/teacher/TeacherTask.vue";
+import TeacherTask_submissionDetail from "@/views/teacher/TeacherTask_submissionDetail.vue";
 import TeacherDataBank from "@/views/teacher/TeacherDataBank.vue";
 
 export default {
     name:"PageTitle",
     components: {
-        StudyDiscuss, GroupChat, CourseGroup, DataBank, StudentTask, ChapterDetail, TeacherTeam, TeacherGrade,TeacherTask,TeacherDataBank}, //DiscussDetail
+        StudyDiscuss, GroupChat, CourseGroup, DataBank, StudentTask, ChapterDetail, TeacherTeam, TeacherGrade,TeacherTask,TeacherDataBank,TeacherTask_submissionDetail}, //DiscussDetail
     data() {
         return {
             activeName: 'first',

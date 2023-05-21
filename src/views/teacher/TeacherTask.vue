@@ -4,32 +4,33 @@
             <div slot="header" class="clearfix">
                 <span v-for="item in items" v-bind:key="item.title1">
                     <el-row >
-                        <el-col :span="5"><div class="grid-content bg-purple-light" >{{item.title1}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title2}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title3}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title4}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title5}}</div></el-col>
+                        <el-col :span="7"><div class="grid-content bg-purple-light" >{{item.title1}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title2}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title3}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title4}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title5}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">发布</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">编辑</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">删除</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">批阅</div></el-col>
                     </el-row>
                 </span>
             </div>
             <div v-for="(task,index) in tasks" v-bind:key="index">
                 <el-row>
-                    <el-col :span="5">
+                    <el-col :span="7">
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{task.title}}</div>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">{{task.deadline}}</div>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.character}}</div>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.handledTotal}}</div>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.status}}</div>
                     </el-col>
                     <el-col :span="2" v-if="task.status === '未开始'">
@@ -119,6 +120,9 @@
                     </el-col>
                     <el-col :span="2">
                         <el-button type="danger" plain @click="removeItem(index)">删除</el-button>
+                    </el-col>
+                    <el-col :span="2">
+                        <el-button type="warning" plain @click="checkItem(index)">批阅</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -349,6 +353,15 @@ export default {
                     });
                 });
         },
+        checkItem(index) {
+            console.log("批阅作业详情。作业编号："+index)
+            this.$router.push({
+                path: 'task_submissionDetail',
+                query: {
+                    taskIndex:index
+                }
+            })
+        }
     },
     mounted() {
         this.characters = this.loadAll();

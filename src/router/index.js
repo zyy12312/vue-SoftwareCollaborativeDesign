@@ -119,6 +119,11 @@ export const teacherRoutes = [
             //     path: "chat",
             //     component: () => import('@/views/teacher/')
             // },
+            //教师查看作业详情
+            {
+                path: "task_submissionDetail",
+                component: () => import('@/views/teacher/TeacherTask_submissionDetail.vue')
+            },
             //教师端成绩管理
             {
                 path: "grade",

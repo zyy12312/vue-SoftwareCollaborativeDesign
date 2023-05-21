@@ -3,7 +3,7 @@
         <el-collapse v-model="activeNames" @change="handleChange">
             <ul id="discuss">
                 <li v-for="item in items" v-bind:key="item.question">
-                    <el-collapse-item :title="item.question" name="1" v-show="items">
+                    <el-collapse-item :title="item.question" name="0" v-show="items">
                         <div>{{ item.detail }}</div>
                         <div style="text-align: right">
                             <a style="font-size: 15px ">{{ item.time }}</a>
@@ -12,7 +12,7 @@
                             </p>
                         </div>
                         <div>
-                            <el-dialog title="回复帖子" :visible.sync="dialogFormVisible">
+                            <el-dialog title="回复帖子" :visible.sync="dialogFormVisible" append-to-body>
                                 <el-form :model="form">
                                     <el-form-item label="回复输入" :label-width="formLabelWidth">
                                         <el-input v-model="form.name" auto-complete="off"></el-input>
@@ -53,7 +53,7 @@
                             </p>
                         </div>
                         <div>
-                            <el-dialog title="回复回帖" :visible.sync="dialogFormVisible">
+                            <el-dialog title="回复回帖" :visible.sync="dialogFormVisible" append-to-body>
                                 <el-form :model="form">
                                     <el-form-item label="回复输入" :label-width="formLabelWidth">
                                         <el-input v-model="form.name" auto-complete="off"></el-input>
@@ -98,7 +98,7 @@ export default {
     el: '#discuss',
     data() {
         return {
-            activeNames: ['1'],
+            activeNames: ['0'],
             initem: this.$router.query.param,
             items: [
                 {question: '什么时候开始？', detail: '明天就开始', time: '2023/5/11 19:40'},

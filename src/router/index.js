@@ -9,6 +9,11 @@ import TeacherLayout from "@/layouts/TeacherLayout.vue";
 //基本路由表
 export const baseRoutes = [
     {
+        path: "/",
+        redirect: "/login",
+        hidden: true
+    },
+    {
         path : "/login",
         component : () => import('@/views/LoginPage'),
         hidden : true

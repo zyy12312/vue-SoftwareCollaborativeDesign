@@ -14,7 +14,7 @@
 // import NavBar from "@/views/NavBar.vue";
 // import NavFoot from "@/views/NavFoot.vue";
 // import AllNavigation from "@/views/AllNavigation.vue";
-// import PageTitle from "@/views/PageTitle.vue";
+// import PageTitle from "@/views/Page.vue";
 //import StudyDiscuss from "@/components/StudyDiscuss.vue";
 
 export default {

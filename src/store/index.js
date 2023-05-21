@@ -7,7 +7,7 @@ import user from "@/store/modules/user";
 
 Vue.use(Vuex)
 
-const index = new Vuex.Store({
+const store = new Vuex.Store({
     modules: {
         app,
         user
@@ -15,4 +15,4 @@ const index = new Vuex.Store({
     getters
 })
 
-export default index
+export default store

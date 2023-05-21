@@ -43,23 +43,30 @@ export const baseRoutes = [
         redirect: '/homepage',
         children: [
             {
+                path : "discussdetail",
+                name : "DiscussDetail",
+                component : () => import('@/views/DiscussDetail'),
+                // redirect:"/homepage/studydiscuss",
+                hidden : false
+            },
+            {
+                path: "task_submissionDetail",
+                component : ()=> import('@/views/teacher/TeacherTask_submissionDetail.vue'),
+                hidden: true
+            },
+            {
                 path: '/homepage',
                 component :()=>import('@/views/HomePage.vue'),
                 children: [
+
                     //发帖详情
                     {
                         path: "studydiscuss",
                         name : "StudyDiscuss",
                         component : ()=> import('@/views/StudyDiscuss.vue'),
-                        children: [
-                            {
-                                path : "discussdetail",
-                                name : "DiscussDetail",
-                                component : () => import('@/views/DiscussDetail'),
-                                // redirect:"/homepage/studydiscuss",
-                                hidden : false
-                            },
-                        ],
+                        // children: [
+
+                        // ],
                         hidden: true
                     },
                     {
@@ -154,39 +161,39 @@ export const baseRoutes = [
     },
 
 
-    {
-        path: "/task",
-        component :() =>import('@/views/Task'),
-        hidden: true
-    },
-    //主页面
-    {
-        path: "/main",
-        component :()=> import('@/views/BasePage.vue'),
-        children : [
-            //初始页面
-            {
-                path: "/basepage",
-                name:"BasePage",
-                component : ()=> import('@/views/HomePage.vue'),
-                children :[
-                    {
-                        path: "classmember",
-                        name:"ClassMember",
-                        component : ()=> import('@/views/ClassMember'),
-                        hidden: true
-                    }
-                ],
-                hidden: true
-            },
-        ],
-        hidden: false
-    },
-    {
-        path: "/information",
-        component : ()=> import('@/views/Information'),
-        hidden: true
-    },
+    // {
+    //     path: "/task",
+    //     component :() =>import('@/views/Task'),
+    //     hidden: true
+    // },
+    // //主页面
+    // {
+    //     path: "/main",
+    //     component :()=> import('@/views/BasePage.vue'),
+    //     children : [
+    //         //初始页面
+    //         {
+    //             path: "/basepage",
+    //             name:"BasePage",
+    //             component : ()=> import('@/views/HomePage.vue'),
+    //             children :[
+    //                 {
+    //                     path: "classmember",
+    //                     name:"ClassMember",
+    //                     component : ()=> import('@/views/ClassMember'),
+    //                     hidden: true
+    //                 }
+    //             ],
+    //             hidden: true
+    //         },
+    //     ],
+    //     hidden: false
+    // },
+    // {
+    //     path: "/information",
+    //     component : ()=> import('@/views/Information'),
+    //     hidden: true
+    // },
     // studentRoutes,
     // teacherRoutes,
     { path: '*', redirect: '/404', hidden: true }

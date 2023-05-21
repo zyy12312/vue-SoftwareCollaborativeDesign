@@ -84,8 +84,8 @@
                 <span class="svg-container">
                   <svg-icon icon-class="user" />
                 </span>
-                <el-radio v-model="signInForm.sex" label="0">Student</el-radio>
-                <el-radio v-model="signInForm.sex" label="1">Teacher</el-radio>
+                <el-radio v-model="signInForm.role" label="0" style="color: #bfbebe">Student</el-radio>
+                <el-radio v-model="signInForm.role" label="1" style="color: #bfbebe">Teacher</el-radio>
             </el-form-item>
 
             <!--性别（0:男；1:女）-->
@@ -93,8 +93,8 @@
                 <span class="svg-container">
                   <svg-icon icon-class="user" />
                 </span>
-                <el-radio v-model="signInForm.sex" label="0">Male</el-radio>
-                <el-radio v-model="signInForm.sex" label="1">Female</el-radio>
+                <el-radio v-model="signInForm.sex" label="0" style="color: #bfbebe">Male</el-radio>
+                <el-radio v-model="signInForm.sex" label="1" style="color: #bfbebe">Female</el-radio>
             </el-form-item>
             <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleSignIn">Sign In</el-button>
         </el-form>

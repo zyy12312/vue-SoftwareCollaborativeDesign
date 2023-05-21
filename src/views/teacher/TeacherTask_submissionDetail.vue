@@ -112,11 +112,19 @@
                                                         <div class="grid-content bg-purple-light">
                                                             <el-button style="float: right; padding: 3px 0" type="text" @click="dialogFormVisible_comment = true;">评分
                                                             </el-button>
-                                                            <el-dialog :visible.sync="dialogFormVisible_comment" append-to-body>
-                                                                <div>
-                                                                    <el-input v-model="score">
-                                                                        <template slot="prepend">分数：</template>
-                                                                    </el-input>
+                                                            <el-dialog :visible.sync="dialogFormVisible_comment" >
+<!--                                                                <div>-->
+<!--                                                                    <el-input v-model="score">-->
+<!--                                                                        <template slot="prepend">分数：</template>-->
+<!--                                                                    </el-input>-->
+<!--                                                                </div>-->
+                                                                <div class="block">
+                                                                    <label for="score">在此键入分数</label>
+                                                                    <el-slider
+                                                                        id="score"
+                                                                        v-model="score"
+                                                                        show-input>
+                                                                    </el-slider>
                                                                 </div>
                                                                 <div>
                                                                     <el-input v-model="comment">

@@ -203,6 +203,7 @@
                 </el-dialog>
             </div>
         </el-card>
+        <router-view/>
     </el-main>
 
 </template>
@@ -413,8 +414,9 @@ export default {
         },
         checkItem(index) {
             console.log("批阅作业详情。作业编号："+index)
+            // console.log("cp"+this.$router.currentRoute.path)
             this.$router.push({
-                path: 'task_submissionDetail',
+                path: '/basepage/task_submissionDetail',
                 query: {
                     taskIndex:index
                 }

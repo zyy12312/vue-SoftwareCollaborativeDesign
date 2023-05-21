@@ -32,12 +32,6 @@ export default {
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
         },
-        goModifyInfo(){
-                                     //对应跳转到修改个人信息界面
-        },
-        goLoginPage(){
-                                     //对应退出登录按钮
-        }
     }
 }
 </script>

@@ -17,7 +17,7 @@ export default {
     /*background: #2c3e50;*/
     height: 100%;
     background:#74759B;
-
+    margin-left: 50px;
 }
 .el-footer{
     margin-bottom: 0;

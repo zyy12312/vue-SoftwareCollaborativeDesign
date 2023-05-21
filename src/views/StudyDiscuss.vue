@@ -58,7 +58,7 @@ export default {
                 });
         },
         goDiscussDetail(item) {
-            console.log(this.$route.fullPath)
+            console.log(this.$router.currentRoute.fullPath)
             router.push('/discussdetail',item);
         },
         getIndex(index){

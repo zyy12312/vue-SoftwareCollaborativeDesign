@@ -1,8 +1,8 @@
 <template>
     <el-main>
         <el-collapse v-model="activeNames" @change="handleChange">
-            <ul id="discuss">
-                <li v-for="item in discuss" v-bind:key="item.title">
+            <div id="discuss">
+                <div v-for="item in discuss" v-bind:key="item.title">
                     <el-collapse-item :title="item.title" name="0" v-show="discuss">
                         <div>{{ item.detail }}</div>
                         <div style="text-align: right">
@@ -13,39 +13,31 @@
                                            :visible.sync="dialogFormVisible" append-to-body>
                                     <el-form :model="form">
                                         <el-form-item label="帖子名称" :label-width="formLabelWidth">
-                                            <el-input v-model="discuss.title" auto-complete="off"></el-input>
+                                            <el-input v-model="form.title" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="帖子内容" :label-width="formLabelWidth">
-                                            <el-input v-model="discuss.detail" auto-complete="off"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="回复时间" :label-width="formLabelWidth">
-                                            <div class="block">
-                                                <el-date-picker
-                                                    v-model="discuss.discussTime"
-                                                    type="datetime"
-                                                    placeholder="选择日期时间">
-                                                </el-date-picker>
-                                            </div>
+                                            <el-input v-model="form.detail" auto-complete="off"></el-input>
                                         </el-form-item>
                                     </el-form>
                                     <div slot="footer" class="dialog-footer">
                                         <el-button
                                             @click="dialogFormVisible = false">取 消</el-button>
                                         <el-button type="primary"
-                                                   @click="dialogFormVisible = false;confirm">确 定</el-button>
+                                                   @click="dialogFormVisible = false;createReply(form)">确 定</el-button>
                                     </div>
                                 </el-dialog>
                             </p>
                         </div>
                     </el-collapse-item>
-                </li>
-                <li v-for="reply in replies" v-bind:key="reply.detail">
-                    <el-collapse-item title="回帖" :name="reply.replyTarget">
+                </div>
+                <div v-for="reply in replies" v-bind:key="reply.detail" >
+                    <div v-for="item in discuss" v-bind:key="item.title">
+                    <el-collapse-item title="回帖" :name="reply.detail" v-if="reply.replyTarget===item.id">
                         <div>{{ reply.detail }}</div>
                         <div style="text-align: right">
-                            <a style="font-size: 15px ">{{ reply.time }}</a>
+                            <a style="font-size: 15px ">{{ reply.replyTime }}</a>
                             <p>
-                                <el-button type="text" @click="dialogFormVisible1 = true;createReply">回复回帖</el-button>
+                                <el-button type="text" @click="dialogFormVisible1 = true">回复回帖</el-button>
                             </p>
                         </div>
                         <div>
@@ -53,32 +45,24 @@
                                        :visible.sync="dialogFormVisible1" append-to-body>
                                 <el-form :model="form">
                                     <el-form-item label="回帖名称" :label-width="formLabelWidth">
-                                        <el-input v-model="discuss.title" auto-complete="off"></el-input>
+                                        <el-input v-model="form.title" auto-complete="off"></el-input>
                                     </el-form-item>
                                     <el-form-item label="回帖内容" :label-width="formLabelWidth">
-                                        <el-input v-model="discuss.detail" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="回帖时间" :label-width="formLabelWidth">
-                                        <div class="block">
-                                            <el-date-picker
-                                                v-model="discuss.discussTime"
-                                                type="datetime"
-                                                placeholder="选择日期时间">
-                                            </el-date-picker>
-                                        </div>
+                                        <el-input v-model="form.detail" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-form>
                                 <div slot="footer" class="dialog-footer">
                                     <el-button @click="dialogFormVisible1 = false">取 消</el-button>
-                                    <el-button type="primary" @click="dialogFormVisible1 = false;createReply">确 定
+                                    <el-button type="primary" @click="dialogFormVisible1 = false;createReply(form)">确 定
                                     </el-button>
                                 </div>
                             </el-dialog>
                         </div>
 
                     </el-collapse-item>
-                </li>
-            </ul>
+                    </div>
+                </div>
+            </div>
         </el-collapse>
 
     </el-main>
@@ -94,9 +78,11 @@ import {Message} from "element-ui";
 export default {
     name: "DiscussDetail",
     el: '#discuss',
+
     data() {
         return {
             activeNames: ['0'],
+
             // initem: this.$router.query.param,
             discuss: [
                 {id:1,title: '什么时候开始？', detail: '明天就开始',authorID:this.$store.getters.user.account,
@@ -104,7 +90,7 @@ export default {
             ],
             replies: [
                 {detail: '确定是明天吗？', authorID:this.$store.getters.user.account,
-                    filesURL:"",replyTime: '2023-05-12 12:30:28', replyIsDiscuss:"",replyTarget: 1},
+                    filesURL:"",replyTime: '2023-05-12 14:30:22', replyIsDiscuss:"",replyTarget: 1},
                 {detail: '真的是明天吗？',authorID:this.$store.getters.user.account,
                     filesURL:"",replyTime: '2023-05-12 14:30:22', replyIsDiscuss:"",replyTarget: 1}
             ],
@@ -115,7 +101,7 @@ export default {
                 title: '',
                 detail:'',
                 authorID:this.$store.getters.user.account,
-                filesURL:'',replyTime: '', replyIsDiscuss:"",replyTarget: ''
+                filesURL:'',replyTime:'', replyIsDiscuss:"",replyTarget: ''
             },
             formLabelWidth: '120px',
             fileList: [{
@@ -127,6 +113,19 @@ export default {
             }]
         };
     },
+    created() {
+        setInterval(() => {
+            const currentTime = new Date();
+            const year = currentTime.getFullYear();
+            const month = String(currentTime.getMonth() + 1).padStart(2, '0');
+            const day = String(currentTime.getDate()).padStart(2, '0');
+            const hours = String(currentTime.getHours()).padStart(2, '0');
+            const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+            const seconds = String(currentTime.getSeconds()).padStart(2, '0');
+
+            this.form.replyTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }, 1000);
+    },
     methods: {
         handleChange(val) {
             console.log(val);
@@ -134,11 +133,13 @@ export default {
 
         createReply(){
             console.log("title:"+this.form.title)
+            console.log("detail:"+this.form.detail)
+            console.log("time:"+this.form.replyTime)
             createReply(this.form)
                 .then((res)=>{
                     if (res.data.code===200){
-                        // let resultbody = res.data.data
-                        // this.discuss = resultbody
+                        let resultbody = res.data.data
+                        this.replies = resultbody
                         Message.success(res.data.msg)
                     }
                 }).catch((err)=>{

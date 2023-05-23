@@ -11,15 +11,6 @@
                         <el-form-item label="帖子内容" :label-width="formLabelWidth">
                             <el-input v-model="discuss.detail" auto-complete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="帖子时间" :label-width="formLabelWidth">
-                        <div class="block">
-                            <el-date-picker
-                                v-model="discuss.discussTime"
-                                type="datetime"
-                                placeholder="选择日期时间">
-                            </el-date-picker>
-                        </div>
-                        </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -62,6 +53,7 @@ export default {
     el: '#example',
     data() {
         return {
+            time:"",
             indexs: "",
             dialogFormVisible:false,
             items: [
@@ -81,6 +73,20 @@ export default {
             formLabelWidth: '120px'
         }
     },
+
+    created() {
+        setInterval(() => {
+            const currentTime = new Date();
+            const year = currentTime.getFullYear();
+            const month = String(currentTime.getMonth() + 1).padStart(2, '0');
+            const day = String(currentTime.getDate()).padStart(2, '0');
+            const hours = String(currentTime.getHours()).padStart(2, '0');
+            const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+            const seconds = String(currentTime.getSeconds()).padStart(2, '0');
+
+            this.discuss.discussTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }, 1000);
+    },
     mounted(){
         getDiscussList().then((res)=>{
             if (res.data.code===200){
@@ -98,11 +104,12 @@ export default {
         },
         createDiscuss(){
             console.log("title:"+this.discuss.title)
+            console.log("detail:"+this.discuss.detail)
             createDiscuss(this.discuss)
                 .then((res)=>{
                     if (res.data.code===200){
-                        // let resultbody = res.data.data
-                        // this.discuss = resultbody
+                        let resultbody = res.data.data
+                        this.items = resultbody
                         Message.success(res.data.msg)
                     }
                 }).catch((err)=>{

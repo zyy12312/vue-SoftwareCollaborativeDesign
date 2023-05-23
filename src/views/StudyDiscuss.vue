@@ -18,7 +18,7 @@
                     </div>
                 </el-dialog>
             </div>
-            <div v-for="item in items" v-bind:key="item">
+            <div v-for="item in items" v-bind:key="item.id">
                 <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                     <el-menu-item index="1">
                         <i class="el-icon-chat-round"></i>
@@ -28,11 +28,11 @@
                         <a style="font-size: 15px;text-align: right ">{{ item.discussTime }}</a>
                         <p>
                             <a>
-                                <el-button type="primary" @click="goDiscussDetail(item)">查看详情</el-button>
+                                <el-button type="primary" @click="goDiscussDetail(item.id)">查看详情</el-button>
                             </a>
 
                             <a>
-                                <el-button type="warning" @click=" deleteDiscuss ">删除帖子</el-button>
+                                <el-button type="warning" @click=" deleteDiscuss " v-if="item.authorID===authorID">删除帖子</el-button>
                             </a>
                         </p>
                     </div>
@@ -55,12 +55,14 @@ export default {
         return {
             time:"",
             indexs: "",
+            authorID:this.$store.getters.user.account,
+            // authorID:'1',
             dialogFormVisible:false,
             items: [
                 {id: 1, title: '什么时候开始？', detail: '明天就开始',
-                    authorID:this.$store.getters.user.account, filesURL:'',discussTime: '2023-05-11 19:40:55'},
+                    authorID:'', filesURL:'',discussTime: '2023-05-11 19:40:55'},
                 {id: 2, title: '什么是事实？', detail: '明天就开始世俗喜欢',
-                    authorID:this.$store.getters.user.account, filesURL:'',discussTime: '2023-05-11 19:40:59'}
+                    authorID:'', filesURL:'',discussTime: '2023-05-11 19:40:59'}
             ],
             discuss: {
                 title: '',
@@ -105,6 +107,7 @@ export default {
         createDiscuss(){
             console.log("title:"+this.discuss.title)
             console.log("detail:"+this.discuss.detail)
+            console.log("time:"+this.discuss.discussTime)
             createDiscuss(this.discuss)
                 .then((res)=>{
                     if (res.data.code===200){
@@ -149,9 +152,10 @@ export default {
                     });
                 });
         },
-        goDiscussDetail() {
+        goDiscussDetail(Id) {
+            console.log("id:"+Id)
             console.log(this.$router.currentRoute.fullPath)
-            router.push('/basepage' + '/discussdetail');
+            router.push({name:'DiscussDetail', params:{ id:Id }});
         },
         getIndex(index) {
             this.indexs = index;

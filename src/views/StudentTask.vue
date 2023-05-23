@@ -437,6 +437,7 @@
 <script>
 import {Message} from "element-ui";
 import {addSubmission} from "@/api/submission";
+import {taskDetail} from "@/api/task";
 
 export default {
     name: "StudentTask",
@@ -479,7 +480,7 @@ export default {
                     index: 1,
                     title: "分布式实验",
                     detail: "开发一个java web 网站，该网站提供一个页面，可以输入图书名称，输出该书的库存。程序应该首先访问缓存输出查询结果，如果缓存没有该数据",
-                    endTime: "2023.05.17 18:00",
+                    endTime: "2023-05-27 18:00:00",
                     file: "分布式实验.docx",
                     fileUrl: "",
                     submitTime:'2023-05-22 18:20:20',
@@ -489,7 +490,7 @@ export default {
                     index: 2,
                     title: "DES实现",
                     detail: "设计一个图书馆数据库，包含一个图书表books,该表有id,bookname, inventory三个字段（假设书名不会重复），并自行提前录入若干图书数据。",
-                    endTime: "2023.05.20 14:00",
+                    endTime: "2023-05-27 14:00:45",
                     file: "DES实现.docx",
                     fileUrl:"",
                     submitTime:'2023-05-22 18:20:20',
@@ -536,6 +537,17 @@ export default {
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
             }]
         }
+    },
+    mounted() {
+        taskDetail().then((res)=>{
+            if (res.data.code===200){
+                let resultbody = res.data.data
+                this.tasks = resultbody
+                Message.success(res.data.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
     },
     created() {
         setInterval(() => {

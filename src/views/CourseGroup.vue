@@ -34,26 +34,26 @@
         <el-card v-else v-for="inv in invitation" :key="inv.teamId">
             <div slot="header" class="clearfix" v-if="inv.state==='未接受'">
                 <span>分组邀请</span>
-                <el-button style="float: right; padding: 3px 0" type="text" @click="refuse;inv.state='已拒绝' ">
+                <el-button style="float: right; padding: 3px 0" type="text" @click="refuse(inv.teamId);inv.state='已拒绝' ">
                     拒绝邀请
                 </el-button>
                 <a v-if="inv.state==='已拒绝'">
                     <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
-                               @click="accept;inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId" disabled>接受邀请
+                               @click="accept(inv.teamId);inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId" disabled>接受邀请
                     </el-button>
                 </a>
                 <a v-else>
                     <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
-                               @click="accept;inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId">接受邀请
+                               @click="accept(inv.teamId);inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId">接受邀请
                     </el-button>
                 </a></div>
             <div slot="header" class="clearfix" v-else-if="inv.state==='已拒绝'">
                 <span>分组邀请</span>
-                <el-button style="float: right; padding: 3px 0" type="text" @click="refuse;inv.state='已拒绝' ">
+                <el-button style="float: right; padding: 3px 0" type="text" @click="refuse(inv.teamId);inv.state='已拒绝' ">
                     拒绝邀请
                 </el-button>
                 <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
-                           @click="accept;inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId" disabled>接受邀请
+                           @click="accept(inv.teamId);inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId" disabled>接受邀请
                 </el-button>
             </div>
             <div v-for="cla in clasp" :key="cla.title1" class="item font">
@@ -99,6 +99,10 @@
 </template>
 
 <script>
+
+import {Message} from "element-ui";
+import {acceptInvitation, getInvitation, rejectInvitation, studentTeamInfo} from "@/api/team";
+
 export default {
     name: "CourseGroup",
     el: "group",
@@ -126,21 +130,57 @@ export default {
                 {title1: "组号", title2: "组长", title3: "邀请职位", title4: "邀请时间", title5: "状态"}
             ],
             invitation: [
-                {teamId: "第五组", leader: "张三", role: "测试经理", invitationTime: "2023.03.12 13:22", state: "未接受"},
-                {teamId: "第一组", leader: "林董", role: "测试经理", invitationTime: "2023.03.14 10:22", state: "已拒绝"},
+                {teamId: "第五组", leader: "张三", role: "测试经理", invitationTime: "2023-03-12 13:22:55", state: "未接受"},
+                {teamId: "第一组", leader: "林董", role: "测试经理", invitationTime: "2023-03-14 10:22:20", state: "未接受"},
             ]
         }
+    },
+    mounted() {
+        getInvitation().then((res)=>{
+            if (res.data.code===200){
+                let resultbody = res.data.data
+                this.invitation = resultbody
+                Message.success(res.data.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
+        studentTeamInfo().then((res)=>{
+            if (res.data.code===200){
+                let resultbody = res.data.data
+                this.items = resultbody
+                Message.success(res.data.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
     },
     methods: {
         goChat() {
             this.$router.push("/ChatRoom");
         },
 
-        accept() {
-
+        accept(id) {
+            acceptInvitation(id).then((res)=>{
+                if (res.data.code===200){
+                    // let resultbody = res.data.data
+                    // this.invitation = resultbody
+                    Message.success(res.data.msg)
+                }
+            }).catch((err)=>{
+                Message.error(err)
+            });
         },
-        refuse() {
-
+        refuse(id) {
+            rejectInvitation(id).then((res)=>{
+                if (res.data.code===200){
+                    // let resultbody = res.data.data
+                    // this.invitation = resultbody
+                    Message.success(res.data.msg)
+                }
+            }).catch((err)=>{
+                Message.error(err)
+            });
         }
     }
 

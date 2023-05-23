@@ -110,10 +110,16 @@ export default {
                 if (valid) {
                     this.loading = true
                     console.log("logining")
+                        // login(this.user).then((res)=>{
+                        //     console.log(res)
+                        //     this.loading=false
+                        // })
                     this.$store.dispatch('user/login', this.user).then(() => {
                         this.$router.push('/basepage')
+                        console.log("end")
                         this.loading = false
-                    }).catch(() => {
+                    })
+                        .catch(() => {
                         this.loading = false
                     })
                 } else {

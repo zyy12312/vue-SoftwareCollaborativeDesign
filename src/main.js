@@ -8,6 +8,7 @@ import '@/styles/index.scss'
 import store from "@/store"; // global css
 
 Vue.config.productionTip = false
+Vue.prototype.HOST = 'http://127.0.0.1:8080';
 
 
 Vue.use(ElementUI)

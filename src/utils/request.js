@@ -5,7 +5,7 @@ import {getToken} from "@/utils/auth";
 
 const service = axios.create(
     {
-        baseURL : null,
+        baseURL : 'http://127.0.0.1:8080',
         timeout :  1000
     }
 )

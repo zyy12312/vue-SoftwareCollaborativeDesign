@@ -24,7 +24,7 @@ id: '1',
 studentId: '2035060301',
 studentName: '王小虎',
 GroupGrade: '87',
-totalGrade: 'N/A'
+totalGrade: 'Null'
 },{
 id: '2',
 studentId: '2035060301',

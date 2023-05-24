@@ -6,9 +6,7 @@
                 <el-row>
                     <el-col :span="8"><div class="grid-content bg-purple-light">{{ item.title1 }}</div></el-col>
                     <el-col :span="4"><div class="grid-content bg-purple-light">{{ item.title2 }}</div></el-col>
-                    <el-col :span="4"><div class="grid-content bg-purple-light">{{ item.title3 }}</div></el-col>
-                    <el-col :span="4"><div class="grid-content bg-purple-light"></div></el-col>
-                    <el-col :span="4"><div class="grid-content bg-purple-light">{{ item.title4 }}</div></el-col>
+                    <el-col :span="12"><div class="grid-content bg-purple-light">{{ item.title4 }}</div></el-col>
                 </el-row>
                 </span>
             </div>
@@ -18,10 +16,10 @@
                         <div class="grid-content bg-purple-light" style="margin-top: 13px">{{ task.title }}</div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="grid-content bg-purple-light" style="margin-top: 13px">{{ task.filename }}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 13px">{{ task.fileURLs }}</div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="grid-content bg-purple-light" style="margin-top: 13px">{{ task.size }}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 13px"></div>
                     </el-col>
                     <el-col :span="4">
                         <div class="grid-content bg-purple-light"></div>
@@ -58,11 +56,11 @@ export default {
     data() {
         return {
             items: [
-                {title1: "资料名称", title2: "附件名称", title3: "附件大小", title4: "下载"},
+                {title1: "资料名称", title2: "附件名称",  title4: "下载"},
             ],
             tasks: [
-                {index: 1, title: "第五章PPT", filename: "chapter 5.ppt", size: "3MB"},
-                {index: 2, title: "实验要求", filename: "实验要求.docx", size: "200KB"}
+                {id: 1, title: "第五章PPT", fileURLs: "chapter 5.ppt", },
+                {id: 2, title: "实验要求", fileURLs: "实验要求.docx",}
             ],
             dialogFormVisible: false,
             indexs: "",

@@ -11,15 +11,6 @@
                         <el-form-item label="帖子内容" :label-width="formLabelWidth">
                             <el-input v-model="discuss.detail" auto-complete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="帖子时间" :label-width="formLabelWidth">
-                        <div class="block">
-                            <el-date-picker
-                                v-model="discuss.discussTime"
-                                type="datetime"
-                                placeholder="选择日期时间">
-                            </el-date-picker>
-                        </div>
-                        </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -27,7 +18,7 @@
                     </div>
                 </el-dialog>
             </div>
-            <div v-for="item in items" v-bind:key="item">
+            <div v-for="item in items" v-bind:key="item.id">
                 <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                     <el-menu-item index="1">
                         <i class="el-icon-chat-round"></i>
@@ -37,11 +28,11 @@
                         <a style="font-size: 15px;text-align: right ">{{ item.discussTime }}</a>
                         <p>
                             <a>
-                                <el-button type="primary" @click="goDiscussDetail(item)">查看详情</el-button>
+                                <el-button type="primary" @click="goDiscussDetail(item.id)">查看详情</el-button>
                             </a>
 
                             <a>
-                                <el-button type="warning" @click=" deleteDiscuss ">删除帖子</el-button>
+                                <el-button type="warning" @click=" deleteDiscuss " v-if="item.authorID===authorID">删除帖子</el-button>
                             </a>
                         </p>
                     </div>
@@ -62,13 +53,16 @@ export default {
     el: '#example',
     data() {
         return {
+            time:"",
             indexs: "",
+            authorID:this.$store.getters.user.account,
+            // authorID:'1',
             dialogFormVisible:false,
             items: [
                 {id: 1, title: '什么时候开始？', detail: '明天就开始',
-                    authorID:this.$store.getters.user.account, filesURL:'',discussTime: '2023-05-11 19:40:55'},
+                    authorID:'', filesURL:'',discussTime: '2023-05-11 19:40:55'},
                 {id: 2, title: '什么是事实？', detail: '明天就开始世俗喜欢',
-                    authorID:this.$store.getters.user.account, filesURL:'',discussTime: '2023-05-11 19:40:59'}
+                    authorID:'', filesURL:'',discussTime: '2023-05-11 19:40:59'}
             ],
             discuss: {
                 title: '',
@@ -80,6 +74,20 @@ export default {
             },
             formLabelWidth: '120px'
         }
+    },
+
+    created() {
+        setInterval(() => {
+            const currentTime = new Date();
+            const year = currentTime.getFullYear();
+            const month = String(currentTime.getMonth() + 1).padStart(2, '0');
+            const day = String(currentTime.getDate()).padStart(2, '0');
+            const hours = String(currentTime.getHours()).padStart(2, '0');
+            const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+            const seconds = String(currentTime.getSeconds()).padStart(2, '0');
+
+            this.discuss.discussTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }, 1000);
     },
     mounted(){
         getDiscussList().then((res)=>{
@@ -98,11 +106,13 @@ export default {
         },
         createDiscuss(){
             console.log("title:"+this.discuss.title)
+            console.log("detail:"+this.discuss.detail)
+            console.log("time:"+this.discuss.discussTime)
             createDiscuss(this.discuss)
                 .then((res)=>{
                     if (res.data.code===200){
-                        // let resultbody = res.data.data
-                        // this.discuss = resultbody
+                        let resultbody = res.data.data
+                        this.items = resultbody
                         Message.success(res.data.msg)
                     }
                 }).catch((err)=>{
@@ -142,9 +152,10 @@ export default {
                     });
                 });
         },
-        goDiscussDetail() {
+        goDiscussDetail(Id) {
+            console.log("id:"+Id)
             console.log(this.$router.currentRoute.fullPath)
-            router.push('/basepage' + '/discussdetail');
+            router.push({name:'DiscussDetail', params:{ id:Id }});
         },
         getIndex(index) {
             this.indexs = index;

@@ -6,6 +6,7 @@
         </div>
         <div v-for="info in infos" :key="info.info" class="text item box">
             <el-row v-if="info.name===myName">
+                <el-col :span="24" style="text-align: center"><a>{{info.sendTime}}</a></el-col>
                 <el-col :span="24" style="text-align: right">
                     <div class="grid-content bg-purple-dark" >
                         <div style="font-size: 14px">{{ info.name }}</div>
@@ -15,6 +16,7 @@
                 </el-col>
             </el-row>
             <el-row v-else>
+                <el-col :span="24" style="text-align: center"><a>{{info.sendTime}}</a></el-col>
                 <el-col :span="24" style="text-align: left">
                     <div class="grid-content bg-purple-dark" >
                         <div style="font-size: 14px">{{ info.name }}</div>
@@ -25,7 +27,7 @@
 
         </div>
         <el-row>
-            <el-col :span="20"><div class="grid-content bg-purple " :model="textarea">
+            <el-col :span="20"><div class="grid-content bg-purple ">
                 <el-input
                     type="textarea"
                     :rows="2"
@@ -56,8 +58,22 @@ export default {
     computed: {
 
     },
+    created() {
+        setInterval(() => {
+            const currentTime = new Date();
+            const year = currentTime.getFullYear();
+            const month = String(currentTime.getMonth() + 1).padStart(2, '0');
+            const day = String(currentTime.getDate()).padStart(2, '0');
+            const hours = String(currentTime.getHours()).padStart(2, '0');
+            const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+            const seconds = String(currentTime.getSeconds()).padStart(2, '0');
+
+            this.textarea.sendTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }, 1000);
+    },
     data(){
         return {
+            time:"",
             textarea: {detail:"",sendTime:"",senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.teamId},
             myName:this.$store.getters.user.name,
             url:this.$store.getters.user.avatarURL,
@@ -69,7 +85,7 @@ export default {
             users:[
                 {name:"",avaterURL: "",teamId:""}
             ],
-            send: {detail:"",sendTime:"",senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.teamId}
+            send: {detail:"",sendTime:'',senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.teamId}
 
         }
     },
@@ -96,11 +112,12 @@ export default {
     methods:{
         sends(){
             console.log("详情:"+this.textarea.detail)
+            console.log("时间:"+this.textarea.sendTime)
             sendMessage(this.textarea)
                 .then((res)=>{
                     if (res.data.code===200){
-                        // let resultbody = res.data.data
-                        // this.discuss = resultbody
+                        let resultbody = res.data.data
+                        this.infos = resultbody
                         Message.success(res.data.msg)
                     }
                 }).catch((err)=>{

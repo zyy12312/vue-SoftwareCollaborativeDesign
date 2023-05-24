@@ -61,7 +61,7 @@
                                            type="text"
                                            @click="dialogFormVisible_upload = true">上传文件</el-button>
                                 <el-dialog title="上传文件"
-                                           :visible.sync="dialogFormVisible_upload">
+                                           :visible.sync="dialogFormVisible_upload" append-to-body>
                                     <el-form :model="form">
                                         <el-form-item :label-width="formLabelWidth">
                                             <div class="upload">

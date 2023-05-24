@@ -24,7 +24,10 @@
                     <el-col :span="4">
                         <div class="grid-content bg-purple-light"></div>
                         <div class="grid-content bg-purple-light">
-                            <el-button type="text" @click="dialogFormVisible = true;getIndex(task.index)"
+                            <el-button type="text" v-if="task.characterType===myRole" @click="dialogFormVisible = true;getIndex(task.index);getSubmissionToTask(task.index)"
+                                       style="font-size: 16px">查看作业
+                            </el-button>
+                            <el-button type="text" v-else @click="dialogFormVisible = true;getIndex(task.index);getSubmissionListToSubTask(task.index)"
                                        style="font-size: 16px">查看作业
                             </el-button>
                             <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs===task.index"  append-to-body>
@@ -155,12 +158,12 @@
                                                                             <el-col :span="24"><div
                                                                                     class="grid-content bg-purple-light"
                                                                                     style="margin-top: 13px;text-align: left">
-                                                                                <el-form :model="form">
+                                                                                <el-form :model="form1">
                                                                                <el-form-item label="截止时间："
                                                                                              :label-width="formLabelWidth">
                                                                               <div class="block">
                                                                                  <el-date-picker
-                                                                                        v-model="value2"
+                                                                                        v-model="form1.endTime"
                                                                                         type="datetime"
                                                                                         placeholder="选择日期时间"
                                                                                         align="right"
@@ -191,7 +194,7 @@
                                                                             <div class="grid-content bg-purple-light"
                                                                                  style="margin-top: 13px">
                                                                                 <el-input placeholder="请输入内容"
-                                                                                          v-model="input4">
+                                                                                          v-model="form1.detail">
                                                                                 </el-input>
                                                                             </div>
                                                                         </el-col>
@@ -202,7 +205,7 @@
                                                                 <el-button @click="dialogFormVisible2 = false">取 消
                                                                 </el-button>
                                                                 <el-button type="primary"
-                                                                           @click="dialogFormVisible2 = false">确 定
+                                                                           @click="dialogFormVisible2 = false;form1.targetID=task.index;form1.characterType=myRole;subtasks(form1)">确 定
                                                                 </el-button>
                                                             </div>
                                                         </el-dialog>
@@ -436,8 +439,8 @@
 
 <script>
 import {Message} from "element-ui";
-import {addSubmission} from "@/api/submission";
-import {taskDetail} from "@/api/task";
+import {addSubmission, getSubmissionListToSubTask, getSubmissionToTask} from "@/api/submission";
+import {createSubTask, taskDetail} from "@/api/task";
 
 export default {
     name: "StudentTask",
@@ -445,7 +448,8 @@ export default {
     data() {
         return {
             activeName2: 'first',
-            myRole: this.$store.getters.user.role,
+            // myRole: this.$store.getters.user.role,
+            myRole:'产品经理',
             indexs: 0,
             searchDetail:false,
             pickerOptions1: {
@@ -527,6 +531,14 @@ export default {
                 filesURL:'',
                 state:''
             },
+            form1:{
+                teamID:this.$store.getters.user.teamId,
+                characterType:'',
+                detail: '',
+                endTime:'',
+                targetID: '',
+                filesURL:'',
+            },
             input4: '',
             formLabelWidth: '120px',
             fileList: [{
@@ -548,6 +560,7 @@ export default {
         }).catch((err)=>{
             Message.error(err)
         });
+
     },
     created() {
         setInterval(() => {
@@ -587,8 +600,19 @@ export default {
         download(index) {
             index;               //下载对应文件的方法
         },
-        subtasks(index){
-            index;              //对应任务分配方法
+        subtasks(subTask){
+            console.log("详情:"+this.form1.detail)
+            console.log("时间:"+this.form1.endTime)
+            createSubTask(subTask)
+                .then((res)=>{
+                    if (res.data.code===200){
+                        let resultbody = res.data.data
+                        this.submit = resultbody
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })//对应任务分配方法
         },
         confirm(){
             console.log("详情:"+this.form.title)
@@ -596,14 +620,36 @@ export default {
             addSubmission(this.form)
                 .then((res)=>{
                     if (res.data.code===200){
-                        // let resultbody = res.data.data
-                        // this.discuss = resultbody
+                        let resultbody = res.data.data
+                        this.submit = resultbody
                         Message.success(res.data.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
             })
                                  //对应写作业的确认按钮
+        },
+        getSubmissionToTask(taskId) {
+            getSubmissionToTask(taskId).then((res) => {
+                if (res.data.code === 200) {
+                    let resultbody = res.data.data
+                    this.submit = resultbody
+                    Message.success(res.data.msg)
+                }
+            }).catch((err) => {
+                Message.error(err)
+            })
+        },
+        getSubmissionListToSubTask(subTaskID){
+            getSubmissionListToSubTask(subTaskID).then((res) => {
+                if (res.data.code === 200) {
+                    let resultbody = res.data.data
+                    this.submit = resultbody
+                    Message.success(res.data.msg)
+                }
+            }).catch((err) => {
+                Message.error(err)
+            })
         }
     },
 

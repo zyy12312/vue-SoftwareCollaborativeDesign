@@ -6,7 +6,7 @@ const getDefaultState = () => {
     return {
         token: getToken(),
         User:{
-            role:0
+            role:1
         }
     }
 }

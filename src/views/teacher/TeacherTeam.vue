@@ -71,6 +71,7 @@
 
 
 import {Message} from "element-ui";
+import {addTeam, teamInfo} from "@/api/team";
 
 export default {
     name: 'TeacherTeam',
@@ -100,24 +101,41 @@ export default {
             ]
         };
     },
+    created() {
+        // this.getList()
+    },
     methods: {
+        // Map<Integer, List<Team>> groupMap
+        getList() {
+            teamInfo()
+                .then((res)=>{
+                    if (res.data.code===200){
+                        let resultbody = res.data.data
+                        this.items = resultbody
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
+        },
+
         goChat(teamID){
             console.log("进入讨论界面，小组号："+teamID)
         },
 
-        //新建小组
-        // addTeamConfirm(){
-        //     console.log("add1:leader="+this.added_leader)
-        //     createTeam(this.added_leader)
-        //         .then((res)=>{
-        //             console.log("add2:leader="+this.added_leader)
-        //             if (res.data.code===200){
-        //                 Message.success(res.data.msg)
-        //             }
-        //         }).catch((err)=>{
-        //         Message.error(err)
-        //     })
-        // },
+        // 新建小组
+        addTeamConfirm(){
+            console.log("add1:leader="+this.added_leader)
+            addTeam(this.added_leader)
+                .then((res)=>{
+                    console.log("add2:leader="+this.added_leader)
+                    if (res.data.code===200){
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
+        },
 
     }
 

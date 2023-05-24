@@ -5,9 +5,7 @@
                 <span v-for="item in items" v-bind:key="item.title1">
                     <el-row>
                         <el-col :span="8"><div class="grid-content bg-purple-light">{{ item.title1 }}</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple-light">{{ item.title2 }}</div></el-col>
                         <el-col :span="4"><div class="grid-content bg-purple-light">{{ item.title3 }}</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple-light">{{ item.title4 }}</div></el-col>
                         <el-col :span="4"><div class="grid-content bg-purple-light">{{ item.title5 }}</div></el-col>
                     </el-row>
                 </span>
@@ -17,35 +15,31 @@
                     <el-col :span="8">
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{ task.title }}</div>
                         <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">
-                            截止：{{ task.deadline }}
+                            截止：{{ task.endTime }}
                         </div>
                     </el-col>
                     <el-col :span="4">
-
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{ task.form }}</div>
-                    </el-col>
-                    <el-col :span="4">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{ task.status }}</div>
-                    </el-col>
-                    <el-col :span="4">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{ task.type }}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{ task.submitTime }}</div>
                     </el-col>
                     <el-col :span="4">
                         <div class="grid-content bg-purple-light"></div>
                         <div class="grid-content bg-purple-light">
-                            <el-button type="text" @click="dialogFormVisible = true;getIndex(task.index)"
+                            <el-button type="text" v-if="task.characterType===myRole" @click="dialogFormVisible = true;getIndex(task.index);getSubmissionToTask(task.index)"
                                        style="font-size: 16px">查看作业
                             </el-button>
-                            <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs===task.index" append-to-body>
+                            <el-button type="text" v-else @click="dialogFormVisible = true;getIndex(task.index);getSubmissionListToSubTask(task.index)"
+                                       style="font-size: 16px">查看作业
+                            </el-button>
+                            <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs===task.index"  append-to-body>
                                 <el-row>
                                     <el-col :span="20">
                                         <div class="grid-content bg-purple-dark"
                                              style="margin-top: 13px;text-align: left">
-                                            {{ task.status }}（若学生多次提交，成绩计算请以评分规则为准）
+                                            {{ task.state }}（若学生多次提交，成绩计算请以评分规则为准）
                                         </div>
                                     </el-col>
                                     <el-col :span="4">
-                                        <div class="grid-content bg-purple-light" v-if="task.leader===myRole">
+                                        <div class="grid-content bg-purple-light" v-if="task.characterType===myRole">
                                             <el-button style="float: right; padding: 3px 0;margin-top: 13px" type="text" @click="dialogFormVisibles = true">提交
                                             </el-button>
                                             <el-dialog title="提交作业"
@@ -116,7 +110,7 @@
                                                 </el-col>
                                                 <el-col :span="12">
                                                     <div class="grid-content bg-purple-light" style="margin-top: 13px">
-                                                        {{ task.deadline }}
+                                                        {{ task.endTime }}
                                                     </div>
                                                 </el-col>
                                             </el-row>
@@ -128,7 +122,7 @@
                                                 </el-col>
                                                 <el-col :span="12">
                                                     <div class="grid-content bg-purple-light" style="margin-top: 13px">
-                                                        {{ task.leader }}
+                                                        {{ task.characterType }}
                                                     </div>
                                                 </el-col>
                                             </el-row>
@@ -152,7 +146,7 @@
                                                 </el-col>
                                                 <el-col :span="4">
                                                     <div class="grid-content bg-purple-light"
-                                                         v-if="task.leader===myRole">
+                                                         v-if="task.characterType===myRole">
                                                         <el-button type="text" @click="dialogFormVisible2 = true">
                                                             任务分配
                                                         </el-button>
@@ -164,12 +158,12 @@
                                                                             <el-col :span="24"><div
                                                                                     class="grid-content bg-purple-light"
                                                                                     style="margin-top: 13px;text-align: left">
-                                                                                <el-form :model="form">
+                                                                                <el-form :model="form1">
                                                                                <el-form-item label="截止时间："
                                                                                              :label-width="formLabelWidth">
                                                                               <div class="block">
                                                                                  <el-date-picker
-                                                                                        v-model="value2"
+                                                                                        v-model="form1.endTime"
                                                                                         type="datetime"
                                                                                         placeholder="选择日期时间"
                                                                                         align="right"
@@ -200,7 +194,7 @@
                                                                             <div class="grid-content bg-purple-light"
                                                                                  style="margin-top: 13px">
                                                                                 <el-input placeholder="请输入内容"
-                                                                                          v-model="input4">
+                                                                                          v-model="form1.detail">
                                                                                 </el-input>
                                                                             </div>
                                                                         </el-col>
@@ -211,7 +205,7 @@
                                                                 <el-button @click="dialogFormVisible2 = false">取 消
                                                                 </el-button>
                                                                 <el-button type="primary"
-                                                                           @click="dialogFormVisible2 = false">确 定
+                                                                           @click="dialogFormVisible2 = false;form1.targetID=task.index;form1.characterType=myRole;subtasks(form1)">确 定
                                                                 </el-button>
                                                             </div>
                                                         </el-dialog>
@@ -244,7 +238,7 @@
                                                     </el-col>
                                                     <el-col :span="8">
                                                         <div class="grid-content bg-purple-light"
-                                                             style="margin-top: 13px">{{ task.filesize }}
+                                                             style="margin-top: 13px">{{ task.submitTime }}
                                                         </div>
                                                     </el-col>
                                                     <el-col :span="4">
@@ -279,7 +273,7 @@
                                                 </el-col>
                                                 <el-col :span="12">
                                                     <div class="grid-content bg-purple-light" style="margin-top: 13px">
-                                                        {{ task.deadline }}
+                                                        {{ task.endTime }}
                                                     </div>
                                                 </el-col>
                                             </el-row>
@@ -291,7 +285,7 @@
                                                 </el-col>
                                                 <el-col :span="12">
                                                     <div class="grid-content bg-purple-light" style="margin-top: 13px">
-                                                        {{ task.leader }}
+                                                        {{ task.characterType }}
                                                     </div>
                                                 </el-col>
                                             </el-row>
@@ -333,7 +327,7 @@
                                                                       <el-form :model="form">
                                                                            <el-form-item label="作业名称"
                                                                                          :label-width="formLabelWidth">
-                                                                                   <el-input v-model="form.name"
+                                                                                   <el-input v-model="form.title"
                                                                                              auto-complete="off"></el-input>
                                                                            </el-form-item>
                                                                           <el-form-item label="作业提交区域"
@@ -346,7 +340,8 @@
                                                                                           :on-preview="handlePreview"
                                                                                           :on-remove="handleRemove"
                                                                                           :file-list="fileList"
-                                                                                          :auto-upload="false">
+                                                                                          :auto-upload="false"
+                                                                                          v-model="form.fileUrl">
                                                                                       <el-button slot="trigger"
                                                                                                  size="small"
                                                                                                  type="primary">选取文件</el-button>
@@ -365,7 +360,7 @@
                                                              <el-button
                                                                      @click="dialogFormVisible1 = false">取 消</el-button>
                                                                <el-button type="primary"
-                                                                          @click="dialogFormVisible1 = false;confirm">确 定</el-button>
+                                                                          @click="dialogFormVisible1 = false;confirm(form)">确 定</el-button>
                                                              </div>
                                                               </el-dialog>
                                                                   </div>
@@ -377,7 +372,7 @@
                                                 <el-row>
                                                     <el-col :span="12">
                                                         <div class="grid-content bg-purple-light"
-                                                             style="margin-top: 5px">{{ sub.subTime }}
+                                                             style="margin-top: 5px">{{ sub.submitTime }}
                                                         </div>
                                                     </el-col>
                                                     <el-col :span="8">
@@ -412,7 +407,7 @@
                                                                             </el-col>
                                                                             <el-col :span="8">
                                                                                 <div class="grid-content bg-purple-light"
-                                                                                     style="margin-top: 13px">{{ sub.fileSize }}
+                                                                                     style="margin-top: 13px">{{ sub.submitTime }}
                                                                                 </div>
                                                                             </el-col>
                                                                         </el-row>
@@ -443,13 +438,18 @@
 </template>
 
 <script>
+import {Message} from "element-ui";
+import {addSubmission, getSubmissionListToSubTask, getSubmissionToTask} from "@/api/submission";
+import {createSubTask, taskDetail} from "@/api/task";
+
 export default {
     name: "StudentTask",
     el: "#Task",
     data() {
         return {
             activeName2: 'first',
-            myRole: "产品经理",
+            // myRole: this.$store.getters.user.role,
+            myRole:'产品经理',
             indexs: 0,
             searchDetail:false,
             pickerOptions1: {
@@ -477,46 +477,38 @@ export default {
             value1: '',
             value2: '',
             items: [
-                {title1: "作业名称", title2: "作业形式", title3: "状态", title4: "类型", title5: "交付"},
+                {title1: "作业名称",  title3: "提交时间",  title5: "交付"},
             ],
             tasks: [
                 {
                     index: 1,
                     title: "分布式实验",
                     detail: "开发一个java web 网站，该网站提供一个页面，可以输入图书名称，输出该书的库存。程序应该首先访问缓存输出查询结果，如果缓存没有该数据",
-                    deadline: "2023.05.17 18:00",
-                    request: "多人合作完成,并提交报告",
+                    endTime: "2023-05-27 18:00:00",
                     file: "分布式实验.docx",
                     fileUrl: "",
-                    filesize: "200KB",
-                    form: "个人作业",
-                    status: "未提交",
-                    type: "负责人发布",
-                    leader: "计划经理"
+                    submitTime:'2023-05-22 18:20:20',
+                    characterType: "计划经理"
                 },
                 {
                     index: 2,
                     title: "DES实现",
                     detail: "设计一个图书馆数据库，包含一个图书表books,该表有id,bookname, inventory三个字段（假设书名不会重复），并自行提前录入若干图书数据。",
-                    deadline: "2023.05.20 14:00",
-                    request: "多人合作完成",
+                    endTime: "2023-05-27 14:00:45",
                     file: "DES实现.docx",
                     fileUrl:"",
-                    filesize: "203KB",
-                    form: "小组作业",
-                    status: "已提交",
-                    type: "教师发布",
-                    leader: "产品经理"
+                    submitTime:'2023-05-22 18:20:20',
+                    characterType: "产品经理"
                 },
             ],
             roles: [
                 {role: "小组长"}, {role: "产品经理"}, {role: "计划质量经理"}, {role: "开发经理"}, {role: "测试经理"}
             ],
             submit: [
-                {subTime: "2023.05.13 11:30", score: "未评分", file: "作业",fileSize:"125KB"}
+                {submitTime: "2023-05-13 11:30:49", score: "未评分", file: "作业"}
             ],
             cla: [
-                {title1: "附件名", title2: "大小"}
+                {title1: "附件名",title2:"提交时间" }
             ],
             clas: [
                 {title1: "交付历史与批改记录", title2: "原始成绩"}
@@ -527,14 +519,25 @@ export default {
             dialogFormVisible2: false,
             dialogFormVisible3: false,
             form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+                submitterID:'',
+                teamID:'',
+                targetID:'',
+                title: '',
+                detail: '',
+                submitTime: '',
+                score:'',
+                comment:'',
+                targetType: '',
+                filesURL:'',
+                state:''
+            },
+            form1:{
+                teamID:this.$store.getters.user.teamId,
+                characterType:'',
+                detail: '',
+                endTime:'',
+                targetID: '',
+                filesURL:'',
             },
             input4: '',
             formLabelWidth: '120px',
@@ -546,6 +549,31 @@ export default {
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
             }]
         }
+    },
+    mounted() {
+        taskDetail().then((res)=>{
+            if (res.data.code===200){
+                let resultbody = res.data.data
+                this.tasks = resultbody
+                Message.success(res.data.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
+
+    },
+    created() {
+        setInterval(() => {
+            const currentTime = new Date();
+            const year = currentTime.getFullYear();
+            const month = String(currentTime.getMonth() + 1).padStart(2, '0');
+            const day = String(currentTime.getDate()).padStart(2, '0');
+            const hours = String(currentTime.getHours()).padStart(2, '0');
+            const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+            const seconds = String(currentTime.getSeconds()).padStart(2, '0');
+
+            this.form.submitTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }, 1000);
     },
     methods: {
         handleClick(tab, event) {
@@ -572,11 +600,56 @@ export default {
         download(index) {
             index;               //下载对应文件的方法
         },
-        subtasks(index){
-            index;              //对应任务分配方法
+        subtasks(subTask){
+            console.log("详情:"+this.form1.detail)
+            console.log("时间:"+this.form1.endTime)
+            createSubTask(subTask)
+                .then((res)=>{
+                    if (res.data.code===200){
+                        let resultbody = res.data.data
+                        this.submit = resultbody
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })//对应任务分配方法
         },
         confirm(){
+            console.log("详情:"+this.form.title)
+            console.log("时间:"+this.form.submitTime)
+            addSubmission(this.form)
+                .then((res)=>{
+                    if (res.data.code===200){
+                        let resultbody = res.data.data
+                        this.submit = resultbody
+                        Message.success(res.data.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
                                  //对应写作业的确认按钮
+        },
+        getSubmissionToTask(taskId) {
+            getSubmissionToTask(taskId).then((res) => {
+                if (res.data.code === 200) {
+                    let resultbody = res.data.data
+                    this.submit = resultbody
+                    Message.success(res.data.msg)
+                }
+            }).catch((err) => {
+                Message.error(err)
+            })
+        },
+        getSubmissionListToSubTask(subTaskID){
+            getSubmissionListToSubTask(subTaskID).then((res) => {
+                if (res.data.code === 200) {
+                    let resultbody = res.data.data
+                    this.submit = resultbody
+                    Message.success(res.data.msg)
+                }
+            }).catch((err) => {
+                Message.error(err)
+            })
         }
     },
 

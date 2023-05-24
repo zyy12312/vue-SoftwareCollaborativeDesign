@@ -36,10 +36,11 @@ export const baseRoutes = [
         redirect: '/homepage',
         children: [
             {
-                path : "discussdetail",
+                path : "discussdetail/:id",
                 name : "DiscussDetail",
                 component : () => import('@/views/DiscussDetail'),
                 // redirect:"/homepage/studydiscuss",
+                props:true,
                 hidden : false
             },
             {

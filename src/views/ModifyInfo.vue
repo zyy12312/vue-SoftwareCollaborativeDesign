@@ -49,6 +49,7 @@
                                 action="https://jsonplaceholder.typicode.com/posts/"
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess"
+                                v-model="form.avaterURL"
                                 :before-upload="beforeAvatarUpload">
                                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -61,7 +62,7 @@
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit">确认修改</el-button>
+                            <el-button type="primary" @click="onSubmit(form)">确认修改</el-button>
                             <el-button>取消</el-button>
                         </el-form-item>
                     </el-form>
@@ -72,6 +73,9 @@
 </template>
 
 <script >
+import {Message} from "element-ui";
+import {editUser} from "@/api/user";
+
 export default {
     name:"ModifyInfo",
     data(){
@@ -87,16 +91,22 @@ export default {
                 name: '',
                 avaterURL:'',
                 password:'',
-                delivery: false,
-                type: [],
                 sex: '',
-                desc: ''
             }
         }
     },
     methods:{
-        onSubmit() {
+        onSubmit(form) {
             console.log('submit!');
+            editUser(form).then((res)=>{
+                if (res.data.code===200){
+                    let resultbody = res.data.data
+                    this.users = resultbody
+                    Message.success(res.data.msg)
+                }
+            }).catch((err)=>{
+                Message.error(err)
+            });
         },
         handleAvatarSuccess(res, file) {
             this.imageUrl = URL.createObjectURL(file.raw);

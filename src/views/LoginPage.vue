@@ -114,6 +114,8 @@ export default {
                         //     console.log(res)
                         //     this.loading=false
                         // })
+                    console.log("user:"+this.user.username)
+                    console.log("user:"+this.user.password)
                     this.$store.dispatch('user/login', this.user).then(() => {
                         this.$router.push('/basepage')
                         console.log("end")

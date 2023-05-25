@@ -1,5 +1,4 @@
-import request from "@/utils/request";
-
+const request = this.$axios.request
 export function createUser(user) {
     return request({
         url: '/user/createUser',

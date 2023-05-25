@@ -1,5 +1,4 @@
-import request from "@/utils/request";
-
+const request  = this.$axios.request
 export function addTeam(map) {
     return request({
         url: '/team/teacher/addTeam',

@@ -1,4 +1,4 @@
-import request from "@/utils/request";
+const request = this.$axios.request
 
 export function taskList() {
     return request({

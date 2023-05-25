@@ -1,14 +1,13 @@
-import axios from 'axios'
 import {Message, MessageBox} from "element-ui";
 import index from "@/store";
 import {getToken} from "@/utils/auth";
+import axios from "axios";
 
-const service = axios.create(
-    {
-        baseURL : 'http://127.0.0.1:8080',
-        timeout :  1000
-    }
-)
+axios.defaults.baseURL = '/api'
+const service = axios.create({
+    baseURL:'/api',
+    timeout : 1000
+})
 
 // request interceptor
 service.interceptors.request.use(

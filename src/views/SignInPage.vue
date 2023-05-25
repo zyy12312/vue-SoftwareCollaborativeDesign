@@ -131,6 +131,7 @@ export default {
 
         return {
             signInForm: {
+                account: '',
                 username: '',
                 password: '',
                 password_confirm: '',

@@ -35,7 +35,7 @@
                             <el-button type="warning" plain @click="dialogFormVisible = true;getIndex(submission.index)"
                                        style="font-size: 16px">查看作业
                             </el-button>
-                            <el-dialog title="作业详情" :visible.sync="dialogFormVisible" v-if="indexs===submission.index">
+                            <el-dialog title="作业详情" :visible.sync="dialogFormVisible" v-if="indexs===submission.index" append-to-body>
                                 <el-tabs type="card">
                                     <el-card>
                                                 <el-row>
@@ -112,7 +112,7 @@
                                                         <div class="grid-content bg-purple-light">
                                                             <el-button style="float: right; padding: 3px 0" type="text" @click="dialogFormVisible_comment = true;">评分
                                                             </el-button>
-                                                            <el-dialog :visible.sync="dialogFormVisible_comment" >
+                                                            <el-dialog :visible.sync="dialogFormVisible_comment" append-to-body>
                                                                 <div class="block">
                                                                     <label for="score">在此键入分数</label>
                                                                     <el-slider
@@ -174,8 +174,7 @@ export default {
             formLabelWidth: '120px',
             dialogFormVisible_comment: false,
             indexs: "",
-            // taskIndex: this.$route.query.taskIndex, //发请求的时候使用这个，接收上个页面传过来的数据
-            taskIndex: "101", //仅做测试用
+            taskIndex: this.$route.query.taskIndex, //接收上个页面传过来的数据
             dialogFormVisible: "",
             submissions: [
                 {
@@ -295,24 +294,21 @@ export default {
             }]
         };
     },
-    // watch: { //发请求的时候使用
-    //     '$route': 'gettingData'
-    // },
-    // created() { //发请求的时候使用
-    //     this.gettingData()
-    // },
     methods: {
-        // 获取小组编号数据
-        // gettingData() { //发请求的时候使用
-        //     this.taskIndex = this.$route.query.taskIndex
-        // },
         getIndex(index) {
             this.indexs = index;
         },
+
+        //评分
         giveComment(submissionID, score, comment) {
             this.dialogFormVisible_comment = false
             console.log("给编号为"+submissionID+"的作业评分："+score+"，评语："+comment)
+
         }
+    },
+
+    created() {
+        console.log("teacher submission detail created. taskIndex="+this.taskIndex)
     }
 }
 

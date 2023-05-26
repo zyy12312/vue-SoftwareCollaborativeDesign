@@ -1,10 +1,11 @@
-const request = this.$axios.request
+import request from "@/utils/request";
 
 export function sendMessage(message) {
     return request({
         url: '/communication/sendMessage',
         method: 'POST',
-        message
+        data:JSON.stringify(message)
+
     })
 }
 
@@ -12,6 +13,6 @@ export function getMessageList(teamID) {
     return request({
         url: '/communication/getMessageList',
         method: 'GET',
-        teamID
+        data:JSON.stringify(teamID)
     })
 }

@@ -1,17 +1,18 @@
-const request = this.$axios.request
+import request from "@/utils/request";
 
 export function addSubmission(submission) {
     return request({
         url: '/submission/addSubmission',
         method: 'POST',
-        submission
+        data:JSON.stringify(submission)
+
     })
 }
 export function editSubmission(submission) {
     return request({
         url: '/submission/editSubmission',
         method: 'POST',
-        submission
+        data:JSON.stringify(submission)
     })
 }
 export function getSubmissionToTask(taskID) {
@@ -26,5 +27,6 @@ export function getSubmissionListToSubTask(subTaskID) {
         url: '/submission/getSubmissionListToSubTask',
         method: 'GET',
         subTaskID
+
     })
 }

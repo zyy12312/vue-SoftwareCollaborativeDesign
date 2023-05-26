@@ -1,16 +1,16 @@
-const request = this.$axios.request
+import request from "@/utils/request";
 export function createUser(user) {
     return request({
         url: '/user/createUser',
         method: 'POST',
-        user
+        data:JSON.stringify(user)
     })
 }
 export function editUser(user) {
     return request({
         url: '/user/editUser',
         method: 'POST',
-        user
+        data:JSON.stringify(user)
     })
 }
 export function getUnGroupedStudentList() {
@@ -38,9 +38,10 @@ export function logout() {
     })
 }
 export function login(user) {
+
     return request({
         url: '/user/login',
         method: 'POST',
-        user
+        data:JSON.stringify(user)
     })
 }

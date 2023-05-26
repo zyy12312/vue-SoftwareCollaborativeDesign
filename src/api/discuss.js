@@ -1,31 +1,32 @@
-const request = this.$axios.request
+import request from "@/utils/request";
 
 export function createDiscuss(discuss) {
     return request({
         url: '/discuss/createDiscuss',
         method: 'POST',
-        discuss
+        data:JSON.stringify(discuss)
     })
 }
 export function createReply(reply) {
     return request({
         url: '/discuss/createReply',
         method: 'POST',
-        reply
+        data:JSON.stringify(reply)
     })
 }
 export function editDiscuss(discuss) {
     return request({
         url: '/discuss/editDiscuss',
         method: 'POST',
-        discuss
+        data:JSON.stringify(discuss)
+
     })
 }
 export function editReply(reply) {
     return request({
         url: '/discuss/editReply',
         method: 'POST',
-        reply
+        data:JSON.stringify(reply)
     })
 }
 export function getDiscussList() {
@@ -38,20 +39,21 @@ export function getReplyList(discussID) {
     return request({
         url: '/discuss/getReplyList',
         method: 'GET',
-        discussID
+        data:JSON.stringify(discussID)
     })
 }
 export function deleteDiscuss(discussIDList) {
     return request({
         url: '/discuss/deleteDiscuss',
         method: 'DELETE',
-        discussIDList
+        data:JSON.stringify(discussIDList)
+
     })
 }
 export function deleteReply(replyIDList) {
     return request({
         url: '/discuss/deleteReply',
         method: 'DELETE',
-        replyIDList
+        data:JSON.stringify(replyIDList)
     })
 }

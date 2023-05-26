@@ -1,24 +1,24 @@
-const request = this.$axios.request
+import request from "@/utils/request";
 
 export function createMaterial(material) {
     return request({
         url: '/material/createMaterial',
         method: 'POST',
-        material
+        data:JSON.stringify(material)
     })
 }
 export function editMaterial(material) {
     return request({
         url: '/material/editMaterial',
         method: 'POST',
-        material
+        data:JSON.stringify(material)
     })
 }
 export function releaseMaterial(materialIDList) {
     return request({
         url: '/material/releaseMaterial',
         method: 'POST',
-        materialIDList
+        data:JSON.stringify(materialIDList)
     })
 }
 export function getAllMaterials() {
@@ -37,6 +37,6 @@ export function deleteMaterial(materialIDList) {
     return request({
         url: '//material/deleteMaterial',
         method: 'DELETE',
-        materialIDList
+        data:JSON.stringify(materialIDList)
     })
 }

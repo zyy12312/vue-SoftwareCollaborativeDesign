@@ -11,7 +11,6 @@ import service from "@/utils/request";
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = service
-// axios.defaults.baseURL = '/api'
 Vue.use(ElementUI)
 new Vue({
   el:'#app',

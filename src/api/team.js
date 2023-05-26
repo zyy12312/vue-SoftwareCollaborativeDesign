@@ -1,9 +1,10 @@
-const request  = this.$axios.request
+
+import request from "@/utils/request";
 export function addTeam(map) {
     return request({
         url: '/team/teacher/addTeam',
         method: 'POST',
-        map
+        data:JSON.stringify(map)
     })
 }
 export function teamInfo() {
@@ -28,20 +29,20 @@ export function sendInvitation(invitation) {
     return request({
         url: '/team/student/invitation',
         method: 'POST',
-        invitation
+        data:JSON.stringify(invitation)
     })
 }
 export function acceptInvitation(invitationId) {
     return request({
         url: '/team/student/acceptInvitation',
         method: 'PUT',
-        invitationId
+        data:JSON.stringify(invitationId)
     })
 }
 export function rejectInvitation(invitationIds) {
     return request({
         url: '/team/student/rejectInvitation',
         method: 'PUT',
-        invitationIds
+        data:JSON.stringify(invitationIds)
     })
 }

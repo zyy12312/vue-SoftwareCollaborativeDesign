@@ -1,4 +1,4 @@
-const request = this.$axios.request
+import request from "@/utils/request";
 
 export function taskList() {
     return request({
@@ -31,14 +31,14 @@ export function releaseTask(taskIDList) {
     return request({
         url: '/task/releaseTask',
         method: 'POST',
-        taskIDList
+        data:JSON.stringify(taskIDList)
     })
 }
 export function createTask(task) {
     return request({
         url: '/task/createTask',
         method: 'POST',
-        task
+        data:JSON.stringify(task)
     })
 }
 //?????
@@ -46,34 +46,36 @@ export function createSubTask(subTask) {
     return request({
         url: '/task/createSubTask',
         method: 'POST',
-        subTask
+        data:JSON.stringify(subTask)
+
     })
 }
 export function editTask(task) {
     return request({
         url: '/task/editTask',
         method: 'POST',
-        task
+        data:JSON.stringify(task)
+
     })
 }
 export function editSubTask(subtask) {
     return request({
         url: '/task/editSubTask',
         method: 'POST',
-        subtask
+        data:JSON.stringify(subtask)
     })
 }
 export function deleteTask(taskIDList) {
     return request({
         url: '/task/deleteTask',
         method: 'DELETE',
-        taskIDList
+        data:JSON.stringify(taskIDList)
     })
 }
 export function deleteSubTask(subtaskIDList) {
     return request({
         url: '/task/deleteSubTask',
         method: 'DELETE',
-        subtaskIDList
+        data:JSON.stringify(subtaskIDList)
     })
 }

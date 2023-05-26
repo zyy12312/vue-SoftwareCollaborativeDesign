@@ -4,8 +4,9 @@ import {getToken} from "@/utils/auth";
 import axios from "axios";
 
 axios.defaults.baseURL = '/api'
+axios.defaults.headers['Content-Type'] = 'application/json';
 const service = axios.create({
-    baseURL:'/api',
+    // baseURL:'/api',
     timeout : 1000
 })
 

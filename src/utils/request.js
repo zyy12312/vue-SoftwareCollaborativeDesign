@@ -59,7 +59,7 @@ service.interceptors.response.use(
         }
     },
     error => {
-        console.log('error:'+error)
+        console.log('error:'+error.message)
         Message({
             message: error.message,
             type: 'error',

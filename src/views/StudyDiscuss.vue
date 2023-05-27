@@ -21,6 +21,7 @@
             <div v-for="item in items" v-bind:key="item.id">
                 <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                     <el-menu-item index="1">
+                        <a>提问者：{{item.authorID}}</a>
                         <i class="el-icon-chat-round"></i>
                         <a href="https://www.ele.me" target="_blank" style="font-size: 18px">{{ item.title }}</a>
                     </el-menu-item>
@@ -28,7 +29,7 @@
                         <a style="font-size: 15px;text-align: right ">{{ item.discussTime }}</a>
                         <p>
                             <a>
-                                <el-button type="primary" @click="goDiscussDetail(item.id)">查看详情</el-button>
+                                <el-button type="primary" @click="goDiscussDetail(item)">查看详情</el-button>
                             </a>
 
                             <a>
@@ -70,7 +71,6 @@ export default {
                 discussTime:'',
                 authorID:this.$store.getters.user.account,
                 filesURL:'',
-                delivery: false,
             },
             formLabelWidth: '120px'
         }
@@ -91,10 +91,10 @@ export default {
     },
     mounted(){
         getDiscussList().then((res)=>{
-            if (res.data.code===200){
-                let resultbody = res.data.data
+            if (res.code===200){
+                let resultbody = res.data
                 this.items = resultbody
-                Message.success(res.data.msg)
+                Message.success(res.msg)
             }
         }).catch((err)=>{
             Message.error(err)
@@ -110,10 +110,10 @@ export default {
             console.log("time:"+this.discuss.discussTime)
             createDiscuss(this.discuss)
                 .then((res)=>{
-                    if (res.data.code===200){
-                        let resultbody = res.data.data
+                    if (res.code===200){
+                        let resultbody = res.data
                         this.items = resultbody
-                        Message.success(res.data.msg)
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -122,10 +122,10 @@ export default {
         deleteDiscuss(){
             deleteDiscuss(this.items.id)
                 .then((res)=>{
-                    if (res.data.code===200){
+                    if (res.code===200){
                         // let resultbody = res.data.data
                         // this.discuss = resultbody
-                        Message.success(res.data.msg)
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -152,10 +152,11 @@ export default {
                     });
                 });
         },
-        goDiscussDetail(Id) {
-            console.log("id:"+Id)
+        goDiscussDetail(item) {
+            console.log("id:"+item)
             console.log(this.$router.currentRoute.fullPath)
-            router.push({name:'DiscussDetail', params:{ id:Id }});
+            router.push({name:'DiscussDetail', params:{item:item}});
+
         },
         getIndex(index) {
             this.indexs = index;

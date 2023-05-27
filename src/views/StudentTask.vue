@@ -10,27 +10,28 @@
                     </el-row>
                 </span>
             </div>
-            <div v-for="(task,index) in tasks" v-bind:key="index">
+            <div v-for="(task,id) in tasks" v-bind:key="id">
                 <el-row>
                     <el-col :span="8">
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{ task.title }}</div>
-                        <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">
-                            截止：{{ task.endTime }}
-                        </div>
+<!--                        <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">-->
+<!--                            截止：{{ task.endTime }}-->
+<!--                        </div>-->
                     </el-col>
                     <el-col :span="4">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{ task.submitTime }}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{ task.endTime }}</div>
                     </el-col>
                     <el-col :span="4">
                         <div class="grid-content bg-purple-light"></div>
                         <div class="grid-content bg-purple-light">
-                            <el-button type="text" v-if="task.characterType===myRole" @click="dialogFormVisible = true;getIndex(task.index);getSubmissionToTask(task.index)"
+                            <el-button type="text"  @click="dialogFormVisible = true;getIndex(task.id);getSubmissionToTask(this.indexs)"
                                        style="font-size: 16px">查看作业
                             </el-button>
-                            <el-button type="text" v-else @click="dialogFormVisible = true;getIndex(task.index);getSubmissionListToSubTask(task.index)"
-                                       style="font-size: 16px">查看作业
-                            </el-button>
-                            <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs===task.index"  append-to-body>
+<!--                            <el-button type="text" v-else @click="dialogFormVisible = true;getIndex(task.id);getSubmissionListToSubTask(task.id)"-->
+<!--                                       style="font-size: 16px">查看作业-->
+<!--                            v-if="task.characterType===myRole"-->
+<!--                            </el-button>-->
+                            <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs===task.id"  append-to-body>
                                 <el-row>
                                     <el-col :span="20">
                                         <div class="grid-content bg-purple-dark"
@@ -79,7 +80,7 @@
                                                     <el-button
                                                         @click="dialogFormVisibles = false">取 消</el-button>
                                                     <el-button type="primary"
-                                                               @click="dialogFormVisibles = false;confirm">确 定</el-button>
+                                                               @click="dialogFormVisibles = false;confirm(form)">确 定</el-button>
                                                 </div>
                                             </el-dialog>
                                         </div>
@@ -205,7 +206,7 @@
                                                                 <el-button @click="dialogFormVisible2 = false">取 消
                                                                 </el-button>
                                                                 <el-button type="primary"
-                                                                           @click="dialogFormVisible2 = false;form1.targetID=task.index;form1.characterType=myRole;subtasks(form1)">确 定
+                                                                           @click="dialogFormVisible2 = false;form1.targetID=task.id;form1.characterType=myRole;subtasks(form1)">确 定
                                                                 </el-button>
                                                             </div>
                                                         </el-dialog>
@@ -253,7 +254,7 @@
                                             </div>
                                         </el-card>
                                     </el-tab-pane>
-                                    <el-tab-pane label="我的作业" name="second">
+                                    <el-tab-pane label="我的作业" name="second" >
                                         <el-card>
                                             <div slot="header" class="clearfix">
                                                     <span>
@@ -440,7 +441,7 @@
 <script>
 import {Message} from "element-ui";
 import {addSubmission, getSubmissionListToSubTask, getSubmissionToTask} from "@/api/submission";
-import {createSubTask, taskDetail} from "@/api/task";
+import {createSubTask,  taskList} from "@/api/task";
 
 export default {
     name: "StudentTask",
@@ -481,7 +482,7 @@ export default {
             ],
             tasks: [
                 {
-                    index: 1,
+                    id: 1,
                     title: "分布式实验",
                     detail: "开发一个java web 网站，该网站提供一个页面，可以输入图书名称，输出该书的库存。程序应该首先访问缓存输出查询结果，如果缓存没有该数据",
                     endTime: "2023-05-27 18:00:00",
@@ -491,7 +492,7 @@ export default {
                     characterType: "计划经理"
                 },
                 {
-                    index: 2,
+                    id: 2,
                     title: "DES实现",
                     detail: "设计一个图书馆数据库，包含一个图书表books,该表有id,bookname, inventory三个字段（假设书名不会重复），并自行提前录入若干图书数据。",
                     endTime: "2023-05-27 14:00:45",
@@ -505,7 +506,7 @@ export default {
                 {role: "小组长"}, {role: "产品经理"}, {role: "计划质量经理"}, {role: "开发经理"}, {role: "测试经理"}
             ],
             submit: [
-                {submitTime: "2023-05-13 11:30:49", score: "未评分", file: "作业"}
+                // {submitTime: "2023-05-13 11:30:49", score: "未评分", file: "作业"}
             ],
             cla: [
                 {title1: "附件名",title2:"提交时间" }
@@ -519,6 +520,7 @@ export default {
             dialogFormVisible2: false,
             dialogFormVisible3: false,
             form: {
+                id:'',
                 submitterID:'',
                 teamID:'',
                 targetID:'',
@@ -551,11 +553,11 @@ export default {
         }
     },
     mounted() {
-        taskDetail().then((res)=>{
-            if (res.data.code===200){
-                let resultbody = res.data.data
+        taskList().then((res)=>{
+            if (res.code===200){
+                let resultbody = res.data
                 this.tasks = resultbody
-                Message.success(res.data.msg)
+                Message.success(res.msg)
             }
         }).catch((err)=>{
             Message.error(err)
@@ -589,6 +591,7 @@ export default {
             console.log(file);
         },
         getIndex(index) {
+            console.log(index)
             this.indexs = index;
         },
         clicks(index) {
@@ -605,24 +608,23 @@ export default {
             console.log("时间:"+this.form1.endTime)
             createSubTask(subTask)
                 .then((res)=>{
-                    if (res.data.code===200){
-                        let resultbody = res.data.data
+                    if (res.code===200){
+                        let resultbody = res.data
                         this.submit = resultbody
-                        Message.success(res.data.msg)
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
             })//对应任务分配方法
         },
-        confirm(){
-            console.log("详情:"+this.form.title)
-            console.log("时间:"+this.form.submitTime)
-            addSubmission(this.form)
-                .then((res)=>{
-                    if (res.data.code===200){
-                        let resultbody = res.data.data
+        confirm(form){
+            console.log("详情:"+form.title)
+            console.log("时间:"+form.submitTime)
+            addSubmission(form).then((res)=>{
+                    if (res.code === 200){
+                        let resultbody = res.data
                         this.submit = resultbody
-                        Message.success(res.data.msg)
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -630,25 +632,28 @@ export default {
                                  //对应写作业的确认按钮
         },
         getSubmissionToTask(taskId) {
+            console.log(taskId)
             getSubmissionToTask(taskId).then((res) => {
-                if (res.data.code === 200) {
-                    let resultbody = res.data.data
+                console.log(res)
+                if (res.code === 200) {
+                    let resultbody = res.data
+                    console.log(resultbody)
                     this.submit = resultbody
-                    Message.success(res.data.msg)
+                    Message.success(res.msg)
                 }
             }).catch((err) => {
                 Message.error(err)
             })
         },
-        getSubmissionListToSubTask(subTaskID){
-            getSubmissionListToSubTask(subTaskID).then((res) => {
-                if (res.data.code === 200) {
-                    let resultbody = res.data.data
+        getSubmissionListToSubTask(){
+            getSubmissionListToSubTask(this.indexs).then((res) => {
+                if (res.code === 200) {
+                    let resultbody = res.data
                     this.submit = resultbody
-                    Message.success(res.data.msg)
+                    Message.success(res.msg)
                 }
             }).catch((err) => {
-                Message.error(err)
+                Message.error(err.message)
             })
         }
     },

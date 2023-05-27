@@ -29,7 +29,7 @@
                         <a style="font-size: 15px;text-align: right ">{{ item.discussTime }}</a>
                         <p>
                             <a>
-                                <el-button type="primary" @click="goDiscussDetail(item)">查看详情</el-button>
+                                <el-button type="primary" @click="goDiscussDetail(item.id,item.title,item.detail,item.authorID,item.discussTime)">查看详情</el-button>
                             </a>
 
                             <a>
@@ -60,17 +60,18 @@ export default {
             // authorID:'1',
             dialogFormVisible:false,
             items: [
-                {id: 1, title: '什么时候开始？', detail: '明天就开始',
-                    authorID:'', filesURL:'',discussTime: '2023-05-11 19:40:55'},
-                {id: 2, title: '什么是事实？', detail: '明天就开始世俗喜欢',
-                    authorID:'', filesURL:'',discussTime: '2023-05-11 19:40:59'}
+                // {id: 1, title: '什么时候开始？', detail: '明天就开始',
+                //     authorID:'', filesURL:'',discussTime: '2023-05-11 19:40:55'},
+                // {id: 2, title: '什么是事实？', detail: '明天就开始世俗喜欢',
+                //     authorID:'', filesURL:'',discussTime: '2023-05-11 19:40:59'}
             ],
             discuss: {
+                id:'',
                 title: '',
                 detail: '',
                 discussTime:'',
                 authorID:this.$store.getters.user.account,
-                filesURL:'',
+                    // filesURL:[],
             },
             formLabelWidth: '120px'
         }
@@ -104,12 +105,11 @@ export default {
         handleSelect(){
 
         },
-        createDiscuss(){
+        createDiscuss(discuss){
             console.log("title:"+this.discuss.title)
             console.log("detail:"+this.discuss.detail)
             console.log("time:"+this.discuss.discussTime)
-            createDiscuss(this.discuss)
-                .then((res)=>{
+            createDiscuss(discuss).then((res)=>{
                     if (res.code===200){
                         let resultbody = res.data
                         this.items = resultbody
@@ -152,10 +152,10 @@ export default {
                     });
                 });
         },
-        goDiscussDetail(item) {
-            console.log("id:"+item)
+        goDiscussDetail(Id,Title, Detail,AuthorID,DiscussTime) {
+            console.log("id:"+Id)
             console.log(this.$router.currentRoute.fullPath)
-            router.push({name:'DiscussDetail', params:{item:item}});
+            router.push({name:'DiscussDetail', params:{ id:Id ,title:Title,detail:Detail,authorID:AuthorID,discussTime:DiscussTime}});
 
         },
         getIndex(index) {

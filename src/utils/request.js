@@ -7,7 +7,7 @@ axios.defaults.baseURL = '/api'
 axios.defaults.headers['Content-Type'] = 'application/json';
 const service = axios.create({
     // baseURL:'/api',
-    timeout : 1000
+    timeout : 5000
 })
 
 // request interceptor
@@ -32,8 +32,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response =>{
         const resultData = response.data
-        console.log(resultData)
-        if (resultData.code !== 20000) {
+        console.log(resultData.data)
+        if (resultData.code !== 200) {
             Message({
                 message: resultData.message || 'Error',
                 type: 'error',

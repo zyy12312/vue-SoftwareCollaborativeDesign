@@ -109,13 +109,13 @@ export default {
             this.$refs.loginForm.validate(valid => {
                 if (valid) {
                     this.loading = true
-                    console.log("logining")
+                    // console.log("logining")
                         // login(this.user).then((res)=>{
                         //     console.log(res)
                         //     this.loading=false
                         // })
-                    console.log("user:"+this.user.username)
-                    console.log("user:"+this.user.password)
+                    // console.log("user:"+this.user.username)
+                    // console.log("user:"+this.user.password)
                     this.$store.dispatch('user/login', this.user).then(() => {
                         this.$router.push('/basepage')
                         console.log("end")

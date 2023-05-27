@@ -26,9 +26,18 @@ export function getSubmissionToTask(taskID) {
 }
 export function getSubmissionListToSubTask(subTaskID) {
     return request({
-        url: '/submission/getSubmissionListToSubTask',
+        url: '/submission/getSubmissionListToSubTask?subTaskID='+subTaskID,
         method: 'GET',
-        subTaskID
+        // params:{
+        //     "subTaskID" :subTaskID
+        // }
 
+    })
+}
+export function readover(result) {
+    return request({
+        url: '/submission/readover',
+        method: 'DELETE',
+        data:JSON.stringify(result)
     })
 }

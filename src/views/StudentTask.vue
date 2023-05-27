@@ -10,7 +10,7 @@
                     </el-row>
                 </span>
             </div>
-            <div v-for="(task,index) in tasks" v-bind:key="index">
+            <div v-for="(task,id) in tasks" v-bind:key="id">
                 <el-row>
                     <el-col :span="8">
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{ task.title }}</div>
@@ -24,7 +24,7 @@
                     <el-col :span="4">
                         <div class="grid-content bg-purple-light"></div>
                         <div class="grid-content bg-purple-light">
-                            <el-button type="text" v-if="task.characterType===myRole" @click="dialogFormVisible = true;getIndex(task.id);getSubmissionToTask(task.id)"
+                            <el-button type="text" v-if="task.characterType===myRole" @click="dialogFormVisible = true;getIndex(task.id);getSubmissionToTask(this.indexs)"
                                        style="font-size: 16px">查看作业
                             </el-button>
                             <el-button type="text" v-else @click="dialogFormVisible = true;getIndex(task.id);getSubmissionListToSubTask(task.id)"
@@ -553,7 +553,6 @@ export default {
     },
     mounted() {
         taskList().then((res)=>{
-
             if (res.code===200){
                 let resultbody = res.data
                 this.tasks = resultbody
@@ -642,15 +641,15 @@ export default {
                 Message.error(err)
             })
         },
-        getSubmissionListToSubTask(subTaskID){
-            getSubmissionListToSubTask(subTaskID).then((res) => {
+        getSubmissionListToSubTask(){
+            getSubmissionListToSubTask(this.indexs).then((res) => {
                 if (res.code === 200) {
                     let resultbody = res.data
                     this.submit = resultbody
                     Message.success(res.msg)
                 }
             }).catch((err) => {
-                Message.error(err)
+                Message.error(err.message)
             })
         }
     },

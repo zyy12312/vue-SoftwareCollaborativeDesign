@@ -17,11 +17,11 @@ export function editSubmission(submission) {
 }
 export function getSubmissionToTask(taskID) {
     return request({
-        url: '/submission/getSubmissionToTask',
+        url: '/submission/getSubmissionToTask?taskID='+taskID,
         method: 'GET',
-        params:{
-            "taskID":taskID
-        }
+        // params:{
+        //     "taskID":taskID
+        // }
     })
 }
 export function getSubmissionListToSubTask(subTaskID) {

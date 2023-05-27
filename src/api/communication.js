@@ -13,6 +13,6 @@ export function getMessageList(teamID) {
     return request({
         url: '/communication/getMessageList',
         method: 'GET',
-        data:JSON.stringify(teamID)
+        params:teamID
     })
 }

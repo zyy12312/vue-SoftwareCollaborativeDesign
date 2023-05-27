@@ -1,10 +1,10 @@
 <template>
     <el-main>
         <el-collapse v-model="activeName" accordion>
-                <div v-for="team_all in teams" v-bind:key="team_all[0].id">
+                <div v-for="team_all in teams" v-bind:key="team_all.team.id">
                         <el-card class="box-card"> <!--每一个课程的卡片-->
                             <div slot="header" class="clearfix">
-                                <span>第{{ team_all[0].teamID }}组分组详情</span>
+                                <span>第{{ team_all.team.teamID }}组分组详情</span>
                                 <el-button style="float: right; padding: 3px 0" type="text" @click="goChat(team_all[0].teamID)">交流入口
                                 </el-button>
                             </div>
@@ -82,18 +82,18 @@ export default {
             dialogFormVisible_add: false,
             added_leader: '',
             teams:[
-                [
-                    {id:"1",teamID:"5",studentID:"2035060301",studentName: "aaa",character:"小组长"},
-                    {id:"2",teamID:"5",studentID:"2035060302",studentName: "bbb",character:"计划经理"},
-                    {id:"3",teamID:"5",studentID:"2035060303",studentName: "ccc",character:"产品经理"},
-                    {id:"4",teamID:"5",studentID:"2035060304",studentName: "ddd",character:"质量经理，测试经理"},
-                ], [
-                    {id:"5",teamID:"2",studentID:"2035060306",studentName: "fff",character:"小组长"},
-                    {id:"6",teamID:"2",studentID:"2035060307",studentName: "ggg",character:"计划经理"},
-                    {id:"7",teamID:"2",studentID:"2035060308",studentName: "hhh",character:"产品经理"},
-                    {id:"8",teamID:"2",studentID:"2035060309",studentName: "iii",character:"质量经理"},
-                    {id:"9",teamID:"2",studentID:"2035060310",studentName: "jjj",character:"测试经理"},
-                ]
+                // [
+                //     {id:"1",teamID:"5",studentID:"2035060301",studentName: "aaa",character:"小组长"},
+                //     {id:"2",teamID:"5",studentID:"2035060302",studentName: "bbb",character:"计划经理"},
+                //     {id:"3",teamID:"5",studentID:"2035060303",studentName: "ccc",character:"产品经理"},
+                //     {id:"4",teamID:"5",studentID:"2035060304",studentName: "ddd",character:"质量经理，测试经理"},
+                // ], [
+                //     {id:"5",teamID:"2",studentID:"2035060306",studentName: "fff",character:"小组长"},
+                //     {id:"6",teamID:"2",studentID:"2035060307",studentName: "ggg",character:"计划经理"},
+                //     {id:"7",teamID:"2",studentID:"2035060308",studentName: "hhh",character:"产品经理"},
+                //     {id:"8",teamID:"2",studentID:"2035060309",studentName: "iii",character:"质量经理"},
+                //     {id:"9",teamID:"2",studentID:"2035060310",studentName: "jjj",character:"测试经理"},
+                // ]
             ],
 
             clas:[
@@ -101,18 +101,17 @@ export default {
             ]
         };
     },
-    created() {
-        // this.getList()
+    mounted() {
+        this.getList()
     },
     methods: {
-        // Map<Integer, List<Team>> groupMap
-        getList() {
-            teamInfo()
+        async getList() {
+            await teamInfo()
                 .then((res)=>{
-                    if (res.data.code===200){
-                        let resultbody = res.data.data
-                        this.items = resultbody
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        let resultbody = res.data
+                        this.teams = resultbody
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)

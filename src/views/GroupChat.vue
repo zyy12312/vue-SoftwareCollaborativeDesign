@@ -91,34 +91,34 @@ export default {
     },
     mounted() {
         getAllUserList().then((res)=>{
-            if (res.data.code===200 && res.data.teamId===this.$store.getters.user.teamId){
-                let resultbody = res.data.data
+            if (res.code===200 && res.data.teamId===this.$store.getters.user.teamId){
+                let resultbody = res.data
                 this.users = resultbody
-                Message.success(res.data.msg)
+                Message.success(res.msg)
             }
         }).catch((err)=>{
             Message.error(err)
         });
         getMessageList(this.$store.getters.user.teamId).then((res)=>{
-            if (res.data.code===200){
-                let resultbody = res.data.data
+            if (res.code===200){
+                let resultbody = res.data
                 this.infos = resultbody
-                Message.success(res.data.msg)
+                Message.success(res.msg)
             }
         }).catch((err)=>{
             Message.error(err)
         });
     },
     methods:{
-        sends(){
+        sends(textarea){
             console.log("详情:"+this.textarea.detail)
             console.log("时间:"+this.textarea.sendTime)
-            sendMessage(this.textarea)
+            sendMessage(textarea)
                 .then((res)=>{
-                    if (res.data.code===200){
-                        let resultbody = res.data.data
+                    if (res.code===200){
+                        let resultbody = res.data
                         this.infos = resultbody
-                        Message.success(res.data.msg)
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)

@@ -276,8 +276,8 @@ export default {
             editMaterial(this.edited_data)
                 .then((res)=>{
                     console.log("edit:inputTitle="+this.edited_data.inputTitle)
-                    if (res.data.code===200){
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -297,8 +297,8 @@ export default {
             createMaterial(this.added_data)
                 .then((res)=>{
                     console.log("add2:inputTitle="+this.added_data.inputTitle)
-                    if (res.data.code===200){
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -329,8 +329,8 @@ export default {
             deleteMaterial(dataId)
                 .then((res)=>{
                     console.log("delete2:deleted_id="+dataId)
-                    if (res.data.code===200){
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -344,8 +344,8 @@ export default {
             releaseMaterial(dataIDList)
                 .then((res)=>{
                     console.log("publish2:published_id="+dataID)
-                    if (res.data.code===200){
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)

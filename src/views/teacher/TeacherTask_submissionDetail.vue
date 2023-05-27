@@ -44,7 +44,7 @@
                                                         style="text-align: left">作业内容：</div></el-col>
                                                     <el-col :span="24"><div
                                                         class="grid-content bg-purple-light"
-                                                        style="margin-top: 13px;text-align: left">{{submission.detail }}</div></el-col>
+                                                        style="margin-top: 13px;text-align: left">{{submission.detail}}</div></el-col>
                                                 </el-row>
                                     </el-card>
                                     <el-card>
@@ -151,11 +151,15 @@
 <script>
 
 
+// import {Message} from "element-ui";
+// import {toNumber} from "vue/src/shared/util";
+
 export default {
     name: 'TeacherTask_submissionDetail',
     el: "#task_submissionDetail",
     data() {
         return {
+            activeName: 'first',
             score:" ",
             comment:" ",
             submit: [
@@ -171,14 +175,13 @@ export default {
                 resource: '',
                 desc: ''
             },
-            formLabelWidth: '120px',
             dialogFormVisible_comment: false,
             indexs: "",
             taskIndex: this.$route.query.taskIndex, //接收上个页面传过来的数据
             dialogFormVisible: "",
             submissions: [
                 {
-                    id: "1",
+                    id: 1,
                     submitterName: "aaa",
                     teamID: "5",
                     detail: "第五组需求分析报告",
@@ -192,7 +195,7 @@ export default {
                     comment: "完成的不错"
                 },
                 {
-                    id: "2",
+                    id: 2,
                     submitterName: "bbb",
                     teamID: "4",
                     detail: "第四组需求分析报告",
@@ -206,7 +209,7 @@ export default {
                     comment: "还可以，继续加油"
                 },
                 {
-                    id: "3",
+                    id: 3,
                     submitterName: "ddd",
                     teamID: "2",
                     detail: "第二组需求分析报告",
@@ -220,7 +223,7 @@ export default {
                     comment: "非常好"
                 },
                 {
-                    id: "4",
+                    id: 4,
                     submitterName: "ccc",
                     teamID: "3",
                     detail: "第三组需求分析报告",
@@ -234,7 +237,7 @@ export default {
                     comment: ""
                 },
                 {
-                    id: "5",
+                    id: 5,
                     submitterName: "bbb",
                     teamID: "8",
                     detail: "第八组系统设计报告，绘制活动图",
@@ -248,7 +251,7 @@ export default {
                     comment: "完成的不错"
                 },
                 {
-                    id: "6",
+                    id: 6,
                     submitterName: "ccc",
                     teamID: "1",
                     detail: "第一组系统设计报告",
@@ -262,7 +265,7 @@ export default {
                     comment: ""
                 },
                 {
-                    id: "7",
+                    id: 7,
                     submitterName: "ddd",
                     teamID: "3",
                     detail: "第三组程序代码",
@@ -303,6 +306,17 @@ export default {
         giveComment(submissionID, score, comment) {
             this.dialogFormVisible_comment = false
             console.log("给编号为"+submissionID+"的作业评分："+score+"，评语："+comment)
+            // readover({
+            //     "submissionId":submissionID,
+            //     "grade":toNumber(score),
+            //     "comment":comment,
+            // }).then((res)=>{
+            //         if (res.code===200){
+            //             Message.success(res.msg)
+            //         }
+            //     }).catch((err)=>{
+            //     Message.error(err)
+            // })
 
         }
     },

@@ -1,14 +1,14 @@
 <template>
     <el-main>
         <el-collapse v-model="activeName" accordion>
-                <div v-for="team_all in teams" v-bind:key="team_all.isTeamUp">
+                <div v-for="(team_all,outIndex) in teams" v-bind:key="outIndex">
                         <el-card class="box-card"> <!--每一个课程的卡片-->
                             <div slot="header" class="clearfix">
                                 <span>第{{ team_all.team[0].teamID }}组分组详情</span>
                                 <el-button style="float: right; padding: 3px 0" type="text" @click="goChat(team_all.team[0].teamID)">交流入口
                                 </el-button>
                             </div>
-                            <div v-for="cla in clas" :key="cla.title1" class="team font">
+                            <div v-for="(cla,claIndex) in clas" :key="claIndex" class="team font">
                                 <el-row>
                                     <el-col :span="8">
                                         <div class="grid-content bg-purple">{{ cla.title1 }}</div>
@@ -21,7 +21,7 @@
                                     </el-col>
                                 </el-row>
                             </div>
-                            <div v-for="team_each in team_all" v-bind:key="team_each.studentID">
+                            <div v-for="(team_each,insideIndex) in team_all" v-bind:key="insideIndex">
                                 <el-row>
                                     <el-col :span="8">
                                         <div class="grid-content bg-purple">{{ team_each.studentID }}</div>
@@ -137,8 +137,8 @@ export default {
             addTeam(this.added_leader)
                 .then((res)=>{
                     console.log("add2:leader="+this.added_leader)
-                    if (res.data.code===200){
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)

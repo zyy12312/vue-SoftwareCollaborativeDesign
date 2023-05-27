@@ -6,26 +6,55 @@ import {resetRouter} from "@/router";
 const getDefaultState = () => {
     return {
         token: getToken(),
+
         User:{
-            id: 13,
-            account: "101010",
+            id: 8,
+            account: "2011110108",
             password: null,
-            name: "教师账号",
+            name: "学生账号1",
             avatarURL: "https://cos-for-scd-1312783961.cos.ap-shanghai.myqcloud.com/defaultAvator.png",
-            role: 1,
-            sex: 1,
-            teamId: null,
-            finalScore: 0.0,
-            team: null,
+            role: 0,
+            sex: 0,
+            teamId: 1,
+            finalScore: 90.0,
+            team: {
+                id: 11,
+                teamID: 1,
+                studentID: 8,
+                studentCharacter: 1,
+                studentCharacterLabel: "组长",
+                user: {
+                    id: 8,
+                    account: "2011110108",
+                    password: null,
+                    name: "学生账号1",
+                    avatarURL: "https://cos-for-scd-1312783961.cos.ap-shanghai.myqcloud.com/defaultAvator.png",
+                    role: 0,
+                    sex: 0,
+                    teamId: null,
+                    finalScore: null,
+                    team: null,
+                    enabled: true,
+                    authorities: [
+                        {
+                            authority: "ROLE_学生"
+                        }
+                    ],
+                    accountNonLocked: true,
+                    credentialsNonExpired: true,
+                    username: "2011110108",
+                    accountNonExpired: true
+                }
+            },
             enabled: true,
             authorities: [
                 {
-                    authority: "ROLE_教师"
+                    authority: "ROLE_学生"
                 }
             ],
             accountNonLocked: true,
             credentialsNonExpired: true,
-            username: "101010",
+            username: "2011110108",
             accountNonExpired: true
         }
     }

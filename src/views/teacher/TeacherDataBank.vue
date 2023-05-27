@@ -4,13 +4,13 @@
             <div slot="header" class="clearfix">
                 <span v-for="item in items" v-bind:key="item.title1">
                     <el-row >
-                        <el-col :span="5"><div class="grid-content bg-purple-light" >{{item.title1}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title2}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title3}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title4}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title5}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title6}}</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple-light">{{item.title7}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple-light" >{{item.title1}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title2}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title3}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title4}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title5}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title6}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple-light">{{item.title7}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">发布</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">编辑</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple-light">删除</div></el-col>
@@ -20,16 +20,16 @@
             <div v-for="(data,index) in datas" v-bind:key="index">
                 <el-row>
 <!--                title1:"资料标题",title2:"资料详情",title3:"附件名称",title4:"下载",title5:"资料状态",title6:"创建时间",title7:"发布时间"-->
-                    <el-col :span="5">
+                    <el-col :span="4">
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{data.title}}</div>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">{{data.description}}</div>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.fileName}}</div>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <el-button type="text" @click="dialogFormVisible_download = true;getIndex(data.index)" style="font-size: 16px">
                             <i class="el-icon-download"></i>
                         </el-button>
@@ -41,13 +41,13 @@
                             </el-row>
                         </el-dialog>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.state}}</div>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.createTime}}</div>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.releaseTime}}</div>
                     </el-col>
                     <el-col :span="2" v-if="data.state === '未发布'">

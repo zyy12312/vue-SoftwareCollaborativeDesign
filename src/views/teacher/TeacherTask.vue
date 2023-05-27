@@ -198,7 +198,7 @@
                         <el-button
                             @click="dialogFormVisible_add = false">取 消</el-button>
                         <el-button type="primary"
-                                   @click="dialogFormVisible_add = false; addTaskConfirm(index)">确 定</el-button>
+                                   @click="dialogFormVisible_add = false; addTaskConfirm()">确 定</el-button>
                     </div>
                 </el-dialog>
             </div>
@@ -296,6 +296,8 @@ export default {
         }
     },
     methods: {
+
+
         //编辑任务
         editTaskConfirm(index){
             this.edited_task.id=this.tasks[index].id
@@ -315,10 +317,7 @@ export default {
         },
 
         //新建任务
-        addTaskConfirm(index){
-            this.edited_task.id=this.tasks[index].id
-            this.edited_task.character=this.tasks[index].character
-            this.edited_task.status=this.tasks[index].status
+        addTaskConfirm(){
             console.log("add1:inputTitle="+this.added_task.inputTitle)
             createTask(this.added_task)
                 .then((res)=>{

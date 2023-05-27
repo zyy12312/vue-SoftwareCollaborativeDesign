@@ -79,7 +79,7 @@
                                                     <el-button
                                                         @click="dialogFormVisibles = false">取 消</el-button>
                                                     <el-button type="primary"
-                                                               @click="dialogFormVisibles = false;confirm">确 定</el-button>
+                                                               @click="dialogFormVisibles = false;confirm(form)">确 定</el-button>
                                                 </div>
                                             </el-dialog>
                                         </div>
@@ -552,10 +552,10 @@ export default {
     },
     mounted() {
         taskDetail().then((res)=>{
-            if (res.data.code===200){
-                let resultbody = res.data.data
+            if (res.code===200){
+                let resultbody = res.data
                 this.tasks = resultbody
-                Message.success(res.data.msg)
+                Message.success(res.msg)
             }
         }).catch((err)=>{
             Message.error(err)
@@ -605,24 +605,23 @@ export default {
             console.log("时间:"+this.form1.endTime)
             createSubTask(subTask)
                 .then((res)=>{
-                    if (res.data.code===200){
-                        let resultbody = res.data.data
+                    if (res.code===200){
+                        let resultbody = res.data
                         this.submit = resultbody
-                        Message.success(res.data.msg)
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
             })//对应任务分配方法
         },
-        confirm(){
-            console.log("详情:"+this.form.title)
-            console.log("时间:"+this.form.submitTime)
-            addSubmission(this.form)
-                .then((res)=>{
-                    if (res.data.code===200){
-                        let resultbody = res.data.data
+        confirm(form){
+            console.log("详情:"+form.title)
+            console.log("时间:"+form.submitTime)
+            addSubmission(form).then((res)=>{
+                    if (res.code === 200){
+                        let resultbody = res.data
                         this.submit = resultbody
-                        Message.success(res.data.msg)
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -631,10 +630,10 @@ export default {
         },
         getSubmissionToTask(taskId) {
             getSubmissionToTask(taskId).then((res) => {
-                if (res.data.code === 200) {
-                    let resultbody = res.data.data
+                if (res.code === 200) {
+                    let resultbody = res.data
                     this.submit = resultbody
-                    Message.success(res.data.msg)
+                    Message.success(res.msg)
                 }
             }).catch((err) => {
                 Message.error(err)
@@ -642,10 +641,10 @@ export default {
         },
         getSubmissionListToSubTask(subTaskID){
             getSubmissionListToSubTask(subTaskID).then((res) => {
-                if (res.data.code === 200) {
-                    let resultbody = res.data.data
+                if (res.code === 200) {
+                    let resultbody = res.data
                     this.submit = resultbody
-                    Message.success(res.data.msg)
+                    Message.success(res.msg)
                 }
             }).catch((err) => {
                 Message.error(err)

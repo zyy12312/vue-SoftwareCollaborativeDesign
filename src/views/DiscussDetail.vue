@@ -31,7 +31,7 @@
                     </el-collapse-item>
                 </div>
                 <div v-for="reply in replies" v-bind:key="reply.detail" >
-                    <el-collapse-item title="回帖" :name="reply.detail" v-if="reply.replyTarget===id">
+                    <el-collapse-item title="回帖" :name="reply.detail" >
                         <div>{{ reply.detail }}</div>
                         <div style="text-align: right">
                             <a style="font-size: 15px ">{{ reply.replyTime }}</a>
@@ -70,29 +70,27 @@
 <script>
 // import {createDiscuss} from '@/api/discuss'
 // import {Message} from "element-ui";
-import {createReply} from "@/api/discuss";
+import {createReply, getReplyList} from "@/api/discuss";
 import {Message} from "element-ui";
 import router from "@/router";
 
 export default {
     name: "DiscussDetail",
     el: '#discuss',
-    props:['id'],
+    props:['item'],
     data() {
         return {
             activeNames: ['0'],
             // id:this.$route.params.id,
             discuss: [
-                {id: 1, title: '什么时候开始？', detail: '明天就开始',authorID:this.$store.getters.user.account,
-                    filesURL:"",discussTime: '2023-05-11 19:40:33'},
-                {id: 2, title: '什么是事实？', detail: '明天就开始世俗喜欢',
-                    authorID:'', filesURL:'',discussTime: '2023-05-11 19:40:59'}
+                {id: this.id, title: this.title, detail: this.detail,authorID:this.authorID,
+                    filesURL:"",discussTime: this.discussTime},
             ],
             replies: [
-                {detail: '确定是明天吗？', authorID:this.$store.getters.user.account,
-                    filesURL:"",replyTime: '2023-05-12 14:30:22', replyIsDiscuss:"",replyTarget: 1},
-                {detail: '真的是明天吗？',authorID:this.$store.getters.user.account,
-                    filesURL:"",replyTime: '2023-05-12 14:30:22', replyIsDiscuss:"",replyTarget: 2}
+                // {detail: '确定是明天吗？', authorID:this.$store.getters.user.account,
+                //     filesURL:"",replyTime: '2023-05-12 14:30:22', replyIsDiscuss:"",replyTarget: 1},
+                // {detail: '真的是明天吗？',authorID:this.$store.getters.user.account,
+                //     filesURL:"",replyTime: '2023-05-12 14:30:22', replyIsDiscuss:"",replyTarget: 2}
             ],
             dialogFormVisible: false,
             dialogFormVisible1: false,
@@ -126,6 +124,24 @@ export default {
             this.form.replyTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }, 1000);
     },
+    mounted() {
+
+    },
+    watch:{
+        item:function (newVal) {
+            this.discuss = newVal;
+            console.log(newVal);
+            getReplyList(this.discuss.id).then((res)=>{
+                if (res.code===200){
+                    let resultbody = res.data
+                    this.replies = resultbody
+                    Message.success(res.msg)
+                }
+            }).catch((err)=>{
+                Message.error(err)
+            })
+        }
+    },
     methods: {
         router() {
             return router
@@ -140,10 +156,10 @@ export default {
             console.log("time:"+this.form.replyTime)
             createReply(this.form)
                 .then((res)=>{
-                    if (res.data.code===200){
-                        let resultbody = res.data.data
+                    if (res.code===200){
+                        let resultbody = res.data
                         this.replies = resultbody
-                        Message.success(res.data.msg)
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)

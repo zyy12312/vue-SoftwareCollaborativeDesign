@@ -33,7 +33,7 @@ export const baseRoutes = [
         redirect: '/homepage',
         children: [
             {
-                path : "discussdetail/:id",
+                path : "discussdetail/:item",
                 name : "DiscussDetail",
                 component : () => import('@/views/DiscussDetail'),
                 // redirect:"/homepage/studydiscuss",

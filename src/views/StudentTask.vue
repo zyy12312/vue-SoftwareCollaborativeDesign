@@ -10,7 +10,7 @@
                     </el-row>
                 </span>
             </div>
-            <div v-for="(task,index) in tasks" v-bind:key="index">
+            <div v-for="(task,id) in tasks" v-bind:key="id">
                 <el-row>
                     <el-col :span="8">
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{ task.title }}</div>
@@ -24,12 +24,13 @@
                     <el-col :span="4">
                         <div class="grid-content bg-purple-light"></div>
                         <div class="grid-content bg-purple-light">
-                            <el-button type="text" v-if="task.characterType===myRole" @click="dialogFormVisible = true;getIndex(task.id);getSubmissionToTask(task.id)"
+                            <el-button type="text"  @click="dialogFormVisible = true;getIndex(task.id);getSubmissionToTask(this.indexs)"
                                        style="font-size: 16px">查看作业
                             </el-button>
-                            <el-button type="text" v-else @click="dialogFormVisible = true;getIndex(task.id);getSubmissionListToSubTask(task.id)"
-                                       style="font-size: 16px">查看作业
-                            </el-button>
+<!--                            <el-button type="text" v-else @click="dialogFormVisible = true;getIndex(task.id);getSubmissionListToSubTask(task.id)"-->
+<!--                                       style="font-size: 16px">查看作业-->
+<!--                            v-if="task.characterType===myRole"-->
+<!--                            </el-button>-->
                             <el-dialog :title="task.title" :visible.sync="dialogFormVisible" v-if="indexs===task.id"  append-to-body>
                                 <el-row>
                                     <el-col :span="20">
@@ -505,7 +506,7 @@ export default {
                 {role: "小组长"}, {role: "产品经理"}, {role: "计划质量经理"}, {role: "开发经理"}, {role: "测试经理"}
             ],
             submit: [
-                {submitTime: "2023-05-13 11:30:49", score: "未评分", file: "作业"}
+                // {submitTime: "2023-05-13 11:30:49", score: "未评分", file: "作业"}
             ],
             cla: [
                 {title1: "附件名",title2:"提交时间" }
@@ -553,7 +554,6 @@ export default {
     },
     mounted() {
         taskList().then((res)=>{
-
             if (res.code===200){
                 let resultbody = res.data
                 this.tasks = resultbody
@@ -591,6 +591,7 @@ export default {
             console.log(file);
         },
         getIndex(index) {
+            console.log(index)
             this.indexs = index;
         },
         clicks(index) {
@@ -633,8 +634,10 @@ export default {
         getSubmissionToTask(taskId) {
             console.log(taskId)
             getSubmissionToTask(taskId).then((res) => {
+                console.log(res)
                 if (res.code === 200) {
                     let resultbody = res.data
+                    console.log(resultbody)
                     this.submit = resultbody
                     Message.success(res.msg)
                 }
@@ -642,15 +645,15 @@ export default {
                 Message.error(err)
             })
         },
-        getSubmissionListToSubTask(subTaskID){
-            getSubmissionListToSubTask(subTaskID).then((res) => {
+        getSubmissionListToSubTask(){
+            getSubmissionListToSubTask(this.indexs).then((res) => {
                 if (res.code === 200) {
                     let resultbody = res.data
                     this.submit = resultbody
                     Message.success(res.msg)
                 }
             }).catch((err) => {
-                Message.error(err)
+                Message.error(err.message)
             })
         }
     },

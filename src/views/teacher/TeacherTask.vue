@@ -22,24 +22,24 @@
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{task.title}}</div>
                     </el-col>
                     <el-col :span="2">
-                        <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">{{task.deadline}}</div>
+                        <div class="grid-content bg-purple-light" style="font-size: 13px;margin-top: 5px">{{task.endTime}}</div>
                     </el-col>
                     <el-col :span="2">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.character}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.characterLabel}}</div>
                     </el-col>
                     <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.handledTotal}}</div>
                     </el-col>
                     <el-col :span="2">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.status}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.state}}</div>
                     </el-col>
-                    <el-col :span="2" v-if="task.status === '未开始'">
+                    <el-col :span="2" v-if="task.state === 0">
                         <el-button type="primary" plain @click="publishTask(task.id)">发布</el-button>
                     </el-col>
                     <el-col :span="2" v-else>
                         <el-button type="primary" plain disabled>发布</el-button>
                     </el-col>
-                    <el-col :span="2" v-if="task.status === '进行中'">
+                    <el-col :span="2" v-if="task.state === 1">
                         <el-button type="success" plain @click="dialogFormVisible_edit = true;">编辑</el-button>
                         <el-dialog :visible.sync="dialogFormVisible_edit" append-to-body>
                             <div>
@@ -55,14 +55,14 @@
 
                             </div>
                             <div>
-                                <el-input v-model="edited_task.inputDeadline">
+                                <el-input v-model="edited_task.inputEndTime">
                                     <template slot="prepend">截止日期：</template>
                                 </el-input>
                             </div>
                             <div>
                                 <el-autocomplete
                                     class="inline-input"
-                                    v-model="inputCharacter"
+                                    v-model="edited_task.characterLabel"
                                     :fetch-suggestions="querySearch"
                                     @select="handleSelect">
                                     <template slot="prepend">作业负责人：</template>
@@ -142,14 +142,14 @@
 
                     </div>
                     <div>
-                        <el-input v-model="added_task.inputDeadline">
+                        <el-input v-model="added_task.inputEndTime">
                             <template slot="prepend">截止日期：</template>
                         </el-input>
                     </div>
                     <div>
                         <el-autocomplete
                             class="inline-input"
-                            v-model="inputCharacter"
+                            v-model="added_task.characterLabel"
                             :fetch-suggestions="querySearch"
                             @select="handleSelect">
                             <template slot="prepend">作业负责人：</template>
@@ -198,7 +198,7 @@
                         <el-button
                             @click="dialogFormVisible_add = false">取 消</el-button>
                         <el-button type="primary"
-                                   @click="dialogFormVisible_add = false; addTaskConfirm(index)">确 定</el-button>
+                                   @click="dialogFormVisible_add = false; addTaskConfirm()">确 定</el-button>
                     </div>
                 </el-dialog>
             </div>
@@ -210,29 +210,34 @@
 
 <script>
 
-import {createTask, deleteTask, editTask, releaseTask} from "@/api/task";
+import {createTask, deleteTask, editTask, releaseTask, taskList} from "@/api/task";
 import {Message} from "element-ui";
-
 export default {
     name: "TeacherTask",
     data() {
         return {
+            formLabelWidth: '120px',
+            inputCharacter_edit: "",
+            inputCharacter_add: "",
+
             edited_task: {
                 inputTitle: '',
                 inputDetail: '',
-                inputDeadline: '',
+                inputEndTime: '',
                 id: '',
                 characterType: '',
+                characterLabel: '',
                 state: '',
             },
             added_task: {
                 inputTitle: '',
                 inputDetail: '',
-                inputDeadline: '',
-                id: '',
+                inputEndTime: '',
                 characterType: '',
-                state: '',
+                characterLabel: '',
+                state: 0,
             },
+
             dialogFormVisible_upload: false,
             dialogFormVisible_edit: false,
             dialogFormVisible_add: false,
@@ -266,48 +271,76 @@ export default {
                 {title1:"交付历史与批改记录",title2:"原始成绩"}
             ],
             indexs:0,
-            // 作业标题title,截止时间deadline,作业负责人character,已交/总计handledTotal,作业状态status
-            tasks: [{
-                id: '101',
-                title: '撰写需求分析报告，绘制用例图',
-                deadline: '2023.5.1',
-                character: '产品经理',
-                handledTotal: '6/6',
-                status: '已截止'
-            },{
-                id: '102',
-                title: '撰写系统设计报告，绘制活动图',
-                deadline: '2023.6.1',
-                character: '开发经理',
-                handledTotal: '5/6',
-                status: '进行中'
-            },{
-                id: '103',
-                title: '提交程序代码',
-                deadline: '2023.6.10',
-                character: '开发经理',
-                handledTotal: '0/6',
-                status: '未开始'
-            },
+            // 作业标题title,截止时间endTime,作业负责人characterLabel,已交/总计handledTotal,作业状态state
+            tasks: [
+            // {id: 101,
+            //     title: '撰写需求分析报告，绘制用例图',
+            //     endTime: '2023.5.1',
+            //     characterType: '',
+            //     characterLabel: '产品经理',
+            //     handledTotal: '6/6',
+            //     state: 1
+            // },{
+            //     id: 102,
+            //     title: '撰写系统设计报告，绘制活动图',
+            //     endTime: '2023.6.1',
+            //     characterType: '',
+            //     characterLabel: '开发经理',
+            //     handledTotal: '5/6',
+            //     state: 1
+            // },{
+            //     id: 103,
+            //     title: '提交程序代码',
+            //     endTime: '2023.6.10',
+            //     characterType: '',
+            //     characterLabel: '开发经理',
+            //     handledTotal: '0/6',
+            //     state: 0
+            // },
             ],
             titles:[
                 {title1:"作业标题",title2:"截止时间",title3:"作业负责人",title4:"已交/总计",title5:"作业状态"}
             ]
         }
     },
+
     methods: {
+        //获取任务列表
+        async getList() {
+            await taskList()
+                .then((res)=>{
+                    if (res.code===200){
+                        this.tasks = res.data
+                        Message.success(res.msg)
+                    }
+                }).catch((err)=>{
+                    Message.error(err)
+                })
+        },
+
         //编辑任务
         editTaskConfirm(index){
+            this.edited_task.characterType=1 // 通过请求找到对应的角色类型（通过字符串类型的角色找数字类型的角色）
+
             this.edited_task.id=this.tasks[index].id
-            this.edited_task.character=this.tasks[index].character
-            this.edited_task.status=this.tasks[index].status
+            this.edited_task.state=this.tasks[index].state
             console.log("edit1:inputTitle="+this.edited_task.inputTitle)
-            // console.log("edit1:id="+this.edited_task.id)
-            editTask(this.edited_task)
+            console.log("edit1:characterType="+this.edited_task.characterType)
+            console.log("edit1:characterLabel="+this.edited_task.characterLabel)
+            console.log("edit1:state="+this.edited_task.state)
+            editTask(
+                {"id":this.edited_task.id,
+                "title":this.edited_task.inputTitle,
+                "detail":this.edited_task.inputDetail,
+                "endTime":this.edited_task.inputEndTime,
+                "characterType":this.edited_task.characterType,
+                "characterLabel":this.edited_task.characterLabel,
+                "state":this.edited_task.state}
+            )
                 .then((res)=>{
                     console.log("edit:inputTitle="+this.edited_task.inputTitle)
-                    if (res.data.code===200){
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -315,16 +348,24 @@ export default {
         },
 
         //新建任务
-        addTaskConfirm(index){
-            this.edited_task.id=this.tasks[index].id
-            this.edited_task.character=this.tasks[index].character
-            this.edited_task.status=this.tasks[index].status
+        addTaskConfirm(){
+            this.added_task.characterType=1 // 通过请求找到对应的角色类型（通过字符串类型的角色找数字类型的角色）
+
             console.log("add1:inputTitle="+this.added_task.inputTitle)
-            createTask(this.added_task)
+            console.log("add1:characterType="+this.added_task.characterType)
+            console.log("add1:characterLabel="+this.added_task.characterLabel)
+            console.log("add1:state="+this.added_task.state)
+            createTask(
+                {"title":this.added_task.inputTitle,
+                "detail":this.added_task.inputDetail,
+                "endTime":this.added_task.inputEndTime,
+                "characterType":this.added_task.characterType,
+                "characterLabel":this.added_task.characterLabel,
+                "state":this.added_task.state})
                 .then((res)=>{
                     console.log("add2:inputTitle="+this.added_task.inputTitle)
-                    if (res.data.code===200){
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -356,8 +397,8 @@ export default {
             deleteTask(taskIDList)
                 .then((res)=>{
                     console.log("delete2:deleted_id="+taskId)
-                    if (res.data.code===200){
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -370,8 +411,8 @@ export default {
             releaseTask(taskId)
                 .then((res)=>{
                     console.log("publish2:published_id="+taskId)
-                    if (res.data.code===200){
-                        Message.success(res.data.msg)
+                    if (res.code===200){
+                        Message.success(res.msg)
                     }
                 }).catch((err)=>{
                 Message.error(err)
@@ -425,6 +466,7 @@ export default {
     },
     mounted() {
         this.characters = this.loadAll();
+        this.getList()
     }
 
 }

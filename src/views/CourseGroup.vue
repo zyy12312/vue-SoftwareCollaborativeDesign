@@ -20,13 +20,13 @@
             <div v-for="item in items" :key="item.name" class="text item">
                 <el-row v-if="user.teamId===item.teamId">
                     <el-col :span="8">
-                        <div class="grid-content bg-purple-light">{{ item.teamId }}</div>
+                        <div class="grid-content bg-purple-light">{{ item.teamID }}</div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="grid-content bg-purple-light">{{ item.name }}</div>
+                        <div class="grid-content bg-purple-light">{{ item.user.name }}</div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="grid-content bg-purple-light">{{ item.role }}</div>
+                        <div class="grid-content bg-purple-light">{{ item.studentCharacterLabel }}</div>
                     </el-col>
                 </el-row>
             </div>
@@ -46,7 +46,8 @@
                     <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
                                @click="accept(inv.teamId);inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId">接受邀请
                     </el-button>
-                </a></div>
+                </a>
+            </div>
             <div slot="header" class="clearfix" v-else-if="inv.state==='已拒绝'">
                 <span>分组邀请</span>
                 <el-button style="float: right; padding: 3px 0" type="text" @click="refuse(inv.teamId);inv.state='已拒绝' ">
@@ -114,14 +115,14 @@ export default {
                 {teamId: this.$store.getters.user.teamId}
             ],
             items: [
-                {teamId: "第五组", name: "张三", role: "小组长"},
-                {teamId: "第五组", name: "李四", role: "计划经理"},
-                {teamId: "第五组", name: "王五", role: "产品经理"},
-                {teamId: "第五组", name: "老六", role: "质量经理"},
-                {teamId: "第一组", name: "张三", role: "小组长"},
-                {teamId: "第一组", name: "李四", role: "计划经理"},
-                {teamId: "第一组", name: "王五", role: "产品经理"},
-                {teamId: "第一组", name: "老六", role: "质量经理"},
+                // {teamId: "第五组", name: "张三", role: "小组长"},
+                // {teamId: "第五组", name: "李四", role: "计划经理"},
+                // {teamId: "第五组", name: "王五", role: "产品经理"},
+                // {teamId: "第五组", name: "老六", role: "质量经理"},
+                // {teamId: "第一组", name: "张三", role: "小组长"},
+                // {teamId: "第一组", name: "李四", role: "计划经理"},
+                // {teamId: "第一组", name: "王五", role: "产品经理"},
+                // {teamId: "第一组", name: "老六", role: "质量经理"},
             ],
             clas: [
                 {title1: "组号", title2: "成员", title3: "对应角色"}
@@ -130,30 +131,38 @@ export default {
                 {title1: "组号", title2: "组长", title3: "邀请职位", title4: "邀请时间", title5: "状态"}
             ],
             invitation: [
-                {teamId: "第五组", leader: "张三", role: "测试经理", invitationTime: "2023-03-12 13:22:55", state: "未接受"},
-                {teamId: "第一组", leader: "林董", role: "测试经理", invitationTime: "2023-03-14 10:22:20", state: "未接受"},
+                // {teamId: "第五组", leader: "张三", role: "测试经理", invitationTime: "2023-03-12 13:22:55", state: "未接受"},
+                // {teamId: "第一组", leader: "林董", role: "测试经理", invitationTime: "2023-03-14 10:22:20", state: "未接受"},
             ]
         }
     },
     mounted() {
         getInvitation().then((res)=>{
-            if (res.data.code===200){
-                let resultbody = res.data.data
+            // console.log(res)
+            if (res.code===200){
+                let resultbody = res.data
+                // console.log("resbd")
+                // console.log(resultbody)
                 this.invitation = resultbody
-                Message.success(res.data.msg)
+                // console.log(this.invitation)
+                Message.success(res.msg)
             }
         }).catch((err)=>{
             Message.error(err)
         });
         studentTeamInfo().then((res)=>{
-            if (res.data.code===200){
-                let resultbody = res.data.data
+            if (res.code===200){
+                let resultbody = res.data
                 this.items = resultbody
-                Message.success(res.data.msg)
+                Message.success(res.msg)
             }
         }).catch((err)=>{
             Message.error(err)
         });
+        // console.log("13")
+        // console.log(this.invitation)
+        // console.log("14")
+        // console.log(this.items)
     },
     methods: {
         goChat() {

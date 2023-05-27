@@ -15,7 +15,7 @@ export function teamInfo() {
 }
 export function studentTeamInfo() {
     return request({
-        url: '/team/student',
+        url: '/team/student/teamInfo',
         method: 'GET',
     })
 }

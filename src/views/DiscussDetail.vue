@@ -23,7 +23,7 @@
                                         <el-button
                                             @click="dialogFormVisible = false">取 消</el-button>
                                         <el-button type="primary"
-                                                   @click="dialogFormVisible = false;createReply(form)">确 定</el-button>
+                                                   @click="dialogFormVisible = false;form.replyTarget=item.id;createReply(form)">确 定</el-button>
                                     </div>
                                 </el-dialog>
                             </p>
@@ -42,17 +42,17 @@
                         <div>
                             <el-dialog title="回复回帖"
                                        :visible.sync="dialogFormVisible1" append-to-body>
-                                <el-form :model="form">
+                                <el-form :model="form1">
                                     <el-form-item label="回帖名称" :label-width="formLabelWidth">
-                                        <el-input v-model="form.title" auto-complete="off"></el-input>
+                                        <el-input v-model="form1.title" auto-complete="off"></el-input>
                                     </el-form-item>
                                     <el-form-item label="回帖内容" :label-width="formLabelWidth">
-                                        <el-input v-model="form.detail" auto-complete="off"></el-input>
+                                        <el-input v-model="form1.detail" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-form>
                                 <div slot="footer" class="dialog-footer">
                                     <el-button @click="dialogFormVisible1 = false">取 消</el-button>
-                                    <el-button type="primary" @click="dialogFormVisible1 = false;createReply(form)">确 定
+                                    <el-button type="primary" @click="dialogFormVisible1 = false;form1.replyTarget=reply.id;createReply(form1)">确 定
                                     </el-button>
                                 </div>
                             </el-dialog>
@@ -77,14 +77,15 @@ import router from "@/router";
 export default {
     name: "DiscussDetail",
     el: '#discuss',
-    props:['item'],
+    props:['id','title','detail','authorID','discussTime'],
     data() {
         return {
+
             activeNames: ['0'],
             // id:this.$route.params.id,
             discuss: [
                 {id: this.id, title: this.title, detail: this.detail,authorID:this.authorID,
-                    filesURL:"",discussTime: this.discussTime},
+                   discussTime: this.discussTime},
             ],
             replies: [
                 // {detail: '确定是明天吗？', authorID:this.$store.getters.user.account,
@@ -95,11 +96,16 @@ export default {
             dialogFormVisible: false,
             dialogFormVisible1: false,
             form: {
-                id:'',
                 title: '',
                 detail:'',
                 authorID:this.$store.getters.user.account,
-                filesURL:'',replyTime:'', replyIsDiscuss:"",replyTarget: ''
+                replyTime:'', replyIsDiscuss:0,replyTarget: ''
+            },
+            form1: {
+                title: '',
+                detail:'',
+                authorID:this.$store.getters.user.account,
+                replyTime:'', replyIsDiscuss:1,replyTarget: ''
             },
             formLabelWidth: '120px',
             fileList: [{
@@ -122,25 +128,17 @@ export default {
             const seconds = String(currentTime.getSeconds()).padStart(2, '0');
 
             this.form.replyTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            this.form1.replyTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }, 1000);
     },
     mounted() {
+        this.$nextTick(() => {
+            this.getReplyList();
+        });
 
     },
     watch:{
-        item:function (newVal) {
-            this.discuss = newVal;
-            console.log(newVal);
-            getReplyList(this.discuss.id).then((res)=>{
-                if (res.code===200){
-                    let resultbody = res.data
-                    this.replies = resultbody
-                    Message.success(res.msg)
-                }
-            }).catch((err)=>{
-                Message.error(err)
-            })
-        }
+
     },
     methods: {
         router() {
@@ -149,7 +147,17 @@ export default {
         handleChange(val) {
             console.log(val);
         },
-
+        getReplyList() {
+            getReplyList(this.id).then((res) => {
+                if (res.code === 200) {
+                    let resultbody = res.data
+                    this.replies = resultbody
+                    Message.success(res.msg)
+                }
+            }).catch((err) => {
+                Message.error(err)
+            })
+        },
         createReply(){
             console.log("title:"+this.form.title)
             console.log("detail:"+this.form.detail)

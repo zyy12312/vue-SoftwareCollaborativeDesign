@@ -5,11 +5,11 @@
             <span style="text-align: center">小组交流聊天室</span>
         </div>
         <div v-for="info in infos" :key="info.info" class="text item box">
-            <el-row v-if="info.name===myName">
+            <el-row v-if="info.senderID===myName">
                 <el-col :span="24" style="text-align: center"><a>{{info.sendTime}}</a></el-col>
                 <el-col :span="24" style="text-align: right">
                     <div class="grid-content bg-purple-dark" >
-                        <div style="font-size: 14px">{{ info.name }}</div>
+                        <div style="font-size: 14px">{{ info.senderID }}</div>
                         <div style="font-size: 14px"> {{info.detail}}<el-avatar round width="50px" height="50px" :src="info.url"></el-avatar></div>
                     </div>
 
@@ -19,7 +19,7 @@
                 <el-col :span="24" style="text-align: center"><a>{{info.sendTime}}</a></el-col>
                 <el-col :span="24" style="text-align: left">
                     <div class="grid-content bg-purple-dark" >
-                        <div style="font-size: 14px">{{ info.name }}</div>
+                        <div style="font-size: 14px">{{ info.senderID }}</div>
                         <div style="font-size: 14px"><el-avatar round width="50px" height="50px" :src="info.url"></el-avatar> {{info.detail}}</div>
                     </div>
                 </el-col>
@@ -74,24 +74,24 @@ export default {
     data(){
         return {
             time:"",
-            textarea: {detail:"",sendTime:"",senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.teamId},
-            myName:this.$store.getters.user.name,
+            textarea: {detail:"",sendTime:"",senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.team.teamID},
+            myName:this.$store.getters.user.account,
             url:this.$store.getters.user.avatarURL,
             infos:[
-                {detail:"你到底是谁？",name:"张三",sendTime:"",senderID:"",teamID:""},
-                {detail:"你猜猜我是谁",name:"李四",sendTime:"",senderID:"",teamID:""},
-                {detail:"你信不信我给你啪啪两下！",name:"张三",sendTime:"",senderID:"",teamID:""},
+                // {detail:"你到底是谁？",sendTime:"",senderID:"2011110108",teamID:""},
+                // {detail:"你猜猜我是谁",sendTime:"",senderID:"",teamID:""},
+                // {detail:"你信不信我给你啪啪两下！",sendTime:"",senderID:"2011110108",teamID:""},
             ],
             users:[
                 {name:"",avaterURL: "",teamId:""}
             ],
-            send: {detail:"",sendTime:'',senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.teamId}
+            send: {detail:"",sendTime:'',senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.team.teamID}
 
         }
     },
     mounted() {
         getAllUserList().then((res)=>{
-            if (res.code===200 && res.data.teamId===this.$store.getters.user.teamId){
+            if (res.code===200 && res.data.teamID===this.$store.getters.user.team.teamID){
                 let resultbody = res.data
                 this.users = resultbody
                 Message.success(res.msg)
@@ -99,7 +99,8 @@ export default {
         }).catch((err)=>{
             Message.error(err)
         });
-        getMessageList(this.$store.getters.user.teamId).then((res)=>{
+        getMessageList(this.$store.getters.user.team.teamID).then((res)=>{
+            console.log("id="+this.$store.getters.user.team.teamID)
             if (res.code===200){
                 let resultbody = res.data
                 this.infos = resultbody

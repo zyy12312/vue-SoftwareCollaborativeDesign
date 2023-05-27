@@ -19,7 +19,9 @@ export function getSubmissionToTask(taskID) {
     return request({
         url: '/submission/getSubmissionToTask',
         method: 'GET',
-        taskID
+        params:{
+            "taskID":taskID
+        }
     })
 }
 export function getSubmissionListToSubTask(subTaskID) {

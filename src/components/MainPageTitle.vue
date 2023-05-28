@@ -6,7 +6,7 @@
                 计算机系-计算机科学教研室</p>
             <el-menu  class="el-menu-demo" mode="horizontal">
                 <el-menu-item style="text-align: left">授课教师
-                    <el-avatar shape="circle" size="large" src="assets/logo.png"/>
+                    <el-avatar shape="circle" size="large" src="https://cos-for-scd-1312783961.cos.ap-shanghai.myqcloud.com/defaultAvator.png"/>
                 </el-menu-item>
                 <el-menu-item index="1" @click="$router.push('/classmember')"><i class="el-icon-s-custom"/>
                     班级成员

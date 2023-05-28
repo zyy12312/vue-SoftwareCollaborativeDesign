@@ -5,22 +5,28 @@
             <span style="text-align: center">小组交流聊天室</span>
         </div>
         <div v-for="info in infos" :key="info.info" class="text item box">
-            <el-row v-if="info.senderID===myName">
+            <el-row v-if="info.senderID===myId">
                 <el-col :span="24" style="text-align: center"><a>{{info.sendTime}}</a></el-col>
                 <el-col :span="24" style="text-align: right">
-                    <div class="grid-content bg-purple-dark" >
-                        <div style="font-size: 14px">{{ info.senderID }}</div>
-                        <div style="font-size: 14px"> {{info.detail}}<el-avatar round width="50px" height="50px" :src="info.url"></el-avatar></div>
+                    <div class="grid-content bg-purple-dark  " >
+                            <div class="info " >
+                                <div class="name" >{{ myName }}</div>
+                                <div class="student-id">{{info.detail}}<el-avatar round width="50px" height="50px" :src="url" class="avatar"></el-avatar></div>
+                            </div>
                     </div>
-
                 </el-col>
             </el-row>
             <el-row v-else>
-                <el-col :span="24" style="text-align: center"><a>{{info.sendTime}}</a></el-col>
+                <el-col :span="24" style="text-align: center" ><a v-if="info.teamID===myTeam">{{info.sendTime}}</a></el-col>
                 <el-col :span="24" style="text-align: left">
-                    <div class="grid-content bg-purple-dark" >
-                        <div style="font-size: 14px">{{ info.senderID }}</div>
-                        <div style="font-size: 14px"><el-avatar round width="50px" height="50px" :src="info.url"></el-avatar> {{info.detail}}</div>
+                    <div  v-for="usr in users" :key="usr.name">
+                    <div class="grid-content bg-purple-dark " v-if="usr.teamId===info.teamID && usr.id===info.senderID">
+
+                        <div class="info">
+                            <div class="name">{{ usr.name }}</div>
+                            <div class="student-id"> <el-avatar round width="50px" height="50px" :src="usr.avatarURL" class="avatar"></el-avatar>{{info.detail}}</div>
+                        </div>
+                    </div>
                     </div>
                 </el-col>
             </el-row>
@@ -74,8 +80,10 @@ export default {
     data(){
         return {
             time:"",
-            textarea: {detail:"",sendTime:"",senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.team.teamID},
-            myName:this.$store.getters.user.account,
+            textarea: {detail:"",sendTime:"",senderID:this.$store.getters.user.id,teamID:this.$store.getters.user.team.teamID},
+            myId:this.$store.getters.user.id,
+            myName:this.$store.getters.user.name,
+            myTeam:this.$store.getters.user.team.teamID,
             url:this.$store.getters.user.avatarURL,
             infos:[
                 // {detail:"你到底是谁？",sendTime:"",senderID:"2011110108",teamID:""},
@@ -83,15 +91,15 @@ export default {
                 // {detail:"你信不信我给你啪啪两下！",sendTime:"",senderID:"2011110108",teamID:""},
             ],
             users:[
-                {name:"",avaterURL: "",teamId:""}
+                {name:"",avaterURL: "",teamId:"",id:''}
             ],
-            send: {detail:"",sendTime:'',senderID:this.$store.getters.user.account,teamID:this.$store.getters.user.team.teamID}
+            send: {detail:"",sendTime:'',senderID:this.$store.getters.user.id,teamID:this.$store.getters.user.team.teamID}
 
         }
     },
     mounted() {
         getAllUserList().then((res)=>{
-            if (res.code===200 && res.data.teamID===this.$store.getters.user.team.teamID){
+            if (res.code===200 ){
                 let resultbody = res.data
                 this.users = resultbody
                 Message.success(res.msg)
@@ -164,5 +172,35 @@ export default {
 .box {
     padding: 10px;
     overflow: auto;
+}
+.info {
+    margin-left: 10px;
+    /* 添加其他样式属性 */
+}
+
+.name {
+    font-size: 16px;
+    font-weight: bold;
+    /* 添加其他样式属性 */
+}
+
+.student-id {
+    font-size: 14px;
+    color: gray;
+    /* 添加其他样式属性 */
+}
+.avatar {
+    width: 50px;
+    height: 50px;
+    /* 添加其他样式属性 */
+}
+.profile {
+    display: v-bind(myName);
+    align-items: center;
+
+}
+.profile1 {
+    display: flex;
+    align-items: center;
 }
 </style>

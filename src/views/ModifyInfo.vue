@@ -14,13 +14,15 @@
                         {{user.account}}
                     </div>
                         <div v-for="user in users" :key="user.account" class="text item" style="text-align: left;font-size: 17px">
-                            {{user.role}}
+                            <a  v-if="user.role===0">学生</a>
+                            <a v-else>教师</a>
                         </div>
                         <div v-for="user in users" :key="user.account" class="text item" style="text-align: left;font-size: 17px">
-                            {{user.sex}}
+                            <a  v-if="user.sex===0">男</a>
+                            <a v-else>女</a>
                         </div>
                         <div v-for="user in users" :key="user.account" class="text item" style="text-align: left;font-size: 17px">
-                            {{user.teamId}}
+                            <a v-if="user.teamId !=null">第{{user.teamId}}组</a>
                         </div></el-col>
                 </el-row>
             </el-card>
@@ -46,19 +48,20 @@
                         <el-form-item label="用户头像">
                             <el-upload
                                 class="avatar-uploader"
-                                action="https://jsonplaceholder.typicode.com/posts/"
+                                action="https://lainvahenohair.icu:9090/file/upload"
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess"
+                                auto-upload:true
                                 v-model="form.avaterURL"
                                 :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                                <img v-if="form.avaterURL" :src="form.avaterURL" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
                         <el-form-item label="用户性别">
                             <el-radio-group v-model="form.sex">
-                                <el-radio label="男"></el-radio>
-                                <el-radio label="女"></el-radio>
+                                <el-radio label="0">男</el-radio>
+                                <el-radio label="1">女</el-radio>
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item>
@@ -82,7 +85,8 @@ export default {
         return{
             imageUrl: '',
             users:[
-                {account:"1001",name:"林董",avatarURL:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",role:"教师",sex:"男",teamId:"无"}
+                {account:this.$store.getters.user.account,name:this.$store.getters.user.name,avatarURL:this.$store.getters.user.avatarURL,role:this.$store.getters.user.role
+                    ,sex:this.$store.getters.user.sex,teamId:this.$store.getters.user.team.teamID}
             ],
             titles:[
                 {title:"用户账号："},{title:"用户角色："},{title:"用户性别："},{title:"用户组号：",}
@@ -97,19 +101,27 @@ export default {
     },
     methods:{
         onSubmit(form) {
-            console.log('submit!');
+            console.log('姓名：'+form.name);
+            console.log('头像：'+form.avaterURL);
+            console.log('密码：'+form.password);
+            console.log('性别：'+form.sex);
             editUser(form).then((res)=>{
-                if (res.data.code===200){
-                    let resultbody = res.data.data
+                if (res.code===200){
+                    let resultbody = res.data
                     this.users = resultbody
-                    Message.success(res.data.msg)
+                    Message.success(res.msg)
                 }
             }).catch((err)=>{
                 Message.error(err)
             });
         },
-        handleAvatarSuccess(res, file) {
-            this.imageUrl = URL.createObjectURL(file.raw);
+        handleAvatarSuccess(res) {
+            let urls = res.data
+            if(urls[0]){
+                this.form.avaterURL = urls[0]
+            }
+            // this.form.avaterURL = URL.createObjectURL(file.raw);=
+
         },
         beforeAvatarUpload(file) {
             const isJPG = file.type === 'image/jpeg';

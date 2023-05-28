@@ -48,7 +48,7 @@
                                                 <el-form :model="form">
                                                     <el-form-item label="作业描述"
                                                                   :label-width="formLabelWidth">
-                                                        <el-input v-model="form.name"
+                                                        <el-input v-model="form.detail"
                                                                   auto-complete="off"></el-input>
                                                     </el-form-item>
                                                     <el-form-item label="作业提交区域"
@@ -167,6 +167,7 @@
                                                                                         v-model="form1.endTime"
                                                                                         type="datetime"
                                                                                         placeholder="选择日期时间"
+                                                                                        format="yyyy-MM-dd" value-format="yyyy-MM-dd"
                                                                                         align="right"
                                                                                         :picker-options="pickerOptions1">
                                                                                  </el-date-picker>
@@ -326,9 +327,9 @@
                                                                       <el-dialog title="提交作业"
                                                                                  :visible.sync="dialogFormVisible1" append-to-body>
                                                                       <el-form :model="form">
-                                                                           <el-form-item label="作业名称"
+                                                                           <el-form-item label="作业详情"
                                                                                          :label-width="formLabelWidth">
-                                                                                   <el-input v-model="form.title"
+                                                                                   <el-input v-model="form.detail"
                                                                                              auto-complete="off"></el-input>
                                                                            </el-form-item>
                                                                           <el-form-item label="作业提交区域"
@@ -342,7 +343,7 @@
                                                                                           :on-remove="handleRemove"
                                                                                           :file-list="fileList"
                                                                                           :auto-upload="false"
-                                                                                          v-model="form.fileUrl">
+                                                                                          v-model="form.filesURL">
                                                                                       <el-button slot="trigger"
                                                                                                  size="small"
                                                                                                  type="primary">选取文件</el-button>
@@ -403,7 +404,7 @@
                                                                         <el-row>
                                                                             <el-col :span="12">
                                                                                 <div class="grid-content bg-purple-light"
-                                                                                     style="margin-top: 13px">{{ sub.file }}
+                                                                                     style="margin-top: 13px">{{ sub.detail }}
                                                                                 </div>
                                                                             </el-col>
                                                                             <el-col :span="8">
@@ -450,7 +451,7 @@ export default {
         return {
             activeName2: 'first',
             // myRole: this.$store.getters.user.role,
-            myRole:'产品经理',
+            myRole:this.$store.getters.user.id,
             indexs: 0,
             searchDetail:false,
             pickerOptions1: {
@@ -478,7 +479,7 @@ export default {
             value1: '',
             value2: '',
             items: [
-                {title1: "作业名称",  title3: "提交时间",  title5: "交付"},
+                {title1: "作业名称",  title3: "截止时间",  title5: "交付"},
             ],
             tasks: [
                 {
@@ -487,7 +488,7 @@ export default {
                     detail: "开发一个java web 网站，该网站提供一个页面，可以输入图书名称，输出该书的库存。程序应该首先访问缓存输出查询结果，如果缓存没有该数据",
                     endTime: "2023-05-27 18:00:00",
                     file: "分布式实验.docx",
-                    fileUrl: "",
+                    filesURL: "",
                     submitTime:'2023-05-22 18:20:20',
                     characterType: "计划经理"
                 },
@@ -497,7 +498,6 @@ export default {
                     detail: "设计一个图书馆数据库，包含一个图书表books,该表有id,bookname, inventory三个字段（假设书名不会重复），并自行提前录入若干图书数据。",
                     endTime: "2023-05-27 14:00:45",
                     file: "DES实现.docx",
-                    fileUrl:"",
                     submitTime:'2023-05-22 18:20:20',
                     characterType: "产品经理"
                 },
@@ -520,25 +520,20 @@ export default {
             dialogFormVisible2: false,
             dialogFormVisible3: false,
             form: {
-                id:'',
-                submitterID:'',
-                teamID:'',
-                targetID:'',
-                title: '',
+                submitterID:this.$store.getters.user.id,
+                teamID:this.$store.getters.user.team.teamID,
+                targetID:this.indexs,
                 detail: '',
                 submitTime: '',
-                score:'',
-                comment:'',
                 targetType: '',
                 filesURL:'',
-                state:''
             },
             form1:{
-                teamID:this.$store.getters.user.teamId,
+                teamID:this.$store.getters.user.team.teamID,
                 characterType:'',
                 detail: '',
                 endTime:'',
-                targetID: '',
+                targetID:this.indexs,
                 filesURL:'',
             },
             input4: '',
@@ -604,8 +599,8 @@ export default {
             index;               //下载对应文件的方法
         },
         subtasks(subTask){
-            console.log("详情:"+this.form1.detail)
-            console.log("时间:"+this.form1.endTime)
+            console.log("详情:"+subTask.detail)
+            console.log("时间:"+subTask.endTime)
             createSubTask(subTask)
                 .then((res)=>{
                     if (res.code===200){
@@ -618,8 +613,9 @@ export default {
             })//对应任务分配方法
         },
         confirm(form){
-            console.log("详情:"+form.title)
+            console.log("详情:"+form.detail)
             console.log("时间:"+form.submitTime)
+            console.log("目标:"+form.targetID)
             addSubmission(form).then((res)=>{
                     if (res.code === 200){
                         let resultbody = res.data

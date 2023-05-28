@@ -18,6 +18,7 @@
                 </el-row>
                 </span>
             </div>
+
             <div v-for="(student,id) in pageList" :key="id" class="text item" style="text-align: left">
                 <el-row>
                     <el-col :span="12">
@@ -30,13 +31,19 @@
 
                         </div>
                     </el-col>
-                    <el-col :span="4">
-                        <div class="grid-content bg-purple-light" style="margin-top: 20px">{{ student.role }}</div>
+                    <el-col :span="4"  v-if="student.role===0">
+                        <div class="grid-content bg-purple-light" style="margin-top: 20px">学生</div>
                     </el-col>
-                    <el-col :span="4">
-                        <div class="grid-content bg-purple-light" style="margin-top: 20px">{{ student.sex }}</div>
+                    <el-col :span="4"  v-else>
+                        <div class="grid-content bg-purple-light" style="margin-top: 20px">教师</div>
                     </el-col>
-                    <el-col :span="4" v-if="student.role==='学生'">
+                    <el-col :span="4" v-if="student.sex===0">
+                        <div class="grid-content bg-purple-light" style="margin-top: 20px">男</div>
+                    </el-col>
+                    <el-col :span="4" v-else>
+                        <div class="grid-content bg-purple-light" style="margin-top: 20px">女</div>
+                    </el-col>
+                    <el-col :span="4" v-if="student.role===0 && student.teamId !=null">
                         <div class="grid-content bg-purple-light" style="margin-top: 20px">第{{ student.teamId }}组
                         </div>
                     </el-col>
@@ -60,128 +67,40 @@
 
 <script>
 
+import {Message} from "element-ui";
+import {getAllUserList} from "@/api/user";
+
 export default {
     name: "ClassMember",
     data() {
         return {
             activeName: 'first',
             teacherNumber: 1,
-            studentNumber: 10,
+            studentNumber: 0,
             current: 1, //初始页
             pagesize: 10,
             total: 0,//总条数
             pageList: [],//循环数据
             students: [
-                {
-                    id: 1,
-                    account: "1001",
-                    name: "林董",
-                    avatarURL: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-                    role: "教师",
-                    sex: "男",
-                    teamId: "无"
-                },
-                {
-                    id: 2,
-                    account: "10001",
-                    name: "郑总",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "女",
-                    teamId: "5"
-                },
-                {
-                    id: 3,
-                    account: "10002",
-                    name: "李都",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "男",
-                    teamId: "6"
-                },
-                {
-                    id: 4,
-                    account: "10003",
-                    name: "李是",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "男",
-                    teamId: "8"
-                },
-                {
-                    id: 5,
-                    account: "10004",
-                    name: "李等等",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "男",
-                    teamId: "1"
-                },
-                {
-                    id: 6,
-                    account: "10005",
-                    name: "老六",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "男",
-                    teamId: "2"
-                },
-                {
-                    id: 7,
-                    account: "10006",
-                    name: "宝宝",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "男",
-                    teamId: "3"
-                },
-                {
-                    id: 8,
-                    account: "10007",
-                    name: "导师",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "男",
-                    teamId: "2"
-                },
-                {
-                    id: 9,
-                    account: "10008",
-                    name: "刘伟",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "男",
-                    teamId: "3"
-                },
-                {
-                    id: 10,
-                    account: "10009",
-                    name: "小丑",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "男",
-                    teamId: "5"
-                },
-                {
-                    id: 11,
-                    account: "100010",
-                    name: "坤哥",
-                    avatarURL: "https://img01.yzcdn.cn/vant/cat.jpeg",
-                    role: "学生",
-                    sex: "男",
-                    teamId: "5"
-                },
+
             ],
             titles: [
                 {title1: "班级成员", title2: "课程角色", title3: "性别", title4: "学生组号"}
             ]
         };
     },
-    created() {
-        //调用获取数据
-        this.getData()
+    mounted() {
+        getAllUserList().then((res)=>{
+            if (res.code===200){
+                let resultbody = res.data
+                this.students = resultbody
+                this.getData()
+                Message.success(res.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
     },
-
     methods: {
         handleClick(tab, event) {
             console.log(tab, event);
@@ -189,6 +108,7 @@ export default {
         getData() {
             //发送接口并赋值
             this.total = this.students.length
+            this.studentNumber = this.total - 1
             // 拷贝一份数据
             let list = JSON.parse(JSON.stringify(this.students))
             // splice处理数组的方法会改变原数组,所以需要拷贝一份

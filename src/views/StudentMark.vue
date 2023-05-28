@@ -50,6 +50,9 @@
 </template>
 
 <script >
+import {Message} from "element-ui";
+import {getStuGrade} from "@/api/grade";
+
 export default {
     name:"StudentMark",
     data(){
@@ -67,6 +70,17 @@ export default {
                 {id:2,name:"DES实现",record:"2023.05.13 11:30",mark:"未评分",comment:"无1"}
             ]
         }
+    },
+    mounted() {
+        getStuGrade().then((res)=>{
+            if (res.code===200){
+                let resultbody = res.data
+                this.tasks = resultbody
+                Message.success(res.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
     },
     methods:{
         getIndex(index){

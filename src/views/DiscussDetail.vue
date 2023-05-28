@@ -12,9 +12,6 @@
                                 <el-dialog title="回复帖子"
                                            :visible.sync="dialogFormVisible" append-to-body>
                                     <el-form :model="form">
-                                        <el-form-item label="帖子名称" :label-width="formLabelWidth">
-                                            <el-input v-model="form.title" auto-complete="off"></el-input>
-                                        </el-form-item>
                                         <el-form-item label="帖子内容" :label-width="formLabelWidth">
                                             <el-input v-model="form.detail" auto-complete="off"></el-input>
                                         </el-form-item>
@@ -43,16 +40,13 @@
                             <el-dialog title="回复回帖"
                                        :visible.sync="dialogFormVisible1" append-to-body>
                                 <el-form :model="form1">
-                                    <el-form-item label="回帖名称" :label-width="formLabelWidth">
-                                        <el-input v-model="form1.title" auto-complete="off"></el-input>
-                                    </el-form-item>
                                     <el-form-item label="回帖内容" :label-width="formLabelWidth">
                                         <el-input v-model="form1.detail" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-form>
                                 <div slot="footer" class="dialog-footer">
                                     <el-button @click="dialogFormVisible1 = false">取 消</el-button>
-                                    <el-button type="primary" @click="dialogFormVisible1 = false;form1.replyTarget=reply.id;createReply(form1)">确 定
+                                    <el-button type="primary" @click="dialogFormVisible1 = false;this.target=reply.id;createReply(form1)">确 定
                                     </el-button>
                                 </div>
                             </el-dialog>
@@ -80,7 +74,7 @@ export default {
     props:['id','title','detail','authorID','discussTime'],
     data() {
         return {
-
+            target:'',
             activeNames: ['0'],
             // id:this.$route.params.id,
             discuss: [
@@ -98,14 +92,14 @@ export default {
             form: {
                 title: '',
                 detail:'',
-                authorID:this.$store.getters.user.account,
-                replyTime:'', replyIsDiscuss:0,replyTarget: ''
+                authorID:this.$store.getters.user.id,
+                replyTime:'', replyIsDiscuss:0,replyTarget: this.target
             },
             form1: {
                 title: '',
                 detail:'',
-                authorID:this.$store.getters.user.account,
-                replyTime:'', replyIsDiscuss:1,replyTarget: ''
+                authorID:this.$store.getters.user.id,
+                replyTime:'', replyIsDiscuss:1,replyTarget: this.target
             },
             formLabelWidth: '120px',
             fileList: [{
@@ -158,11 +152,11 @@ export default {
                 Message.error(err)
             })
         },
-        createReply(){
+        createReply(form){
             console.log("title:"+this.form.title)
             console.log("detail:"+this.form.detail)
             console.log("time:"+this.form.replyTime)
-            createReply(this.form)
+            createReply(form)
                 .then((res)=>{
                     if (res.code===200){
                         let resultbody = res.data

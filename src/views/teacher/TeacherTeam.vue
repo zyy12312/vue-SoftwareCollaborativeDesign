@@ -21,14 +21,14 @@
                                     </el-col>
                                 </el-row>
                             </div>
-                            <div v-for="(team_each,insideIndex) in team_all" v-bind:key="insideIndex">
+                            <div v-for="(team_each,insideIndex) in team_all.team" v-bind:key="insideIndex">
                                 <el-row>
                                     <el-col :span="8">
                                         <div class="grid-content bg-purple">{{ team_each.studentID }}</div>
                                     </el-col>
-<!--                                    <el-col :span="8">-->
-<!--                                        <div class="grid-content bg-purple-light">{{ team_each.user.name }}</div>-->
-<!--                                    </el-col>-->
+                                    <el-col :span="8">
+                                        <div class="grid-content bg-purple-light">{{ team_each.user.name }}</div>
+                                    </el-col>
                                     <el-col :span="8">
                                         <div class="grid-content bg-purple">{{ team_each.studentCharacterLabel }}</div>
                                     </el-col>
@@ -42,19 +42,18 @@
             <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px" >添加小组</el-button>
             <el-dialog :visible.sync="dialogFormVisible_add" append-to-body>
                 <div>
-                    <el-input v-model="added_leader">
-                        <template slot="prepend">组长姓名：</template>
+                    <el-input v-model="added_team.teamID">
+                        <template slot="prepend">组号：</template>
                     </el-input>
                 </div>
-<!--                <div>-->
-<!--                    <el-autocomplete-->
-<!--                        class="inline-input"-->
-<!--                        v-model="inputstudentCharacterLabel"-->
-<!--                        :fetch-suggestions="querySearch"-->
-<!--                        @select="handleSelect">-->
-<!--                        <template slot="prepend">组长姓名：</template>-->
-<!--                    </el-autocomplete>-->
-<!--                </div>-->
+                <div>
+                    <el-autocomplete
+                        class="inline-input"
+                        v-model="added_team.studentID"
+                        :fetch-suggestions="querySearch">
+                        <template slot="prepend">组长姓名：</template>
+                    </el-autocomplete>
+                </div>
                 <div slot="footer" class="dialog-footer">
                     <el-button
                         @click="dialogFormVisible_add = false">取 消</el-button>
@@ -72,6 +71,7 @@
 
 import {Message} from "element-ui";
 import {addTeam, teamInfo} from "@/api/team";
+import {getUnGroupedStudentList} from "@/api/user";
 
 export default {
     name: 'TeacherTeam',
@@ -80,7 +80,11 @@ export default {
         return {
             dialogFormVisible_add: false,
             activeName: 'first',
-            added_leader: '',
+            added_team: {
+                teamID: '',
+                studentID: '',
+                studentCharacter: 1
+            },
             teams:[
                 // [
                 //     {id:"1",teamID:"5",studentID:"2035060301",studentName: "aaa",studentCharacterLabel:"小组长"},
@@ -98,28 +102,30 @@ export default {
 
             clas:[
                 {title1:"成员学号",title2:"成员名称",title3:"对应角色"}
+            ],
+
+            unGroupedStudentList:{
+                id:'',
+                name:''
+            },
+
+            unGroupedStudentNameList:[
+                {
+
+                }
             ]
         };
     },
     mounted() {
         this.getList()
+        this.loadUnGroupedStudentList();
     },
     methods: {
         async getList() {
             await teamInfo()
                 .then((res)=>{
-                    console.log("res:")
-                    console.log(res)
                     if (res.code===200){
                         this.teams = res.data
-                        console.log("teams:")
-                        console.log(this.teams)
-                        console.log("studentID:")
-                        console.log(this.teams[0].team[0].studentID)
-                        console.log("studentCharacterLabel:")
-                        console.log(this.teams[0].team[0].studentCharacterLabel)
-                        console.log("user name:")
-                        console.log(this.teams[0].team[0].user.name)
                         Message.success(res.msg)
                     }
                 }).catch((err)=>{
@@ -127,16 +133,52 @@ export default {
             })
         },
 
+        querySearch(queryString, cb) {
+            var unGroupedStudentList = this.unGroupedStudentList;
+            var results = queryString ? unGroupedStudentList.filter(this.createFilter(queryString)) : unGroupedStudentList;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+
+        createFilter(queryString) {
+            return (restaurant) => {
+                return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+        },
+        loadUnGroupedStudentList() {
+            getUnGroupedStudentList().then((res)=>{
+                if (res.code===200){
+                    this.unGroupedStudentList = res.data
+                    // console.log("list:")
+                    // console.log(this.unGroupedStudentList)
+                    // console.log("name:")
+                    // console.log(this.unGroupedStudentList[0].name)
+                    // Message.success(res.msg)
+                }
+            }).catch((err)=>{
+                Message.error(err)
+            })
+            //遍历unGroupedStudentList，取出所有的name，并装入unGroupedStudentNameList
+            console.log("list:")
+            console.log(this.unGroupedStudentList)
+            for (var stu in this.unGroupedStudentList) {
+                console.log("1:")
+                console.log(stu);
+                console.log("2:")
+                console.log(this.unGroupedStudentList.get(stu));
+                // this.unGroupedStudentNameList.set("value",stu.name)
+            }
+        },
+        
         goChat(teamID){
             console.log("进入讨论界面，小组号："+teamID)
         },
 
         // 新建小组
         addTeamConfirm(){
-            console.log("add1:leader="+this.added_leader)
-            addTeam(this.added_leader)
+            console.log("add1:leader="+this.added_team)
+            addTeam(this.added_team)
                 .then((res)=>{
-                    console.log("add2:leader="+this.added_leader)
                     if (res.code===200){
                         Message.success(res.msg)
                     }

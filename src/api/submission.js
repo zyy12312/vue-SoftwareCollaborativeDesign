@@ -17,27 +17,27 @@ export function editSubmission(submission) {
 }
 export function getSubmissionToTask(taskID) {
     return request({
-        url: '/submission/getSubmissionToTask?taskID='+taskID,
+        url: '/submission/getSubmissionToTask',
         method: 'GET',
-        // params:{
-        //     "taskID":taskID
-        // }
+        params:{
+            "taskID":parseInt(taskID)
+        }
     })
 }
 export function getSubmissionListToSubTask(subTaskID) {
     return request({
         url: '/submission/getSubmissionListToSubTask?subTaskID='+subTaskID,
         method: 'GET',
-        // params:{
-        //     "subTaskID" :subTaskID
-        // }
+        params:{
+            "taskID":parseInt(subTaskID)
+        }
 
     })
 }
 export function readover(result) {
     return request({
         url: '/submission/readover',
-        method: 'DELETE',
+        method: 'POST',
         data:JSON.stringify(result)
     })
 }

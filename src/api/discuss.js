@@ -39,7 +39,9 @@ export function getReplyList(discussID) {
     return request({
         url: '/discuss/getReplyList',
         method: 'GET',
-        data:JSON.stringify(discussID)
+        params:{
+            "discussID":parseInt(discussID)
+        }
     })
 }
 export function deleteDiscuss(discussIDList) {

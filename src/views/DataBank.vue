@@ -27,19 +27,19 @@
                     <el-col :span="4">
                         <div class="grid-content bg-purple-light">
                             <el-button type="text"
-                                       @click="dialogFormVisible = true;getIndex(task.index);download(task.index)"
+                                       @click="getIndex(task.index);download(task.index)"
                                        style="font-size: 16px">
-                                <i class="el-icon-download"></i>
+                                <i  class="el-icon-download"><a :href="task.fileURLs"></a></i>
                             </el-button>
-                            <el-dialog title="文件下载" :visible.sync="dialogFormVisible" v-if="indexs===task.index">
-                                <el-row>
-                                    <el-col :span="20">
-                                        <div class="grid-content bg-purple-dark"
-                                             style="margin-top: 13px;text-align: left">{{ task.title }}
-                                        </div>
-                                    </el-col>
-                                </el-row>
-                            </el-dialog>
+<!--                            <el-dialog title="文件下载" :visible.sync="dialogFormVisible" v-if="indexs===task.index">-->
+<!--                                <el-row>-->
+<!--                                    <el-col :span="20">-->
+<!--                                        <div class="grid-content bg-purple-dark"-->
+<!--                                             style="margin-top: 13px;text-align: left">{{ task.title }}-->
+<!--                                        </div>-->
+<!--                                    </el-col>-->
+<!--                                </el-row>-->
+<!--                            </el-dialog>-->
                         </div>
                     </el-col>
                 </el-row>
@@ -59,7 +59,7 @@ export default {
                 {title1: "资料名称", title2: "附件名称",  title4: "下载"},
             ],
             tasks: [
-                {id: 1, title: "第五章PPT", fileURLs: "chapter 5.ppt", },
+                {id: 1, title: "第五章PPT", fileURLs: "https://cos-for-scd-1312783961.cos.ap-shanghai.myqcloud.com/defaultAvator.png", },
                 {id: 2, title: "实验要求", fileURLs: "实验要求.docx",}
             ],
             dialogFormVisible: false,
@@ -83,7 +83,16 @@ export default {
         },
         download(index) {
             this.indexs = index;                   //下载对应资料的方法
-        }
+        },
+        getFileNameAndType(url){
+            return  (url).substring((url).lastIndexOf("/")+1);
+        },
+        getFileName(nameAndType){
+            return (nameAndType).split(".")[0];
+        },
+        getFileType(nameAndType){
+            return (nameAndType).split(".")[1];
+        },
     }
 }
 </script>

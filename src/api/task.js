@@ -10,21 +10,28 @@ export function taskDetail(taskID) {
     return request({
         url: '/task/detail',
         method: 'GET',
-        taskID
+        params:{
+            taskID:taskID
+        }
     })
 }
 export function subTaskList(taskID) {
     return request({
         url: '/task/subTaskList',
         method: 'GET',
-        taskID
+        params:{
+            taskID:taskID
+        }
     })
 }
 export function subTaskDetail(subTaskID) {
     return request({
         url: '/task/subTaskDetail',
         method: 'GET',
-        subTaskID
+        params:{
+            subTaskID:subTaskID
+        }
+
     })
 }
 export function releaseTask(taskIDList) {

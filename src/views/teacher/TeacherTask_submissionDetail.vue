@@ -19,11 +19,11 @@
                         <el-col :span="6"><div class="grid-content bg-purple-light">编辑</div></el-col>
                     </el-row>
                     </div>
-                <div v-for="submission in submissions" v-bind:key="submission.id">
-                    <div v-if="submission.targetID===taskIndex">
+                <div v-for="(submission,outIndex) in submissions" v-bind:key="outIndex">
+                    <div v-if="Number(submission.targetID)===Number(taskIndex)">
                         <el-row>
                             <el-col :span="6">
-                                <div class="grid-content bg-purple">{{ submission.submitterName }}</div>
+                                <div class="grid-content bg-purple">{{ submission.submitter.name }}</div>
                             </el-col>
                             <el-col :span="6">
                                 <div class="grid-content bg-purple-light">{{ submission.teamID }}</div>
@@ -32,20 +32,20 @@
                                 <div class="grid-content bg-purple">{{ submission.submitTime }}</div>
                             </el-col>
                             <el-col :span="6">
-                            <el-button type="warning" plain @click="dialogFormVisible = true;getIndex(submission.index)"
+                            <el-button type="warning" plain @click="dialogFormVisible = true;getIndex(submission.id)"
                                        style="font-size: 16px">查看作业
                             </el-button>
-                            <el-dialog title="作业详情" :visible.sync="dialogFormVisible" v-if="indexs===submission.index" append-to-body>
+                            <el-dialog title="作业详情" :visible.sync="dialogFormVisible" v-if="indexs===submission.id" append-to-body><!--v-if="indexs===submission.index" -->
                                 <el-tabs type="card">
                                     <el-card>
-                                                <el-row>
-                                                    <el-col :span="24"><div
-                                                        class="grid-content bg-purple"
-                                                        style="text-align: left">作业内容：</div></el-col>
-                                                    <el-col :span="24"><div
-                                                        class="grid-content bg-purple-light"
-                                                        style="margin-top: 13px;text-align: left">{{submission.detail}}</div></el-col>
-                                                </el-row>
+                                        <el-row>
+                                            <el-col :span="24"><div
+                                                class="grid-content bg-purple"
+                                                style="text-align: left">作业内容：</div></el-col>
+                                            <el-col :span="24"><div
+                                                class="grid-content bg-purple-light"
+                                                style="margin-top: 13px;text-align: left">{{submission.detail}}</div></el-col>
+                                        </el-row>
                                     </el-card>
                                     <el-card>
                                         <div slot="header" class="clearfix">
@@ -53,23 +53,21 @@
                                                 <el-row>
                                                     <el-col :span="12"><div
                                                         class="grid-content bg-purple-light">{{titleGroup2.title1 }}</div></el-col>
-                                                    <el-col :span="8"><div
-                                                        class="grid-content bg-purple-light">{{titleGroup2.title2 }}</div></el-col>
+<!--                                                    <el-col :span="8"><div-->
+<!--                                                        class="grid-content bg-purple-light">{{titleGroup2.title2 }}</div></el-col>-->
                                                 </el-row>
                                             </span>
                                         </div>
                                         <div>
                                             <el-row>
                                                 <el-col :span="12">
-                                                    <div class="grid-content bg-purple-light"
-                                                         style="margin-top: 13px">{{ submission.fileName }}
-                                                    </div>
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px">{{ submission.filesURL }}</div>
                                                 </el-col>
-                                                <el-col :span="8">
-                                                    <div class="grid-content bg-purple-light"
-                                                         style="margin-top: 13px">{{ submission.filesize }}
-                                                    </div>
-                                                </el-col>
+<!--                                                <el-col :span="8">-->
+<!--                                                    <div class="grid-content bg-purple-light"-->
+<!--                                                         style="margin-top: 13px">{{ submission.filesize }}-->
+<!--                                                    </div>-->
+<!--                                                </el-col>-->
                                                 <el-col :span="4">
                                                     <div class="grid-content bg-purple-light">
                                                         <el-button type="text" @click="dialogFormVisible = true"
@@ -96,17 +94,12 @@
                                             </el-row>
                                         </span>
                                             </div>
-                                            <div v-for="sub in submit" v-bind:key="sub.file">
                                                 <el-row>
                                                     <el-col :span="12">
-                                                        <div class="grid-content bg-purple-light"
-                                                             style="margin-top: 5px">{{ sub.score }}
-                                                        </div>
+                                                        <div class="grid-content bg-purple-light" style="margin-top: 5px">{{ submission.score }}</div>
                                                     </el-col>
                                                     <el-col :span="8">
-                                                        <div class="grid-content bg-purple-light"
-                                                             style="margin-top: 2px">{{ sub.comment }}
-                                                        </div>
+                                                        <div class="grid-content bg-purple-light" style="margin-top: 2px">{{ submission.comment }}</div>
                                                     </el-col>
                                                     <el-col :span="4">
                                                         <div class="grid-content bg-purple-light">
@@ -134,7 +127,6 @@
                                                         </div>
                                                     </el-col>
                                                 </el-row>
-                                            </div>
                                         </el-card>
                                 </el-tabs>
                             </el-dialog>
@@ -152,19 +144,17 @@
 
 
 // import {Message} from "element-ui";
-// import {toNumber} from "vue/src/shared/util";
+
+import {Message} from "element-ui";
+import {getSubmissionToTask, readover} from "@/api/submission";
 
 export default {
     name: 'TeacherTask_submissionDetail',
-    el: "#task_submissionDetail",
     data() {
         return {
             activeName: 'first',
             score:" ",
             comment:" ",
-            submit: [
-                {score: "未评分", comment: "未给评语"}
-            ],
             form: {
                 name: '',
                 region: '',
@@ -180,104 +170,6 @@ export default {
             taskIndex: this.$route.query.taskIndex, //接收上个页面传过来的数据
             dialogFormVisible: "",
             submissions: [
-                {
-                    id: 1,
-                    submitterName: "aaa",
-                    teamID: "5",
-                    detail: "第五组需求分析报告",
-                    fileName: "分析报告.docx",
-                    filesize: "200KB",
-                    fileURL: "",
-                    targetID: "101",
-                    targetType: "0",
-                    score: "88",
-                    submitTime: "2023-03-21 17:08:58",
-                    comment: "完成的不错"
-                },
-                {
-                    id: 2,
-                    submitterName: "bbb",
-                    teamID: "4",
-                    detail: "第四组需求分析报告",
-                    fileName: "分析报告.docx",
-                    filesize: "200KB",
-                    fileURL: "",
-                    targetID: "101",
-                    targetType: "0",
-                    score: "76",
-                    submitTime: "2023-03-22 12:08:58",
-                    comment: "还可以，继续加油"
-                },
-                {
-                    id: 3,
-                    submitterName: "ddd",
-                    teamID: "2",
-                    detail: "第二组需求分析报告",
-                    fileName: "分析报告.docx",
-                    filesize: "200KB",
-                    fileURL: "",
-                    targetID: "101",
-                    targetType: "0",
-                    score: "95",
-                    submitTime: "2023-03-24 13:08:58",
-                    comment: "非常好"
-                },
-                {
-                    id: 4,
-                    submitterName: "ccc",
-                    teamID: "3",
-                    detail: "第三组需求分析报告",
-                    fileName: "分析报告.docx",
-                    filesize: "200KB",
-                    fileURL: "",
-                    targetID: "101",
-                    targetType: "0",
-                    score: "",
-                    submitTime: "2023-03-25 14:08:58",
-                    comment: ""
-                },
-                {
-                    id: 5,
-                    submitterName: "bbb",
-                    teamID: "8",
-                    detail: "第八组系统设计报告，绘制活动图",
-                    fileName: "分析报告.docx",
-                    filesize: "200KB",
-                    fileURL: "",
-                    targetID: "102",
-                    targetType: "0",
-                    score: "88",
-                    submitTime: "2023-03-02 17:08:58",
-                    comment: "完成的不错"
-                },
-                {
-                    id: 6,
-                    submitterName: "ccc",
-                    teamID: "1",
-                    detail: "第一组系统设计报告",
-                    fileName: "分析报告.docx",
-                    filesize: "200KB",
-                    fileURL: "",
-                    targetID: "102",
-                    targetType: "0",
-                    score: "",
-                    submitTime: "2023-04-11 17:08:58",
-                    comment: ""
-                },
-                {
-                    id: 7,
-                    submitterName: "ddd",
-                    teamID: "3",
-                    detail: "第三组程序代码",
-                    fileName: "分析报告.docx",
-                    filesize: "200KB",
-                    fileURL: "",
-                    targetID: "103",
-                    targetType: "0",
-                    score: "",
-                    submitTime: "2023-05-19 17:08:58",
-                    comment: ""
-                },
             ],
             titleGroups1: [
                 {title1: "提交人", title2: "团队编号", title3: "提交时间"}
@@ -298,31 +190,51 @@ export default {
         };
     },
     methods: {
-        getIndex(index) {
-            this.indexs = index;
+
+        async getList() {
+            console.log("taskIndex:"+this.taskIndex)
+            await getSubmissionToTask(this.taskIndex)
+                .then((res)=>{
+                    console.log("res:")
+                    console.log(res)
+                    if (res.code===200){
+                        this.submissions = res.data
+                        console.log("submissions:")
+                        console.log(this.submissions)
+                        Message.success(res.msg)
+                    }
+                }).catch((err)=>{
+                    Message.error(err)
+                })
         },
 
         //评分
         giveComment(submissionID, score, comment) {
             this.dialogFormVisible_comment = false
             console.log("给编号为"+submissionID+"的作业评分："+score+"，评语："+comment)
-            // readover({
-            //     "submissionId":submissionID,
-            //     "grade":toNumber(score),
-            //     "comment":comment,
-            // }).then((res)=>{
-            //         if (res.code===200){
-            //             Message.success(res.msg)
-            //         }
-            //     }).catch((err)=>{
-            //     Message.error(err)
-            // })
+            readover({
+                "submissionId":submissionID,
+                "grade":Number(score),
+                "comment":comment,
+            }).then((res)=>{
+                    if (res.code===200){
+                        Message.success(res.msg)
+                    }
+                }).catch((err)=>{
+                Message.error(err)
+            })
+        },
 
-        }
+        getIndex(index) {
+            this.indexs = index;
+        },
     },
 
     created() {
         console.log("teacher submission detail created. taskIndex="+this.taskIndex)
+        // console.log(typeof this.taskIndex) //number
+
+        this.getList()
     }
 }
 

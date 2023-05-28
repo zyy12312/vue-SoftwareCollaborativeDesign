@@ -42,7 +42,8 @@
                         </el-dialog>
                     </el-col>
                     <el-col :span="2">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.state}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px" v-if="data.state === 0">未发布</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px" v-else>已发布</div>
                     </el-col>
                     <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.createTime}}</div>
@@ -50,18 +51,21 @@
                     <el-col :span="2">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{data.releaseTime}}</div>
                     </el-col>
-                    <el-col :span="2" v-if="data.state === '未发布'">
+                    <el-col :span="2" v-if="data.state === 0">
                         <el-button type="primary" plain @click="publishData(data.id)">发布</el-button>
                     </el-col>
                     <el-col :span="2" v-else>
                         <el-button type="primary" plain disabled >发布</el-button>
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="success" plain @click="dialogFormVisible_edit = true;">编辑</el-button>
+                        <el-button type="success" plain @click="edit(index)">编辑</el-button>
                         <el-dialog :visible.sync="dialogFormVisible_edit" append-to-body>
                             <div>
-                                <el-input v-model="inputName">
+                                <el-input v-model="edited_data.title">
                                     <template slot="prepend">资料名称：</template>
+                                </el-input>
+                                <el-input v-model="edited_data.description">
+                                    <template slot="prepend">资料详情：</template>
                                 </el-input>
                             </div>
                             <div class="grid-content bg-purple-light">
@@ -108,7 +112,7 @@
                                 <el-button
                                     @click="dialogFormVisible_edit = false">取 消</el-button>
                                 <el-button type="primary"
-                                           @click="dialogFormVisible_edit = false; editDataConfirm(index)">确 定</el-button>
+                                           @click="dialogFormVisible_edit = false; editDataConfirm()">确 定</el-button>
                             </div>
                         </el-dialog>
                     </el-col>
@@ -121,8 +125,13 @@
                 <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px" >添加资料</el-button>
                 <el-dialog :visible.sync="dialogFormVisible_add" append-to-body>
                     <div>
-                        <el-input v-model="inputName">
-                            <template slot="prepend">资料名称：</template>
+                        <el-input v-model="added_data.title">
+                            <template slot="prepend">资料标题：</template>
+                        </el-input>
+                    </div>
+                    <div>
+                        <el-input v-model="added_data.description">
+                            <template slot="prepend">资料详情：</template>
                         </el-input>
                     </div>
                         <div class="grid-content bg-purple-light">
@@ -168,7 +177,7 @@
                         <el-button
                             @click="dialogFormVisible_add = false">取 消</el-button>
                         <el-button type="primary"
-                                   @click="dialogFormVisible_add = false; addDataConfirm(index)">确 定</el-button>
+                                   @click="dialogFormVisible_add = false; addDataConfirm()">确 定</el-button>
                     </div>
                 </el-dialog>
             </div>
@@ -179,30 +188,14 @@
 
 <script>
 import {Message} from "element-ui";
-import {createMaterial, deleteMaterial, editMaterial, releaseMaterial} from "@/api/material";
+import {createMaterial, deleteMaterial, editMaterial, getAllMaterials, releaseMaterial} from "@/api/material";
+import {getNowTime} from "@/utils";
 
 export default {
     name: "TeacherDataBank",
     data() {
         return {
-            edited_data: {
-                id: '',
-                state: '',
-                title: '',
-                createTime: '',
-                description: '',
-                releaseTime: '',
-                fileURLs: '',
-            },
-            added_data: {
-                id: '',
-                state: '',
-                title: '',
-                createTime: '',
-                description: '',
-                releaseTime: '',
-                fileURLs: '',
-            },
+            formLabelWidth: '120px',
             dialogFormVisible_upload: false,
             dialogFormVisible_edit: false,
             dialogFormVisible_add: false,
@@ -225,57 +218,56 @@ export default {
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
             }],
             indexs:0,
-            datas: [{
-                id: '201',
-                state: '已发布',
-                title: '需求分析报告要求',
-                createTime: '2023-03-23 09:00:00',
-                description: '需求分析报告要求ppt，包含上课要点',
-                releaseTime: '2023-03-24 09:00:00',
-                fileURLs: 'v1/v2/v3/v4/需求报告.pptx',
-                fileName: ''
-            },{
-                id: '201',
-                state: '已发布',
-                title: '系统设计课件',
-                createTime: '2023-03-23 09:00:00',
-                description: '系统设计课件ppt，包含上课要点',
-                releaseTime: '2023-04-24 09:00:00',
-                fileURLs: 'v1/v2/v3/v4/系统设计课件.pptx',
-                fileName: ''
-            },{
-                id: '201',
-                state: '未发布',
-                title: '代码提交要求',
-                createTime: '2023-04-23 09:00:00',
-                description: '代码提交要求ppt，包含上课要点',
-                releaseTime: '',
-                fileURLs: 'v1/v2/v3/v4/代码提交要求.pptx',
-                fileName: ''
-            }
-            ],
+            edited_data: {
+                id: '', //number
+                state: '', //number
+                title: '',
+                createTime: '',
+                description: '',
+            },
+            added_data: {
+                title: '',
+                createTime: '',
+                description: '',
+            },
+            datas: [],
             items:[
                 {title1:"资料标题",title2:"资料详情",title3:"附件名称",title4:"下载",title5:"资料状态",title6:"创建时间",title7:"发布时间"}
             ],
-            characters: [],
-            inputName: '',
-            inputDetail: '',
-            inputDeadline: '',
-            inputCharacter: ''
 
         }
     },
+
     methods: {
-        //编辑资料
-        editDataConfirm(index){
+        //获取任务列表
+        async getList() {
+            await getAllMaterials()
+                .then((res)=>{
+                    if (res.code===200){
+                        this.datas = res.data
+                        Message.success(res.msg)
+                    }
+                }).catch((err)=>{
+                    Message.error(err)
+                })
+        },
+
+        //编辑任务（点击编辑按钮）
+        edit(index){
             this.edited_data.id=this.datas[index].id
-            this.edited_data.character=this.datas[index].character
+            this.edited_data.createTime=this.datas[index].createTime
+            this.edited_data.title=this.datas[index].title
             this.edited_data.state=this.datas[index].state
-            console.log("edit1:inputTitle="+this.edited_data.inputTitle)
-            // console.log("edit1:id="+this.edited_data.id)
+            this.edited_data.description=this.datas[index].description
+            this.dialogFormVisible_edit = true
+        },
+
+
+        //编辑资料
+        editDataConfirm(){
+            console.log("edit1:title="+this.edited_data.title)
             editMaterial(this.edited_data)
                 .then((res)=>{
-                    console.log("edit:inputTitle="+this.edited_data.inputTitle)
                     if (res.code===200){
                         Message.success(res.msg)
                     }
@@ -283,25 +275,24 @@ export default {
                 Message.error(err)
             })
         },
-        edit_confirm(dataID,dataName){
-            console.log("完成第"+dataID+"个资料的编辑操作，修改后的资料名称："+dataName);
-        },
 
 
         //新建资料
-        addDataConfirm(index){
-            this.edited_data.id=this.datas[index].id
-            this.edited_data.character=this.datas[index].character
-            this.edited_data.state=this.datas[index].state
-            console.log("add1:inputTitle="+this.added_data.inputTitle)
+        addDataConfirm(){
+            this.added_data.createTime=getNowTime()
+            console.log("add1:title="+this.added_data.title)
+            console.log("add1:description="+this.added_data.description)
+            console.log("add1:createTime="+this.added_data.createTime)
             createMaterial(this.added_data)
                 .then((res)=>{
-                    console.log("add2:inputTitle="+this.added_data.inputTitle)
+                    // this.added_data.title=null
+                    // this.added_data.description=null
                     if (res.code===200){
                         Message.success(res.msg)
                     }
                 }).catch((err)=>{
-                Message.error(err)
+
+                Message.error(err.message)
             })
         },
 
@@ -326,9 +317,8 @@ export default {
                     });
                 });
             console.log("delete1:deleted_id="+dataId)
-            deleteMaterial(dataId)
+            deleteMaterial([dataId])
                 .then((res)=>{
-                    console.log("delete2:deleted_id="+dataId)
                     if (res.code===200){
                         Message.success(res.msg)
                     }
@@ -340,10 +330,8 @@ export default {
         //发布资料
         publishData(dataID){
             console.log("publish1:published_id="+dataID)
-            let dataIDList = [dataID]
-            releaseMaterial(dataIDList)
+            releaseMaterial([dataID])
                 .then((res)=>{
-                    console.log("publish2:published_id="+dataID)
                     if (res.code===200){
                         Message.success(res.msg)
                     }
@@ -371,19 +359,10 @@ export default {
         clicks(index){
             this.indexs=index;
         },
-        loadAll() {
-            return [
-                { "value": "小组长"},
-                { "value": "产品经理"},
-                { "value": "开发经理"},
-                { "value": "质量和计划经理"},
-                { "value": "测试经理"},
-            ];
-        },
     },
 
     mounted() {
-        this.characters = this.loadAll();
+        this.getList()
     }
 
 }

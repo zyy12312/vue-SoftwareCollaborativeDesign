@@ -31,16 +31,17 @@
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.handledTotal}}</div>
                     </el-col>
                     <el-col :span="2">
-                        <div class="grid-content bg-purple-light" style="margin-top: 10px">{{task.state}}</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px" v-if="task.state===0">未发布</div>
+                        <div class="grid-content bg-purple-light" style="margin-top: 10px" v-else>已发布</div>
                     </el-col>
                     <el-col :span="2" v-if="task.state === 0">
-                        <el-button type="primary" plain @click="publishTask(task.id)">发布</el-button>
+                        <el-button type="primary" plain @click="publishTask(task.id,index)">发布</el-button>
                     </el-col>
                     <el-col :span="2" v-else>
                         <el-button type="primary" plain disabled>发布</el-button>
                     </el-col>
-                    <el-col :span="2" v-if="task.state === 1">
-                        <el-button type="success" plain @click="dialogFormVisible_edit = true;">编辑</el-button>
+                    <el-col :span="2">
+                        <el-button type="success" plain @click="edit(index)">编辑</el-button>
                         <el-dialog :visible.sync="dialogFormVisible_edit" append-to-body>
                             <div>
                                 <el-input v-model="edited_task.inputTitle">
@@ -63,8 +64,7 @@
                                 <el-autocomplete
                                     class="inline-input"
                                     v-model="edited_task.characterLabel"
-                                    :fetch-suggestions="querySearch"
-                                    @select="handleSelect">
+                                    :fetch-suggestions="querySearch">
                                     <template slot="prepend">作业负责人：</template>
                                 </el-autocomplete>
                             </div>
@@ -116,9 +116,6 @@
                             </div>
                         </el-dialog>
                     </el-col>
-                    <el-col :span="2" v-else>
-                        <el-button type="success" plain disabled>编辑</el-button>
-                    </el-col>
                     <el-col :span="2">
                         <el-button type="danger" plain @click="deleteTaskConfirm(task.id)">删除</el-button>
                     </el-col>
@@ -150,8 +147,7 @@
                         <el-autocomplete
                             class="inline-input"
                             v-model="added_task.characterLabel"
-                            :fetch-suggestions="querySearch"
-                            @select="handleSelect">
+                            :fetch-suggestions="querySearch">
                             <template slot="prepend">作业负责人：</template>
                         </el-autocomplete>
                     </div>
@@ -212,6 +208,7 @@
 
 import {createTask, deleteTask, editTask, releaseTask, taskList} from "@/api/task";
 import {Message} from "element-ui";
+// import {toNumber} from "vue/src/shared/util";
 export default {
     name: "TeacherTask",
     data() {
@@ -271,33 +268,7 @@ export default {
                 {title1:"交付历史与批改记录",title2:"原始成绩"}
             ],
             indexs:0,
-            // 作业标题title,截止时间endTime,作业负责人characterLabel,已交/总计handledTotal,作业状态state
-            tasks: [
-            // {id: 101,
-            //     title: '撰写需求分析报告，绘制用例图',
-            //     endTime: '2023.5.1',
-            //     characterType: '',
-            //     characterLabel: '产品经理',
-            //     handledTotal: '6/6',
-            //     state: 1
-            // },{
-            //     id: 102,
-            //     title: '撰写系统设计报告，绘制活动图',
-            //     endTime: '2023.6.1',
-            //     characterType: '',
-            //     characterLabel: '开发经理',
-            //     handledTotal: '5/6',
-            //     state: 1
-            // },{
-            //     id: 103,
-            //     title: '提交程序代码',
-            //     endTime: '2023.6.10',
-            //     characterType: '',
-            //     characterLabel: '开发经理',
-            //     handledTotal: '0/6',
-            //     state: 0
-            // },
-            ],
+            tasks: [],
             titles:[
                 {title1:"作业标题",title2:"截止时间",title3:"作业负责人",title4:"已交/总计",title5:"作业状态"}
             ]
@@ -318,12 +289,24 @@ export default {
                 })
         },
 
-        //编辑任务
+        //编辑任务（点击编辑按钮）
+        edit(index){
+            console.log(index)
+            this.edited_task.id=this.tasks[index].id
+            this.edited_task.inputDetail=this.tasks[index].detail
+            this.edited_task.inputEndTime=this.tasks[index].endTime
+            this.edited_task.inputTitle=this.tasks[index].title
+            this.edited_task.characterType=this.tasks[index].characterType
+            this.edited_task.characterLabel=this.tasks[index].characterLabel
+            this.edited_task.state=this.tasks[index].state
+            this.dialogFormVisible_edit = true
+        },
+
+
+        //编辑任务（编辑后点击确认）
         editTaskConfirm(index){
             this.edited_task.characterType=1 // 通过请求找到对应的角色类型（通过字符串类型的角色找数字类型的角色）
 
-            this.edited_task.id=this.tasks[index].id
-            this.edited_task.state=this.tasks[index].state
             console.log("edit1:inputTitle="+this.edited_task.inputTitle)
             console.log("edit1:characterType="+this.edited_task.characterType)
             console.log("edit1:characterLabel="+this.edited_task.characterLabel)
@@ -338,8 +321,14 @@ export default {
                 "state":this.edited_task.state}
             )
                 .then((res)=>{
-                    console.log("edit:inputTitle="+this.edited_task.inputTitle)
                     if (res.code===200){
+                        this.tasks[index].id=this.edited_task.id
+                        this.tasks[index].detail=this.edited_task.inputDetail
+                        this.tasks[index].endTime=this.edited_task.inputEndTime
+                        this.tasks[index].title=this.edited_task.inputTitle
+                        this.tasks[index].characterType=this.edited_task.characterType
+                        this.tasks[index].characterLabel=this.edited_task.characterLabel
+                        this.tasks[index].state=this.edited_task.state
                         Message.success(res.msg)
                     }
                 }).catch((err)=>{
@@ -363,7 +352,6 @@ export default {
                 "characterLabel":this.added_task.characterLabel,
                 "state":this.added_task.state})
                 .then((res)=>{
-                    console.log("add2:inputTitle="+this.added_task.inputTitle)
                     if (res.code===200){
                         Message.success(res.msg)
                     }
@@ -393,8 +381,7 @@ export default {
                     });
                 });
             console.log("delete1:deleted_id="+taskId)
-            let taskIDList = [taskId]
-            deleteTask(taskIDList)
+            deleteTask([taskId])
                 .then((res)=>{
                     console.log("delete2:deleted_id="+taskId)
                     if (res.code===200){
@@ -406,15 +393,16 @@ export default {
         },
 
         //发布任务
-        publishTask(taskId){
+        publishTask(taskId,index){
             console.log("publish1:published_id="+taskId)
-            releaseTask(taskId)
+            releaseTask([taskId])
                 .then((res)=>{
-                    console.log("publish2:published_id="+taskId)
                     if (res.code===200){
+                        this.tasks[index].state=1
                         Message.success(res.msg)
                     }
                 }).catch((err)=>{
+
                 Message.error(err)
             })
         },
@@ -447,9 +435,6 @@ export default {
                 { "value": "质量和计划经理"},
                 { "value": "测试经理"},
             ];
-        },
-        handleSelect(item) {
-            console.log(item);
         },
 
         //跳转至批阅作业详情界面

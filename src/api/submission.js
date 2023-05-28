@@ -37,7 +37,7 @@ export function getSubmissionListToSubTask(subTaskID) {
 export function readover(result) {
     return request({
         url: '/submission/readover',
-        method: 'DELETE',
+        method: 'POST',
         data:JSON.stringify(result)
     })
 }

@@ -28,7 +28,7 @@
                 </div>
 
                 <div v-for="grade in gradeData" v-bind:key="grade.id">
-                        <el-row>
+                        <el-row style="margin-top: 20px">
                             <el-col :span="4">
                                 <div class="grid-content bg-purple">{{ grade.studentId }}</div>
                             </el-col>

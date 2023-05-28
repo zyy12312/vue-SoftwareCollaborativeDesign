@@ -21,7 +21,7 @@
                     </div>
                 <div v-for="(submission,outIndex) in submissions" v-bind:key="outIndex">
                     <div v-if="Number(submission.targetID)===Number(taskIndex)">
-                        <el-row>
+                        <el-row style="margin-top: 20px">
                             <el-col :span="6">
                                 <div class="grid-content bg-purple">{{ submission.submitter.name }}</div>
                             </el-col>

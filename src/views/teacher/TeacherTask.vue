@@ -17,7 +17,7 @@
                 </span>
             </div>
             <div v-for="(task,index) in tasks" v-bind:key="index">
-                <el-row>
+                <el-row style="margin-top: 20px">
                     <el-col :span="7">
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{task.title}}</div>
                     </el-col>
@@ -125,7 +125,7 @@
                 </el-row>
             </div>
             <div class="grid-content bg-purple-light" >
-                <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px" >添加作业</el-button>
+                <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px;margin-top: 20px" >添加作业</el-button>
                 <el-dialog :visible.sync="dialogFormVisible_add" append-to-body>
                     <div>
                         <el-input v-model="added_task.inputTitle">
@@ -163,7 +163,7 @@
                                             <el-upload
                                                 class="upload-demo"
                                                 ref="upload"
-                                                action="https://jsonplaceholder.typicode.com/posts/"
+                                                action="http://lainhavenhair.icu:9090/file/upload/"
                                                 :on-preview="handlePreview"
                                                 :on-remove="handleRemove"
                                                 :file-list="fileList"

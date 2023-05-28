@@ -18,7 +18,7 @@
                 </span>
             </div>
             <div v-for="(data,index) in datas" v-bind:key="index">
-                <el-row>
+                <el-row style="margin-top: 20px">
 <!--                title1:"资料标题",title2:"资料详情",title3:"附件名称",title4:"下载",title5:"资料状态",title6:"创建时间",title7:"发布时间"-->
                     <el-col :span="4">
                         <div class="grid-content bg-purple-light" style="margin-top: 5px">{{data.title}}</div>
@@ -122,7 +122,7 @@
                 </el-row>
             </div>
             <div class="grid-content bg-purple-light" >
-                <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px" >添加资料</el-button>
+                <el-button type="primary" @click="dialogFormVisible_add = true;"  style="font-size: 16px;margin-top: 20px" >添加资料</el-button>
                 <el-dialog :visible.sync="dialogFormVisible_add" append-to-body>
                     <div>
                         <el-input v-model="added_data.title">

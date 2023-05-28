@@ -71,6 +71,20 @@ export const baseRoutes = [
                         hidden: true
                     },
                     {
+                        path: "teachergroupchat/:teamId",
+                        name: "TeacherGroupChat",
+                        component : ()=> import('@/views/teacher/TeacherGroupChat.vue'),
+                        props:true,
+                        hidden: true
+                    },
+                    {
+                        path: "teacherrole",
+                        name: "TeacherRole",
+                        component : ()=> import('@/views/teacher/TeacherRole.vue'),
+                        props:true,
+                        hidden: true
+                    },
+                    {
                         path: "groupchat",
                         component : ()=> import('@/views/GroupChat.vue'),
                         hidden: true

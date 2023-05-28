@@ -17,7 +17,8 @@ export default ({
                 "thirteen" : '/teacherteam',
                 "fourteen" : '/teachergrade',
                 "fifteen" : '/teachertask',
-                "sixteen" : '/teacherdatabank'
+                "sixteen" : '/teacherdatabank',
+                "seventeen" : '/teacherrole'
             }
             //active:0
         };
@@ -80,6 +81,9 @@ export default ({
                     <!--                <TeacherTask></TeacherTask>-->
                 </el-tab-pane>
                 <el-tab-pane label="资料管理" name="sixteen">
+                    <!--                <TeacherDataBank></TeacherDataBank>-->
+                </el-tab-pane>
+                <el-tab-pane label="角色选择" name="seventeen">
                     <!--                <TeacherDataBank></TeacherDataBank>-->
                 </el-tab-pane>
             </el-tabs>

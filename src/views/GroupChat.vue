@@ -21,12 +21,17 @@
                 <el-col :span="24" style="text-align: left">
                     <div  v-for="usr in users" :key="usr.name">
                     <div class="grid-content bg-purple-dark " v-if="usr.teamId===info.teamID && usr.id===info.senderID">
-
                         <div class="info">
                             <div class="name">{{ usr.name }}</div>
                             <div class="student-id"> <el-avatar round width="50px" height="50px" :src="usr.avatarURL" class="avatar"></el-avatar>{{info.detail}}</div>
                         </div>
                     </div>
+                        <div class="grid-content bg-purple-dark " v-else-if="usr.role===1 && usr.id===info.senderID">
+                            <div class="info">
+                                <div class="name">{{ usr.name }}</div>
+                                <div class="student-id"> <el-avatar round width="50px" height="50px" :src="usr.avatarURL" class="avatar"></el-avatar>{{info.detail}}</div>
+                            </div>
+                        </div>
                     </div>
                 </el-col>
             </el-row>
@@ -43,7 +48,7 @@
                 </el-input>
             </div></el-col>
             <el-col :span="4"><div class="grid-content bg-purple-light">
-                    <el-button type="primary" style="margin-top: 10px" @click="sends(textarea)">发送</el-button>
+                    <el-button type="primary" style="margin-top: 10px" @click="sends(textarea);refresh">发送</el-button>
             </div></el-col>
         </el-row>
 
@@ -91,7 +96,7 @@ export default {
                 // {detail:"你信不信我给你啪啪两下！",sendTime:"",senderID:"2011110108",teamID:""},
             ],
             users:[
-                {name:"",avaterURL: "",teamId:"",id:''}
+                {name:"",avaterURL: "",teamId:"",id:'',role:''}
             ],
             send: {detail:"",sendTime:'',senderID:this.$store.getters.user.id,teamID:this.$store.getters.user.team.teamID}
 
@@ -119,6 +124,9 @@ export default {
         });
     },
     methods:{
+        refresh() {
+            location.reload();
+        },
         sends(textarea){
             console.log("详情:"+this.textarea.detail)
             console.log("时间:"+this.textarea.sendTime)

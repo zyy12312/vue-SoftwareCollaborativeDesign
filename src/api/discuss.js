@@ -7,6 +7,12 @@ export function createDiscuss(discuss) {
         data:JSON.stringify(discuss)
     })
 }
+export function discussStatistic() {
+    return request({
+        url: '/discuss/getStatistic',
+        method: 'GET',
+    })
+}
 export function createReply(reply) {
     return request({
         url: '/discuss/createReply',

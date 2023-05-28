@@ -15,6 +15,12 @@ export function taskDetail(taskID) {
         }
     })
 }
+export function taskStatistic() {
+    return request({
+        url: '/task/getStatistic',
+        method: 'GET',
+    })
+}
 export function subTaskList(taskID) {
     return request({
         url: '/task/subTaskList',

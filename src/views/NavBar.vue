@@ -13,7 +13,7 @@
                     <el-menu-item index="1-2" @click="$router.push('/login')">退出登录</el-menu-item>
                 </el-submenu>
             </el-menu>
-            <el-avatar round width="50px" height="50px" :src="avaterURL" class="avatar"/>
+            <el-avatar round width="50px" height="50px" :src="this.$store.getters.user.avatarURL" class="avatar"/>
 
         </div>
     </el-header>

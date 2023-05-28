@@ -6,13 +6,15 @@
         <el-col :span="24"><div class="grid-content bg-purple-dark">
             <el-button @click="exportData" type="success" style="float: right">导出成绩<i class=" el-icon-position"></i></el-button></div>
         </el-col></el-row>
-    <div v-for="score in scores"  :key="score" class="text item " >
-    <el-row>
-        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.teacherScore}}分<div class="font">教师评分</div></div></el-col>
-        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.overallScore}}分<div class="font">综合成绩</div></div></el-col>
-        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.finalScore}}分<div class="font">期末成绩</div></div></el-col>
-    </el-row>
-    </div>
+
+    <el-row >
+        <div v-for="score in scores.submissions" :key="score" class="text item ">
+        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.score}}分<div class="font">教师评分</div></div></el-col>
+<!--        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.score}}分<div class="font">综合成绩</div></div></el-col>-->
+<!--        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.score}}分<div class="font">期末成绩</div></div></el-col>-->
+
+        </div></el-row>
+
     <el-card class="box-card" >
         <div slot="header" class="clearfix" >
             <span v-for="item in items" :key="item" >
@@ -59,9 +61,9 @@ export default {
         return{
             dialogFormVisible: false,
             indexs:0,
-            scores:[
-                {teacherScore:45,overallScore:40,finalScore:85}
-            ],
+            scores:{
+                // {teacherScore:45,overallScore:40,finalScore:85}
+        },
             items:[
                 {title1:"任务",title2:"提交记录",title3:"评分",title4:"查看评语",}
             ],
@@ -75,12 +77,14 @@ export default {
         getStuGrade().then((res)=>{
             if (res.code===200){
                 let resultbody = res.data
-                this.tasks = resultbody
+                console.log(resultbody)
+                this.scores = resultbody
                 Message.success(res.msg)
             }
         }).catch((err)=>{
             Message.error(err)
         });
+
     },
     methods:{
         getIndex(index){

@@ -31,30 +31,30 @@
                 </el-row>
             </div>
         </el-card>
-        <el-card v-else v-for="inv in invitation" :key="inv.teamId">
-            <div slot="header" class="clearfix" v-if="inv.state==='未接受'">
+        <el-card v-else v-for="inv in invitation" :key="inv">
+            <div slot="header" class="clearfix" v-if="inv.state===0">
                 <span>分组邀请</span>
-                <el-button style="float: right; padding: 3px 0" type="text" @click="refuse(inv.teamId);inv.state='已拒绝' ">
+                <el-button style="float: right; padding: 3px 0" type="text" @click="refuse(inv.teamID);inv.state=2 ">
                     拒绝邀请
                 </el-button>
-                <a v-if="inv.state==='已拒绝'">
+                <a v-if="inv.state===2">
                     <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
-                               @click="accept(inv.teamId);inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId" disabled>接受邀请
+                               @click="accept(inv.teamID);inv.state=1;user.teamID=inv.teamID;haveGroup=inv.teamID" disabled>接受邀请
                     </el-button>
                 </a>
                 <a v-else>
                     <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
-                               @click="accept(inv.teamId);inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId">接受邀请
+                               @click="accept(inv.teamID);inv.state=1;user.teamID=inv.teamID;haveGroup=inv.teamID">接受邀请
                     </el-button>
                 </a>
             </div>
-            <div slot="header" class="clearfix" v-else-if="inv.state==='已拒绝'">
+            <div slot="header" class="clearfix" v-else-if="inv.state===2">
                 <span>分组邀请</span>
-                <el-button style="float: right; padding: 3px 0" type="text" @click="refuse(inv.teamId);inv.state='已拒绝' ">
+                <el-button style="float: right; padding: 3px 0" type="text" @click="refuse(inv.teamID);inv.state=2 ">
                     拒绝邀请
                 </el-button>
                 <el-button style="float: right; padding: 3px 0;margin-right: 30px" type="text"
-                           @click="accept(inv.teamId);inv.state='已接受';user.teamId=inv.teamId;haveGroup=inv.teamId" disabled>接受邀请
+                           @click="accept(inv.teamID);inv.state=1;user.teamID=inv.teamID;haveGroup=inv.teamID" disabled>接受邀请
                 </el-button>
             </div>
             <div v-for="cla in clasp" :key="cla.title1" class="item font">
@@ -79,19 +79,24 @@
             <div class="text item">
                 <el-row>
                     <el-col :span="8">
-                        <div class="grid-content bg-purple-light">{{ inv.teamId }}</div>
+                        <div class="grid-content bg-purple-light">第{{ inv.teamID }}组</div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="grid-content bg-purple-light">{{ inv.leader }}</div>
+                        <div class="grid-content bg-purple-light">{{ inv.inviter.name }}</div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="grid-content bg-purple-light">{{ inv.role }}</div>
+                        <div class="grid-content bg-purple-light" v-if="inv.characterID===2">产品经理</div>
+                        <div class="grid-content bg-purple-light" v-else-if="inv.characterID===3">开发经理</div>
+                        <div class="grid-content bg-purple-light" v-else-if="inv.characterID===4">计划质量经理</div>
+                        <div class="grid-content bg-purple-light" v-else-if="inv.characterID===5">测试经理</div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="grid-content bg-purple-light">{{ inv.invitationTime }}</div>
+                        <div class="grid-content bg-purple-light">{{ inv.invitationTime}}</div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="grid-content bg-purple-light">{{ inv.state }}</div>
+                        <div class="grid-content bg-purple-light" v-if="inv.state===0">未接受</div>
+                        <div class="grid-content bg-purple-light" v-else-if="inv.state===1">已接受</div>
+                        <div class="grid-content bg-purple-light" v-else-if="inv.state===2">已拒绝</div>
                     </el-col>
                 </el-row>
             </div>
@@ -171,10 +176,10 @@ export default {
 
         accept(id) {
             acceptInvitation(id).then((res)=>{
-                if (res.data.code===200){
-                    // let resultbody = res.data.data
-                    // this.invitation = resultbody
-                    Message.success(res.data.msg)
+                if (res.code===200){
+                    let resultbody = res.data.data
+                    this.invitation = resultbody
+                    Message.success(res.msg)
                 }
             }).catch((err)=>{
                 Message.error(err)
@@ -182,10 +187,10 @@ export default {
         },
         refuse(id) {
             rejectInvitation(id).then((res)=>{
-                if (res.data.code===200){
-                    // let resultbody = res.data.data
-                    // this.invitation = resultbody
-                    Message.success(res.data.msg)
+                if (res.code===200){
+                    let resultbody = res.data
+                    this.invitation = resultbody
+                    Message.success(res.msg)
                 }
             }).catch((err)=>{
                 Message.error(err)

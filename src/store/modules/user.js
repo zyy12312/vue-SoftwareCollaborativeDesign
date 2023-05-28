@@ -6,7 +6,7 @@ import {resetRouter} from "@/router";
 const getDefaultState = () => {
     return {
         token: getToken(),
-
+        
         User:{
             id: 8,
             account: "2011110108",

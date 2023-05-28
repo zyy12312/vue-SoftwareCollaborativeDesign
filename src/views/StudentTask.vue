@@ -179,7 +179,7 @@
                                                                                         v-model="form1.endTime"
                                                                                         type="datetime"
                                                                                         placeholder="选择日期时间"
-                                                                                        format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                                                                                        format="yyyy-MM-dd hh:mm:ss" value-format="yyyy-MM-dd hh:mm:ss"
                                                                                         align="right"
                                                                                         :picker-options="pickerOptions1">
                                                                                  </el-date-picker>
@@ -195,7 +195,7 @@
                                                                     </el-row>
                                                                     </span>
                                                                 </div>
-                                                                <div v-for="role in roles" :key="role.role"
+                                                                <div v-for="(role,index) in roles" :key="index"
                                                                      class="text item">
                                                                     <el-row>
                                                                         <el-col :span="6">
@@ -208,7 +208,7 @@
                                                                             <div class="grid-content bg-purple-light"
                                                                                  style="margin-top: 13px">
                                                                                 <el-input placeholder="请输入内容"
-                                                                                          v-model="form1.subtask.detail">
+                                                                                          v-model="form1.subtask[index].detail">
                                                                                 </el-input>
                                                                             </div>
                                                                         </el-col>
@@ -553,7 +553,7 @@ export default {
                 detail: '',
                 submitTime: '',
                 targetType: '',
-                filesURL:'',
+                filesURL:[],
             },
             form1:{
                 teamID:this.$store.getters.user.team.teamID,
@@ -561,11 +561,27 @@ export default {
                     {
                         characterType:1,
                         detail:''
-                    }
+                    },
+                    {
+                        characterType:2,
+                        detail:''
+                    },
+                    {
+                        characterType:3,
+                        detail:''
+                    },
+                    {
+                        characterType:4,
+                        detail:''
+                    },
+                    {
+                        characterType:5,
+                        detail:''
+                    },
                 ],
                 endTime:'',
                 targetID:this.indexs,
-                filesURL:'',
+                filesURL:[],
             },
             input4: '',
             formLabelWidth: '120px',

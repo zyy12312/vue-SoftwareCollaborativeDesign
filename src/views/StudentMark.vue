@@ -2,16 +2,16 @@
 <template>
 <el-main style="background-color: #ffffff">
 <!--    #eef4fa-->
-    <el-row>
-        <el-col :span="24"><div class="grid-content bg-purple-dark">
-            <el-button @click="exportData" type="success" style="float: right">导出成绩<i class=" el-icon-position"></i></el-button></div>
-        </el-col></el-row>
+<!--    <el-row>-->
+<!--        <el-col :span="24"><div class="grid-content bg-purple-dark">-->
+<!--            <el-button @click="exportData" type="success" style="float: right">导出成绩<i class=" el-icon-position"></i></el-button></div>-->
+<!--        </el-col></el-row>-->
 
     <el-row >
-        <div v-for="score in scores.submissions" :key="score" class="text item ">
-        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.score}}分<div class="font">教师评分</div></div></el-col>
-<!--        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.score}}分<div class="font">综合成绩</div></div></el-col>-->
-<!--        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{score.score}}分<div class="font">期末成绩</div></div></el-col>-->
+        <div  class="text item ">
+        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{scores.finalScore.toFixed(1)}}分<div class="font">教师评分</div></div></el-col>
+        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{scores.groupScore.toFixed(1)}}分<div class="font">综合成绩</div></div></el-col>
+        <el-col :span="8"><div class="grid-content1 bg-purple-dark boxx">{{scores.totalScore.toFixed(1)}}分<div class="font">期末成绩</div></div></el-col>
 
         </div></el-row>
 
@@ -26,11 +26,11 @@
             </el-row>
             </span>
         </div>
-        <div v-for="(task,id) in tasks" :key="id" class="text item" style="text-align: left;">
+        <div v-for="(task,id) in scores.submissions" :key="task.id" class="text item" style="text-align: left;">
             <el-row>
-                <el-col :span="9"><div class="grid-content bg-purple " style="margin-top: 12px">{{task.name}}</div></el-col>
-                <el-col :span="5"><div class="grid-content bg-purple-light " style="margin-top: 12px">{{task.record}}</div></el-col>
-                <el-col :span="5"><div class="grid-content bg-purple " style="margin-top: 11px">{{task.mark}}</div></el-col>
+                <el-col :span="9"><div class="grid-content bg-purple " style="margin-top: 12px">{{task.detail}}</div></el-col>
+                <el-col :span="5"><div class="grid-content bg-purple-light " style="margin-top: 12px">{{task.submitTime}}</div></el-col>
+                <el-col :span="5"><div class="grid-content bg-purple " style="margin-top: 11px">{{task.score}}</div></el-col>
                 <el-col :span="5">
                     <div class="grid-content bg-purple-light ">
                             <el-button type="text" @click="dialogFormVisible = true;getIndex(id)"  style="font-size: 16px" >点击查看</el-button>

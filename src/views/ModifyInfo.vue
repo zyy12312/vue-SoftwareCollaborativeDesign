@@ -52,9 +52,9 @@
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess"
                                 auto-upload:true
-                                v-model="form.avaterURL"
+                                v-model="form.avatarURL"
                                 :before-upload="beforeAvatarUpload">
-                                <img v-if="form.avaterURL" :src="form.avaterURL" class="avatar">
+                                <img v-if="form.avatarURL" :src="form.avatarURL" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
@@ -81,6 +81,10 @@ import {editUser} from "@/api/user";
 
 export default {
     name:"ModifyInfo",
+    mounted() {
+
+    },
+
     data(){
         return{
             imageUrl: '',
@@ -92,8 +96,10 @@ export default {
                 {title:"用户账号："},{title:"用户角色："},{title:"用户性别："},{title:"用户组号：",}
             ],
             form: {
+                teamId:this.$store.getters.user.team.teamID,
+                id:this.$store.getters.user.id,
                 name: '',
-                avaterURL:'',
+                avatarURL:'https://cos-for-scd-1312783961.cos.ap-shanghai.myqcloud.com/defaultAvator.png',
                 password:'',
                 sex: '',
             }
@@ -101,6 +107,7 @@ export default {
     },
     methods:{
         onSubmit(form) {
+            console.log('id：'+form.id);
             console.log('姓名：'+form.name);
             console.log('头像：'+form.avaterURL);
             console.log('密码：'+form.password);
@@ -109,6 +116,11 @@ export default {
                 if (res.code===200){
                     let resultbody = res.data
                     this.users = resultbody
+                    this.$store.dispatch("user/update",resultbody)
+                    console.log("1112321")
+                    console.log(this.$store.getters.user)
+                    // this.$store.getters.user.avatarURL =this.users.avaterURL
+                    // this.$store.getters.user.sex = this.users.sex
                     Message.success(res.msg)
                 }
             }).catch((err)=>{

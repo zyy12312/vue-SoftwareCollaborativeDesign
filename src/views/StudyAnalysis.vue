@@ -21,10 +21,10 @@
                     <p>/讨论总帖子数</p>
                 </div>
                 </el-col>
-                    <div v-for="discus in discuss" :key="discus" class="grid-content bg-purple-dark" >
-                        <a style="font-family: 'Curlz MT',serif;font-size: 70px;color: #13ce66">{{discus.mydiscuss}}</a>
+                    <div  class="grid-content bg-purple-dark" >
+                        <a style="font-family: 'Curlz MT',serif;font-size: 70px;color: #13ce66">{{discuss.submitAmount}}</a>
                         <a style="font-size: 30px"> /</a>
-                        <a style="font-family: 'Curlz MT',serif;font-size: 30px;color: #263445"> {{discus.alldiscuss}}</a>
+                        <a style="font-family: 'Curlz MT',serif;font-size: 30px;color: #263445"> {{discuss.total}}</a>
                     </div>
             </div></el-col>
             <el-col :span="12">
@@ -37,10 +37,10 @@
                         <p>/作业布置总数</p>
                     </div>
                     </el-col>
-                    <div v-for="task in tasks" :key="task" class="grid-content bg-purple-dark" >
-                        <a style="font-family: 'Curlz MT',serif;font-size: 70px;color: #13ce66">{{task.submittask}}</a>
+                    <div  class="grid-content bg-purple-dark" >
+                        <a style="font-family: 'Curlz MT',serif;font-size: 70px;color: #13ce66">{{tasks.submitAmount}}</a>
                         <a style="font-size: 30px"> /</a>
-                        <a style="font-family: 'Curlz MT',serif;font-size: 30px;color: #263445"> {{task.alltask}}</a>
+                        <a style="font-family: 'Curlz MT',serif;font-size: 30px;color: #263445"> {{tasks.taskAmount}}</a>
                     </div>
                 </div></el-col>
         </el-row>
@@ -49,30 +49,47 @@
 </template>
 
 <script >
+import {Message} from "element-ui";
+import {discussStatistic} from "@/api/discuss";
+import {taskStatistic} from "@/api/task";
+
 export default {
     name:"StudyAnalysis",
     data(){
         return{
             name:this.$store.getters.user.name,
-            studies:[
-                {times: 10,timelength:"00 小时 22 分 "}
-            ],
             discuss:[
-                {mydiscuss:1,alldiscuss:10}
-            ],
-            notice:[
-                {readnotice:1,allnotice:5}
-            ],
-            data:[
-                {downdata:2,alldata:5}
+                // {mydiscuss:1,alldiscuss:10}
             ],
             tasks:[
-                {submittask:1,alltask:2}
+                // {submittask:1,alltask:2}
             ]
         }
     },
     methods:{
 
+    },
+    mounted() {
+        discussStatistic().then((res)=>{
+            if (res.code===200){
+                let resultbody = res.data
+                console.log(resultbody)
+                this.discuss = resultbody
+                Message.success(res.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
+        taskStatistic().then((res)=>{
+            if (res.code===200){
+                let resultbody = res.data
+                console.log(resultbody)
+                this.tasks = resultbody
+                Message.success(res.msg)
+            }
+        }).catch((err)=>{
+            Message.error(err)
+        });
     }
 }
 </script>

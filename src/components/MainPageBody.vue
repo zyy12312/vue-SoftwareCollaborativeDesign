@@ -19,6 +19,7 @@ export default ({
                 "fifteen" : '/teachertask',
                 "sixteen" : '/teacherdatabank',
                 "seventeen" : '/teacherrole'
+
             }
             //active:0
         };
@@ -41,7 +42,11 @@ export default ({
         let currentTag = (url).substring((url).lastIndexOf("/"))
         // console.log("current"+currentTag)
         if (currentTag === '/homepage'){
-            this.activeName = 'first'
+            if(this.$store.getters.user.role === 1 && this.$store.getters.user.finalScore === 0){
+                this.activeName = 'seventeen'
+            } else{
+                this.activeName = 'first'
+            }
             let basepath = this.$route.path
             this.$router.fullPath
             // console.log("bp  "+basepath)
@@ -64,6 +69,12 @@ export default ({
 <template>
     <el-col>
         <keep-alive>
+            <el-tabs v-if="$store.getters.user.role === 1 && $store.getters.user.finalScore === 0" v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="角色选择" name="seventeen">
+                    <!--                <TeacherDataBank></TeacherDataBank>-->
+                </el-tab-pane>
+            </el-tabs>
+
             <el-tabs v-if="$store.getters.user.role === 1" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="章节" name="first">
                     <!--                <ChapterDetail></ChapterDetail>-->
@@ -83,9 +94,8 @@ export default ({
                 <el-tab-pane label="资料管理" name="sixteen">
                     <!--                <TeacherDataBank></TeacherDataBank>-->
                 </el-tab-pane>
-                <el-tab-pane label="角色选择" name="seventeen">
-                    <!--                <TeacherDataBank></TeacherDataBank>-->
-                </el-tab-pane>
+<!--                <el-tab-pane label="角色选择" name="seventeen">-->
+<!--                </el-tab-pane>-->
             </el-tabs>
             <el-tabs v-else-if="$store.getters.user.role === 0" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="章节" name="first">

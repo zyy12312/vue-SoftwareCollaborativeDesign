@@ -15,14 +15,14 @@
                 </div>
 
                 <div>
-                    <el-input v-model="characterName1" placeholder="请输入角色名1" style="margin-top: 20px"></el-input>
-                    <el-input v-model="characterName2" placeholder="请输入角色名2" style="margin-top: 20px"></el-input>
-                    <el-input v-model="characterName3" placeholder="请输入角色名3" style="margin-top: 20px"></el-input>
-                    <el-input v-model="characterName4" placeholder="请输入角色名4" style="margin-top: 20px"></el-input>
-                    <el-input v-model="characterName5" placeholder="请输入角色名5" style="margin-top: 20px"></el-input>
+                    <el-input v-model="characterName[0]" placeholder="请输入角色名1" style="margin-top: 20px"></el-input>
+                    <el-input v-model="characterName[1]" placeholder="请输入角色名2" style="margin-top: 20px"></el-input>
+                    <el-input v-model="characterName[2]" placeholder="请输入角色名3" style="margin-top: 20px"></el-input>
+                    <el-input v-model="characterName[3]" placeholder="请输入角色名4" style="margin-top: 20px"></el-input>
+                    <el-input v-model="characterName[4]" placeholder="请输入角色名5" style="margin-top: 20px"></el-input>
                 </div>
 
-                <el-button type="primary" round style="margin-top: 20px">提交</el-button>
+                <el-button type="primary" round style="margin-top: 20px" @click="createRoles()">提交</el-button>
             </el-card>
         </el-collapse>
     </el-main>
@@ -31,15 +31,15 @@
 
 <script>
 
+import {Message} from "element-ui";
+import {addCharacter} from "@/api/character";
+
 export default {
     name: "TeacherGrade",
     data() {
         return {
-            characterName1:"",
-            characterName2:"",
-            characterName3:"",
-            characterName4:"",
-            characterName5:"",
+            activeName: "first",
+            characterName:[],
             data: [{
                 label: '往年角色标签',
                 children: [
@@ -82,7 +82,27 @@ export default {
         }
     },
     methods: {
+        async createRoles(){
+            let counter = 0;
+            for(var i in this.characterName){
+                await addCharacter(this.characterName[i])
+                    .then((res)=>{
+                        if (res.code===200){
+                            counter +=1;
+                            Message.success(res.msg)
+                        }
+                    }).catch((err)=>{
+                    Message.error(err)
+                })
+            }
+            if (counter === this.characterName.length){
+                //将教师的finalScore置为1，接下来再登陆教师时直接进入主界面
+                this.$store.getters.user.finalScore=1
+                //跳转至教师主界面
+                this.$router.push("/basepage")
+            }
 
+        }
     }
 }
 

@@ -6,3 +6,12 @@ export function getCharacterMap() {
         method: 'GET',
     })
 }
+
+
+export function addCharacter(characterName) {
+    return request({
+        url: '/character/addCharacter',
+        method: 'POST',
+        data: {"characterName":characterName}
+    })
+}

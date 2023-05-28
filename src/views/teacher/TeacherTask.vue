@@ -163,7 +163,7 @@
                                             <el-upload
                                                 class="upload-demo"
                                                 ref="upload"
-                                                action="http://lainhavenhair.icu:9090/file/upload/"
+                                                action="/file/upload/"
                                                 :on-preview="handlePreview"
                                                 :on-remove="handleRemove"
                                                 :file-list="fileList"

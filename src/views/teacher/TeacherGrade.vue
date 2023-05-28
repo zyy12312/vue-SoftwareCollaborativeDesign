@@ -27,26 +27,26 @@
                     </div>
                 </div>
 
-                <div v-for="grade in gradeData" v-bind:key="grade.id">
+                <div v-for="(grade,outIndex) in gradeData" v-bind:key="outIndex">
                         <el-row style="margin-top: 20px">
                             <el-col :span="4">
-                                <div class="grid-content bg-purple">{{ grade.studentId }}</div>
+                                <div class="grid-content bg-purple">{{ grade.student.id }}</div>
                             </el-col>
                             <el-col :span="4">
-                                <div class="grid-content bg-purple-light">{{ grade.studentName }}</div>
+                                <div class="grid-content bg-purple-light">{{ grade.student.name }}</div>
                             </el-col>
                             <el-col :span="4">
-                                <div class="grid-content bg-purple">{{ grade.GroupGrade }}</div>
+                                <div class="grid-content bg-purple">{{ grade.groupScore }}</div>
                             </el-col>
                             <el-col :span="4">
-                                <el-input v-model="grade.finalGrade" placeholder="请输入期末成绩"></el-input>
+                                <el-input v-model="grade.finalScore" placeholder="请输入期末成绩"></el-input>
                             </el-col>
                             <el-col :span="4">
-                                <div class="grid-content bg-purple">{{ grade.totalGrade }}</div>
+                                <div class="grid-content bg-purple" >{{ grade.totalScore }}</div>
                             </el-col>
                             <el-col :span="4">
                                 <div class="grid-content bg-purple-light" >
-                                    <el-button type="primary" @click="saveGrade(grade.studentId, grade.totalGrade)"  style="font-size: 16px" >保存</el-button>
+                                    <el-button type="primary" @click="saveGrade(grade.student.id, parseFloat(grade.finalScore))"  style="font-size: 16px" >保存</el-button>
                                 </div>
                             </el-col>
                         </el-row>
@@ -66,60 +66,15 @@ export default {
     name: "TeacherGrade",
     data() {
         return {
-            gradeData: [{
-                id: 1,
-                studentId: '2035060301',
-                studentName: '王小虎',
-                GroupGrade: '87',
-                finalGrade: "",
-                totalGrade: 'N/A'
-            },{
-                id: 2,
-                studentId: '2035060302',
-                studentName: '王小虎',
-                GroupGrade: '87',
-                finalGrade: "",
-                totalGrade: '78'
-            },{
-                id: 3,
-                studentId: '2035060303',
-                studentName: '王小虎',
-                GroupGrade: '87',
-                finalGrade: "",
-                totalGrade: '70'
-            },{
-                id: 4,
-                studentId: '2035060304',
-                studentName: '王小虎',
-                GroupGrade: '87',
-                finalGrade: "",
-                totalGrade: 'N/A'
-            },{
-                id: 5,
-                studentId: '2035060305',
-                studentName: '王小虎',
-                GroupGrade: '87',
-                finalGrade: "",
-                totalGrade: '99'
-            },{
-                id: 6 ,
-                studentId: '2035060306',
-                studentName: '王小虎',
-                GroupGrade: '87',
-                finalGrade: "",
-                totalGrade: 'N/A'
-            },{
-                id: 7,
-                studentId: '2035060307',
-                studentName: '王小虎',
-                GroupGrade: '87',
-                finalGrade: "",
-                totalGrade: '67'
-            } ],
+            activeName:"first",
+            gradeData: [],
             titleGroups:[
                 {title1:"学号",title2:"姓名",title3:"小组成绩",title4:"期末成绩",title5:"总成绩"}
             ]
         }
+    },
+    mounted() {
+        this.getList()
     },
     methods: {
         //获取成绩列表
@@ -128,7 +83,10 @@ export default {
                 .then((res)=>{
                     if (res.code===200){
                         this.gradeData = res.data
-                        console.log(this.gradeData)
+                        for(var grade in this.gradeData){
+                            this.gradeData[grade].totalScore = this.gradeData[grade].totalScore.toFixed(1)
+                            this.gradeData[grade].groupScore = this.gradeData[grade].groupScore.toFixed(1)
+                        }
                         Message.success(res.msg)
                     }
                 }).catch((err)=>{
@@ -138,6 +96,7 @@ export default {
 
         //保存成绩
         saveGrade(id, score){
+            console.log(typeof id+","+typeof score)
             inputGrade({"studentID":id, "finalScore":score})
                 .then((res)=>{
                     if (res.code===200){

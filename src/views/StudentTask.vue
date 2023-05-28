@@ -5,8 +5,8 @@
                 <span v-for="item in items" v-bind:key="item.title1">
                     <el-row>
                         <el-col :span="8"><div class="grid-content bg-purple-light">{{ item.title1 }}</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple-light">{{ item.title3 }}</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple-light">{{ item.title5 }}</div></el-col>
+                        <el-col :span="8"><div class="grid-content bg-purple-light">{{ item.title3 }}</div></el-col>
+                        <el-col :span="8"><div class="grid-content bg-purple-light">{{ item.title5 }}</div></el-col>
                     </el-row>
                 </span>
             </div>
@@ -18,10 +18,10 @@
 <!--                            截止：{{ task.endTime }}-->
 <!--                        </div>-->
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="8">
                         <div class="grid-content bg-purple-light" style="margin-top: 10px">{{ task.endTime }}</div>
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="8">
                         <div class="grid-content bg-purple-light"></div>
                         <div class="grid-content bg-purple-light">
                             <el-button type="text"  @click="dialogFormVisible = true;getIndex(task.id);getSubmissionToTask(this.indexs)"
@@ -122,8 +122,20 @@
                                                     </div>
                                                 </el-col>
                                                 <el-col :span="12">
-                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px">
-                                                        {{ task.characterType }}
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-if=" task.characterType===1">
+                                                        小组长
+                                                    </div>
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-else-if=" task.characterType===2">
+                                                        产品经理
+                                                    </div>
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-else-if=" task.characterType===3">
+                                                        开发经理
+                                                    </div>
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-else-if=" task.characterType===4">
+                                                        计划质量经理
+                                                    </div>
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-else-if=" task.characterType===5">
+                                                        测试经理
                                                     </div>
                                                 </el-col>
                                             </el-row>
@@ -167,7 +179,7 @@
                                                                                         v-model="form1.endTime"
                                                                                         type="datetime"
                                                                                         placeholder="选择日期时间"
-                                                                                        format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                                                                                        format="yyyy-MM-dd hh:mm:ss" value-format="yyyy-MM-dd hh:mm:ss"
                                                                                         align="right"
                                                                                         :picker-options="pickerOptions1">
                                                                                  </el-date-picker>
@@ -183,7 +195,7 @@
                                                                     </el-row>
                                                                     </span>
                                                                 </div>
-                                                                <div v-for="role in roles" :key="role.role"
+                                                                <div v-for="(role,index) in roles" :key="index"
                                                                      class="text item">
                                                                     <el-row>
                                                                         <el-col :span="6">
@@ -196,7 +208,7 @@
                                                                             <div class="grid-content bg-purple-light"
                                                                                  style="margin-top: 13px">
                                                                                 <el-input placeholder="请输入内容"
-                                                                                          v-model="form1.detail">
+                                                                                          v-model="form1.subtask[index].detail">
                                                                                 </el-input>
                                                                             </div>
                                                                         </el-col>
@@ -235,20 +247,22 @@
                                                 <el-row>
                                                     <el-col :span="12">
                                                         <div class="grid-content bg-purple-light"
-                                                             style="margin-top: 13px">{{ task.file }}
+                                                             style="margin-top: 13px">{{ task.title }}
                                                         </div>
                                                     </el-col>
                                                     <el-col :span="8">
                                                         <div class="grid-content bg-purple-light"
-                                                             style="margin-top: 13px">{{ task.submitTime }}
+                                                             style="margin-top: 13px">{{ task.endTime }}
                                                         </div>
                                                     </el-col>
                                                     <el-col :span="4">
                                                         <div class="grid-content bg-purple-light">
+                                                            <el-link :href="task.filesURL">
                                                             <el-button type="text" @click="dialogFormVisible = true;download(index)"
                                                                        style="font-size: 16px">
                                                                 <i class="el-icon-download"></i>
                                                             </el-button>
+                                                            </el-link>
                                                         </div>
                                                     </el-col>
                                                 </el-row>
@@ -286,8 +300,20 @@
                                                     </div>
                                                 </el-col>
                                                 <el-col :span="12">
-                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px">
-                                                        {{ task.characterType }}
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-if=" task.characterType===1">
+                                                        小组长
+                                                    </div>
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-else-if=" task.characterType===2">
+                                                        产品经理
+                                                    </div>
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-else-if=" task.characterType===3">
+                                                        开发经理
+                                                    </div>
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-else-if=" task.characterType===4">
+                                                        计划质量经理
+                                                    </div>
+                                                    <div class="grid-content bg-purple-light" style="margin-top: 13px" v-else-if=" task.characterType===5">
+                                                        测试经理
                                                     </div>
                                                 </el-col>
                                             </el-row>
@@ -442,7 +468,8 @@
 <script>
 import {Message} from "element-ui";
 import {addSubmission, getSubmissionListToSubTask, getSubmissionToTask} from "@/api/submission";
-import {createSubTask,  taskList} from "@/api/task";
+import {createSubTask, taskList} from "@/api/task";
+
 
 export default {
     name: "StudentTask",
@@ -451,7 +478,7 @@ export default {
         return {
             activeName2: 'first',
             // myRole: this.$store.getters.user.role,
-            myRole:this.$store.getters.user.id,
+            myRole:this.$store.getters.user.team.studentCharacter,
             indexs: 0,
             searchDetail:false,
             pickerOptions1: {
@@ -482,25 +509,25 @@ export default {
                 {title1: "作业名称",  title3: "截止时间",  title5: "交付"},
             ],
             tasks: [
-                {
-                    id: 1,
-                    title: "分布式实验",
-                    detail: "开发一个java web 网站，该网站提供一个页面，可以输入图书名称，输出该书的库存。程序应该首先访问缓存输出查询结果，如果缓存没有该数据",
-                    endTime: "2023-05-27 18:00:00",
-                    file: "分布式实验.docx",
-                    filesURL: "",
-                    submitTime:'2023-05-22 18:20:20',
-                    characterType: "计划经理"
-                },
-                {
-                    id: 2,
-                    title: "DES实现",
-                    detail: "设计一个图书馆数据库，包含一个图书表books,该表有id,bookname, inventory三个字段（假设书名不会重复），并自行提前录入若干图书数据。",
-                    endTime: "2023-05-27 14:00:45",
-                    file: "DES实现.docx",
-                    submitTime:'2023-05-22 18:20:20',
-                    characterType: "产品经理"
-                },
+                //{
+                //     id: 1,
+                //     title: "分布式实验",
+                //     detail: "开发一个java web 网站，该网站提供一个页面，可以输入图书名称，输出该书的库存。程序应该首先访问缓存输出查询结果，如果缓存没有该数据",
+                //     endTime: "2023-05-27 18:00:00",
+                //     file: "分布式实验.docx",
+                //     filesURL: "",
+                //     submitTime:'2023-05-22 18:20:20',
+                //     characterType: "计划经理"
+                // },
+                // {
+                //     id: 2,
+                //     title: "DES实现",
+                //     detail: "设计一个图书馆数据库，包含一个图书表books,该表有id,bookname, inventory三个字段（假设书名不会重复），并自行提前录入若干图书数据。",
+                //     endTime: "2023-05-27 14:00:45",
+                //     file: "DES实现.docx",
+                //     submitTime:'2023-05-22 18:20:20',
+                //     characterType: "产品经理"
+                // },
             ],
             roles: [
                 {role: "小组长"}, {role: "产品经理"}, {role: "计划质量经理"}, {role: "开发经理"}, {role: "测试经理"}
@@ -526,15 +553,35 @@ export default {
                 detail: '',
                 submitTime: '',
                 targetType: '',
-                filesURL:'',
+                filesURL:[],
             },
             form1:{
                 teamID:this.$store.getters.user.team.teamID,
-                characterType:'',
-                detail: '',
+                subtask:[
+                    {
+                        characterType:1,
+                        detail:''
+                    },
+                    {
+                        characterType:2,
+                        detail:''
+                    },
+                    {
+                        characterType:3,
+                        detail:''
+                    },
+                    {
+                        characterType:4,
+                        detail:''
+                    },
+                    {
+                        characterType:5,
+                        detail:''
+                    },
+                ],
                 endTime:'',
                 targetID:this.indexs,
-                filesURL:'',
+                filesURL:[],
             },
             input4: '',
             formLabelWidth: '120px',
@@ -557,7 +604,16 @@ export default {
         }).catch((err)=>{
             Message.error(err)
         });
-
+        // getCharacterMap().then((res)=>{
+        //     if (res.code===200){
+        //         let resultbody = res.data
+        //         let keys = resultbody.keys();
+        //         this.roles = Array.from(keys)
+        //         Message.success(res.msg)
+        //     }
+        // }).catch((err)=>{
+        //     Message.error(err)
+        // });
     },
     created() {
         setInterval(() => {

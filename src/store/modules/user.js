@@ -6,7 +6,7 @@ import {resetRouter} from "@/router";
 const getDefaultState = () => {
     return {
         token: getToken(),
-
+        
         User:{
             id: 8,
             account: "2011110108",
@@ -95,7 +95,12 @@ const actions = {
             })
         })
     },
-
+    update({ commit }, user) {
+        return new Promise((resolve) => {
+            commit("SET_User",user)
+            resolve()
+        })
+    },
     // // get user info
     // getInfo({ commit, state }) {
     //     return new Promise((resolve, reject) => {

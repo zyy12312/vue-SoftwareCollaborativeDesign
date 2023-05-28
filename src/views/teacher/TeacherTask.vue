@@ -163,7 +163,7 @@
                                             <el-upload
                                                 class="upload-demo"
                                                 ref="upload"
-                                                action="https://jsonplaceholder.typicode.com/posts/"
+                                                action="http://lainhavenhair.icu:9090/file/upload/"
                                                 :on-preview="handlePreview"
                                                 :on-remove="handleRemove"
                                                 :file-list="fileList"

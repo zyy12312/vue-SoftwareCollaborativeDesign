@@ -142,6 +142,18 @@ export function getNowTime() {
 
 
 //小于10的拼接上0字符串
-function addZero(s) {
+export function addZero(s) {
   return s < 10 ? ('0' + s) : s;
+}
+
+export function dateToString(date_old) {
+  let date = {
+    year: date_old.getFullYear(),
+    month: date_old.getMonth() + 1,
+    date: date_old.getDate(),
+    hour: date_old.getHours(),
+    minute: date_old.getMinutes(),
+    second: date_old.getSeconds()
+  }
+  return date.year + '-' + addZero(date.month) + '-' + addZero(date.date) + ' ' + addZero(date.hour) + ':' + addZero(date.minute) + ':' + addZero(date.second)
 }

@@ -56,9 +56,11 @@
 
                             </div>
                             <div>
-                                <el-input v-model="edited_task.inputEndTime">
-                                    <template slot="prepend">截止日期：</template>
-                                </el-input>
+                                <el-date-picker
+                                    v-model="edited_task.inputEndTime"
+                                    type="datetime"
+                                    placeholder="选择截止日期的日期时间">
+                                </el-date-picker>
                             </div>
                             <div>
                                 <el-autocomplete
@@ -139,9 +141,11 @@
 
                     </div>
                     <div>
-                        <el-input v-model="added_task.inputEndTime">
-                            <template slot="prepend">截止日期：</template>
-                        </el-input>
+                        <el-date-picker
+                            v-model="added_task.inputEndTime"
+                            type="datetime"
+                            placeholder="选择截止日期的日期时间">
+                        </el-date-picker>
                     </div>
                     <div>
                         <el-autocomplete
@@ -208,11 +212,13 @@
 
 import {createTask, deleteTask, editTask, releaseTask, taskList} from "@/api/task";
 import {Message} from "element-ui";
+import {dateToString} from "@/utils";
 // import {toNumber} from "vue/src/shared/util";
 export default {
     name: "TeacherTask",
     data() {
         return {
+            time_add: "",
             formLabelWidth: '120px',
             inputCharacter_edit: "",
             inputCharacter_add: "",
@@ -235,6 +241,13 @@ export default {
                 state: 0,
             },
 
+            // characterMap:{
+            //     "组长":"1",
+            //     "产品经理":"2",
+            //     "开发经理":"3",
+            //     "计划质量经理":"4",
+            //     "测试经理":"5"
+            // },
             dialogFormVisible_upload: false,
             dialogFormVisible_edit: false,
             dialogFormVisible_add: false,
@@ -291,7 +304,6 @@ export default {
 
         //编辑任务（点击编辑按钮）
         edit(index){
-            console.log(index)
             this.edited_task.id=this.tasks[index].id
             this.edited_task.inputDetail=this.tasks[index].detail
             this.edited_task.inputEndTime=this.tasks[index].endTime
@@ -306,11 +318,7 @@ export default {
         //编辑任务（编辑后点击确认）
         editTaskConfirm(index){
             this.edited_task.characterType=1 // 通过请求找到对应的角色类型（通过字符串类型的角色找数字类型的角色）
-
-            console.log("edit1:inputTitle="+this.edited_task.inputTitle)
-            console.log("edit1:characterType="+this.edited_task.characterType)
-            console.log("edit1:characterLabel="+this.edited_task.characterLabel)
-            console.log("edit1:state="+this.edited_task.state)
+            this.edited_task.inputEndTime=dateToString(this.edited_task.inputEndTime)
             editTask(
                 {"id":this.edited_task.id,
                 "title":this.edited_task.inputTitle,
@@ -339,11 +347,7 @@ export default {
         //新建任务
         addTaskConfirm(){
             this.added_task.characterType=1 // 通过请求找到对应的角色类型（通过字符串类型的角色找数字类型的角色）
-
-            console.log("add1:inputTitle="+this.added_task.inputTitle)
-            console.log("add1:characterType="+this.added_task.characterType)
-            console.log("add1:characterLabel="+this.added_task.characterLabel)
-            console.log("add1:state="+this.added_task.state)
+            this.added_task.inputEndTime=dateToString(this.added_task.inputEndTime)
             createTask(
                 {"title":this.added_task.inputTitle,
                 "detail":this.added_task.inputDetail,
@@ -380,10 +384,8 @@ export default {
                         message: "已取消删除"
                     });
                 });
-            console.log("delete1:deleted_id="+taskId)
             deleteTask([taskId])
                 .then((res)=>{
-                    console.log("delete2:deleted_id="+taskId)
                     if (res.code===200){
                         Message.success(res.msg)
                     }
@@ -394,7 +396,6 @@ export default {
 
         //发布任务
         publishTask(taskId,index){
-            console.log("publish1:published_id="+taskId)
             releaseTask([taskId])
                 .then((res)=>{
                     if (res.code===200){
@@ -440,7 +441,6 @@ export default {
         //跳转至批阅作业详情界面
         checkItem(taskId) {
             console.log("批阅作业详情。作业编号："+taskId)
-            // console.log("cp"+this.$router.currentRoute.path)
             this.$router.push({
                 path: '/basepage/task_submissionDetail',
                 query: {

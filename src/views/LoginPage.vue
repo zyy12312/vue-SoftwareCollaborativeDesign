@@ -39,9 +39,12 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
             </el-form-item>
-
-            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
+            <div>
+                <el-button :loading="loading_login" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+            </div>
+            <div>
+                <el-button :loading="loading_signIn" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="signIn">Sigh In</el-button>
+            </div>
             <div class="tips">
                 <span style="margin-right:20px;">username: admin</span>
                 <span> password: any</span>
@@ -81,7 +84,8 @@ export default {
                 username: [{ required: true, trigger: 'blur', validator: validateUsername }],
                 password: [{ required: true, trigger: 'blur', validator: validatePassword }]
             },
-            loading: false,
+            loading_login: false,
+            loading_signIn: false,
             passwordType: 'password',
             redirect: undefined
         }
@@ -121,6 +125,12 @@ export default {
                     console.log('error submit!!')
                     return false
                 }
+            })
+        },
+
+        signIn(){
+            this.$router.push({
+                path: '/signIn'
             })
         }
     }

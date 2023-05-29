@@ -103,6 +103,8 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import {Message} from "element-ui";
+import {createUser} from "@/api/user";
 
 export default {
     name: 'SignInPage',
@@ -171,6 +173,22 @@ export default {
             })
         },
         handleSignIn() {
+            createUser({
+                "account":this.signInForm.account,  // String
+                "password":this.signInForm.password,  // String
+                "name":this.signInForm.username,  // String
+                "role":this.signInForm.role,  // String
+                "sex":this.signInForm.sex  // String
+            })
+                .then((res)=>{
+                    if (res.code===200){
+                        Message.success(res.msg)
+                    }
+                }).catch((err)=>{
+
+                Message.error(err)
+            })
+
             this.$refs.signInForm.validate(valid => {
                 if (valid) {
                     this.loading = true
